@@ -2,9 +2,12 @@
   "name": "hotcatbackend",
   "version": "1.0.0",
   "description": "Smart Orders, Happier Tables.",
-  "main": "index.js",
+  "main": "dist/server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/server.js",
+    "start:dev": "tsx watch src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -15,5 +18,15 @@
   "bugs": {
     "url": "https://github.com/RaniduNethma/HotCat-Backend/issues"
   },
-  "homepage": "https://github.com/RaniduNethma/HotCat-Backend#readme"
+  "homepage": "https://github.com/RaniduNethma/HotCat-Backend#readme",
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.5.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.2"
+  }
 }
