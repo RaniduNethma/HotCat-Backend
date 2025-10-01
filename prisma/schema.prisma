@@ -8,102 +8,105 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Profile {
+model User {
   id          Int         @id @default(autoincrement())
   userName    String      @unique
   name        String?
   phone       String?
   email       String?     @unique
   dateOfBirth DateTime?
-  profileType profileType @default(BRONZE)
+  profileType ProfileType @default(BRONZE)
   createdAt   DateTime    @default(now())
-  order       order[]
+  order       Order[]
 }
 
-model staff {
+model Staff {
   id        Int      @id @default(autoincrement())
   userName  String   @unique
   name      String
   phone     String
   email     String?  @unique
-  role      role     @default(WAITER)
+  role      Role     @default(WAITER)
   createdAt DateTime @default(now())
-  order     order[]
+  order     Order[]
 }
 
-model table {
+model Table {
   id          Int         @id @default(autoincrement())
   tableNumber Int         @unique
-  status      tableStatus @default(FREE)
-  order       order[]
+  status      TableStatus @default(FREE)
+  order       Order[]
 }
 
-model product {
+model Product {
   id             Int              @id @default(autoincrement())
   name           String           @unique
   description    String?
-  category       category         @relation(fields: [categoryId], references: [id])
+  category       Category         @relation(fields: [categoryId], references: [id])
   categoryId     Int
   stock          Int              @default(0)
-  priceListItems priceListItems[]
-  orderItems     orderItems[]
+  createdAt      DateTime         @default(now())
+  priceListItems PriceListItems[]
+  orderItems     OrderItems[]
 }
 
-model category {
+model Category {
   id          Int       @id @default(autoincrement())
   name        String    @unique
   description String
-  product     product[]
+  createdAt   DateTime  @default(now())
+  product     Product[]
 }
 
-model priceList {
+model PriceList {
   id             Int              @id @default(autoincrement())
   name           String           @unique
   description    String?
-  priceListItems priceListItems[]
+  createdAt      DateTime         @default(now())
+  priceListItems PriceListItems[]
 }
 
-model priceListItems {
+model PriceListItems {
   id          Int       @id @default(autoincrement())
-  product     product   @relation(fields: [productId], references: [id])
+  product     Product   @relation(fields: [productId], references: [id])
   productId   Int
-  priceList   priceList @relation(fields: [priceListId], references: [id])
+  priceList   PriceList @relation(fields: [priceListId], references: [id])
   priceListId Int
   price       Decimal   @db.Decimal(10, 2)
 }
 
-model order {
+model Order {
   id            Int          @id @default(autoincrement())
-  profile       Profile?     @relation(fields: [profileId], references: [id])
-  profileId     Int?
-  staff         staff?       @relation(fields: [staffId], references: [id])
+  User          User?        @relation(fields: [UserId], references: [id])
+  UserId        Int?
+  staff         Staff?       @relation(fields: [staffId], references: [id])
   staffId       Int?
-  table         table?       @relation(fields: [tableId], references: [id])
+  table         Table?       @relation(fields: [tableId], references: [id])
   tableId       Int?
-  totalDiscount Int?
-  totalPrice    Int
-  status        orderStatus  @default(PENDING)
+  totalDiscount Decimal?     @db.Decimal(10, 2)
+  totalPrice    Decimal      @db.Decimal(10, 2)
+  status        OrderStatus  @default(PENDING)
   createdAt     DateTime     @default(now())
-  orderItems    orderItems[]
+  orderItems    OrderItems[]
 }
 
-model orderItems {
+model OrderItems {
   id        Int     @id @default(autoincrement())
-  order     order   @relation(fields: [orderId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId   Int
-  product   product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
   productId Int
   Quantity  Int
   subTotal  Decimal @db.Decimal(10, 2)
 }
 
-enum profileType {
+enum ProfileType {
   BRONZE
   SILVER
   GOLD
 }
 
-enum role {
+enum Role {
   WAITER
   CHEF
   STORE_KEEPER
@@ -112,12 +115,12 @@ enum role {
   MANAGER
 }
 
-enum tableStatus {
+enum TableStatus {
   FREE
   BUSY
 }
 
-enum orderStatus {
+enum OrderStatus {
   PENDING
   COOKING
   READY
