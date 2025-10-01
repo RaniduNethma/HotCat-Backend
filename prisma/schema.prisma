@@ -8,3 +8,118 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Profile {
+  id          Int         @id @default(autoincrement())
+  userName    String      @unique
+  name        String?
+  phone       String?
+  email       String?     @unique
+  dateOfBirth DateTime?
+  profileType profileType @default(BRONZE)
+  createdAt   DateTime    @default(now())
+  order       order[]
+}
+
+model staff {
+  id        Int      @id @default(autoincrement())
+  userName  String   @unique
+  name      String
+  phone     String
+  email     String?  @unique
+  role      role     @default(WAITER)
+  createdAt DateTime @default(now())
+  order     order[]
+}
+
+model table {
+  id          Int         @id @default(autoincrement())
+  tableNumber Int         @unique
+  status      tableStatus @default(FREE)
+  order       order[]
+}
+
+model product {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  description    String?
+  category       category         @relation(fields: [categoryId], references: [id])
+  categoryId     Int
+  stock          Int              @default(0)
+  priceListItems priceListItems[]
+  orderItems     orderItems[]
+}
+
+model category {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String
+  product     product[]
+}
+
+model priceList {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  description    String?
+  priceListItems priceListItems[]
+}
+
+model priceListItems {
+  id          Int       @id @default(autoincrement())
+  product     product   @relation(fields: [productId], references: [id])
+  productId   Int
+  priceList   priceList @relation(fields: [priceListId], references: [id])
+  priceListId Int
+  price       Decimal   @db.Decimal(10, 2)
+}
+
+model order {
+  id            Int          @id @default(autoincrement())
+  profile       Profile?     @relation(fields: [profileId], references: [id])
+  profileId     Int?
+  staff         staff?       @relation(fields: [staffId], references: [id])
+  staffId       Int?
+  table         table?       @relation(fields: [tableId], references: [id])
+  tableId       Int?
+  totalDiscount Int?
+  totalPrice    Int
+  status        orderStatus  @default(PENDING)
+  createdAt     DateTime     @default(now())
+  orderItems    orderItems[]
+}
+
+model orderItems {
+  id        Int     @id @default(autoincrement())
+  order     order   @relation(fields: [orderId], references: [id])
+  orderId   Int
+  product   product @relation(fields: [productId], references: [id])
+  productId Int
+  Quantity  Int
+  subTotal  Decimal @db.Decimal(10, 2)
+}
+
+enum profileType {
+  BRONZE
+  SILVER
+  GOLD
+}
+
+enum role {
+  WAITER
+  CHEF
+  STORE_KEEPER
+  OFFICER
+  ADMIN
+  MANAGER
+}
+
+enum tableStatus {
+  FREE
+  BUSY
+}
+
+enum orderStatus {
+  PENDING
+  COOKING
+  READY
+  DELIVERED
+}
