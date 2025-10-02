@@ -29,6 +29,7 @@
   "devDependencies": {
     "@prisma/generator-helper": "^6.16.3",
     "@prisma/internals": "^6.16.3",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.5.2",

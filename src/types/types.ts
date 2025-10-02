@@ -31,9 +31,10 @@ export enum OrderStatus {
 export type User = {
   id: number;
   userName: string;
-  name?: string | null;
-  phone?: string | null;
+  name: string;
+  phone: string;
   email?: string | null;
+  password: string;
   dateOfBirth?: Date | null;
   profileType: ProfileType;
   createdAt: Date;
@@ -46,6 +47,7 @@ export type Staff = {
   name: string;
   phone: string;
   email?: string | null;
+  password: string;
   role: Role;
   createdAt: Date;
   order: Order[];
