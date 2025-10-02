@@ -23,7 +23,7 @@ export const auth = (roles: string[] = []) => {
             if(roles.length && !roles.includes(decoded.role)){
                 return res
                     .status(403)
-                    .json({message: "Forbidden"});
+                    .json({message: 'Forbidden'});
             }
 
             next();
@@ -38,7 +38,7 @@ export const auth = (roles: string[] = []) => {
             }
             return res
                 .status(500)
-                .json({error: 'Internal server error'});
+                .json({message: 'Internal server error'});
         }
     }
 }
