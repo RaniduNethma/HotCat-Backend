@@ -21,7 +21,9 @@ export const userRegisterService = async (data: User) => {
 }
 
 export const userLoginService = async (data: {email: string; password: string}) => {
- const user = await DB.profileType.findUnique({
-    where: {email: data.email},
- });
+    const user = await DB.profileType.findUnique({
+        where: {email: data.email},
+    });
+
+    if(!user) throw new Error('User not found');
 }
