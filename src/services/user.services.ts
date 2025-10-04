@@ -20,6 +20,8 @@ export const userRegisterService = async (data: User) => {
     return user;
 }
 
-export const userLoginService = async (data: User) => {
-    
+export const userLoginService = async (data: {email: string; password: string}) => {
+ const user = await DB.profileType.findUnique({
+    where: {email: data.email},
+ });
 }
