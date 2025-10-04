@@ -19,3 +19,7 @@ export const userRegisterService = async (data: User) => {
     });
     return user;
 }
+
+export const userLoginService = async (data: User) => {
+    
+}
