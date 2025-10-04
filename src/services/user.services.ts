@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import DB from '../configs/dbConfig.js';
 import type { User } from '../types/types.js';
 
-export const register = async (data: User) => {
+export const userRegisterService = async (data: User) => {
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const user = await DB.user.create({
