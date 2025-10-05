@@ -20,7 +20,7 @@ export const userRegisterController = async(req: Request, res: Response, next: N
     }
 }
 
-export const userLoginController = async (req: Request, res: Response, next: NextFunction){
+export const userLoginController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         
     }
