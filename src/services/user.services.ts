@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 import DB from '../configs/dbConfig.js';
-import type { User } from '../types/types.js';
+import { type User } from '../types/types.js';
+import { JWT_SECRET } from '../configs/envConfig.js';
 
 export const userRegisterService = async (data: User) => {
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -26,4 +27,17 @@ export const userLoginService = async (data: {email: string; password: string}) 
     });
 
     if(!user) throw new Error('User not found');
+
+    const isMatch = await bcrypt.compare(data.password, user.password);
+    if(!isMatch){
+        throw new Error ('Invalid credentials');
+    }
+
+    const token = jwt.sign(
+        {id: user.id, role: 'USER'},
+        JWT_SECRET!,
+        {expiresIn: '1h'}
+    );
+
+    return token;
 }
