@@ -22,22 +22,40 @@ export const userRegisterService = async (data: User) => {
 }
 
 export const userLoginService = async (data: {email: string; password: string}) => {
-    const user = await DB.profileType.findUnique({
-        where: {email: data.email},
-    });
+    try {
+        const user = await DB.profileType.findUnique({
+            where: {email: data.email},
+        });
 
-    if(!user) throw new Error('User not found');
+        if(!user){
+            return{
+                statusCode: 401,
+                message: 'Invalid email or password'
+            }
+        }
 
-    const isMatch = await bcrypt.compare(data.password, user.password);
-    if(!isMatch){
-        throw new Error ('Invalid credentials');
+        const isMatch = await bcrypt.compare(data.password, user.password);
+
+        if(!isMatch){
+            return{
+                statusCode: 401,
+                message: 'Invalid email or password'
+            }
+        }
+
+        const token = jwt.sign(
+            {id: user.id, role: 'USER'},
+            JWT_SECRET!,
+            {expiresIn: '1h'}
+        );
+
+        return token;
     }
-
-    const token = jwt.sign(
-        {id: user.id, role: 'USER'},
-        JWT_SECRET!,
-        {expiresIn: '1h'}
-    );
-
-    return token;
+    catch (error) {
+        console.error('Error executing login', error);
+        return{
+            statusCode: 500,
+            message: 'Internal server error'
+        }
+    }
 }
