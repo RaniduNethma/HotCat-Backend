@@ -49,7 +49,12 @@ export const userLoginService = async (data: {email: string; password: string}) 
             {expiresIn: '1h'}
         );
 
-        return token;
+        return {
+            statusCode: 200,
+            message: 'Login successfull',
+            user: user,
+            token
+        }
     }
     catch (error) {
         console.error('Error executing login', error);
