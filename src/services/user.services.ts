@@ -21,7 +21,7 @@ export const userRegisterService = async (data: User) => {
     return user;
 }
 
-export const userLoginService = async (data: {email: string; password: string}) => {
+export const userLoginService = async (data: { email: string; password: string; }, password: any) => {
     try {
         const user = await DB.profileType.findUnique({
             where: {email: data.email},
