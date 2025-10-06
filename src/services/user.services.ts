@@ -5,26 +5,55 @@ import * as types from '../types/types.js';
 import { JWT_SECRET } from '../configs/envConfig.js';
 
 export const userRegisterService = async (data: types.User) => {
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    try {
+        const existingUser = await DB.user.findUnique({
+            where: {userName: data.userName}
+        });
 
-    const user = await DB.user.create({
-        data: {
-            userName: data.userName,
-            name: data.name,
-            phone: data.phone,
-            email: data.email ?? null,
-            dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
-            profileType: types.ProfileType.BRONZE,
-            password: hashedPassword
+        if(existingUser != null){
+            return{
+                statusCode: 409,
+                message: 'Username already exists'
+            }
         }
-    });
-    return user;
+
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+
+        const newUser = await DB.user.create({
+            data: {
+                userName: data.userName,
+                name: data.name,
+                phone: data.phone,
+                email: data.email ?? null,
+                dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
+                profileType: types.ProfileType.BRONZE,
+                password: hashedPassword
+            }
+        });
+
+        const savedUser = await DB.user.findUnique({
+            where: {userName: data.userName}
+        });
+
+        return{
+            statusCode: 200,
+            message: 'Registration successful',
+            user: savedUser
+        }
+    }
+    catch (error) {
+        console.error('Error executing registration', error);
+        return{
+            statusCode: 500,
+            message: 'Internal server error'
+        }
+    }
 }
 
-export const userLoginService = async (data: { email: string; password: string; }, password: any) => {
+export const userLoginService = async (data: { userName: string; password: string; }, password: any) => {
     try {
         const user = await DB.user.findUnique({
-            where: {email: data.email},
+            where: {userName: data.userName},
         });
 
         if(!user){
