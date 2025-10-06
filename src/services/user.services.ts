@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import DB from '../configs/dbConfig.js';
-import { type User } from '../types/types.js';
+import * as types from '../types/types.js';
 import { JWT_SECRET } from '../configs/envConfig.js';
 
-export const userRegisterService = async (data: User) => {
+export const userRegisterService = async (data: types.User) => {
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const user = await DB.user.create({
@@ -12,9 +12,9 @@ export const userRegisterService = async (data: User) => {
             userName: data.userName,
             name: data.name,
             phone: data.phone,
-            email: data.email,
+            email: data.email ?? null,
             dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
-            profileType: "BRONZE",
+            profileType: types.ProfileType.BRONZE,
             password: hashedPassword
         }
     });
@@ -23,7 +23,7 @@ export const userRegisterService = async (data: User) => {
 
 export const userLoginService = async (data: { email: string; password: string; }, password: any) => {
     try {
-        const user = await DB.profileType.findUnique({
+        const user = await DB.user.findUnique({
             where: {email: data.email},
         });
 
