@@ -39,6 +39,16 @@ export const createUser = async (
 
     const savedUser = await DB.user.findUnique({
       where: { userName: userName },
+      select: {
+        id: true,
+        userName: true,
+        name: true,
+        phone: true,
+        email: true,
+        dateOfBirth: true,
+        profileType: true,
+        createdAt: true
+      },
     });
 
     return {
@@ -46,7 +56,8 @@ export const createUser = async (
       message: "Registration successful",
       user: savedUser,
     };
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Error executing registration", error);
     return {
       statusCode: 500,
@@ -62,6 +73,12 @@ export const loginUser = async (
   try {
     const user = await DB.user.findUnique({
       where: { userName: userName },
+      select: {
+        id: true,
+        userName: true,
+        email: true,
+        password: true
+      },
     });
 
     if (!user) {
@@ -80,6 +97,20 @@ export const loginUser = async (
       };
     }
 
+    const userData = await DB.user.findUnique({
+      where: {userName: userName},
+      select: {
+        id: true,
+        userName: true,
+        name: true,
+        phone: true,
+        email: true,
+        dateOfBirth: true,
+        profileType: true,
+        createdAt: true
+      },
+    });
+
     const token = jwt.sign({ id: user.id, role: "USER" }, JWT_SECRET!, {
       expiresIn: "1h",
     });
@@ -87,10 +118,11 @@ export const loginUser = async (
     return {
       statusCode: 200,
       message: "Login successfull",
-      user: user,
+      user: userData,
       token,
     };
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Error executing login", error);
     return {
       statusCode: 500,
