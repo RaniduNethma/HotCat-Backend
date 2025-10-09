@@ -62,7 +62,10 @@ export const createStaffUser = async (
   }
 };
 
-export const staffUserLogin = async (userName: string, password: string) => {
+export const staffUserLogin = async (
+    userName: string, 
+    password: string
+) => {
   try {
     const staffUser = await DB.staff.findUnique({
       where: { userName: userName },
