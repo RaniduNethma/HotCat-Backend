@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import * as staffAuthServices from '../services/staff.services/staff.auth.services.js';
+import * as staffAuthServices from '../../services/staff.services/staff.auth.services.js';
 
 export const staffSignup = async (
     req: Request,
