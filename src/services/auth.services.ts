@@ -111,15 +111,20 @@ export const loginUser = async (
       },
     });
 
-    const token = jwt.sign({ id: user.id, role: "USER" }, JWT_SECRET!, {
+    const accessToken = jwt.sign({ id: user.id, role: "USER" }, JWT_SECRET!, {
       expiresIn: "1h",
+    });
+
+    const refreshToken = jwt.sign({ id: user.id}, JWT_SECRET!, {
+      expiresIn: "7d",
     });
 
     return {
       statusCode: 200,
       message: "Login successfull",
       user: userData,
-      token,
+      accessToken,
+      refreshToken
     };
   }
   catch (error) {

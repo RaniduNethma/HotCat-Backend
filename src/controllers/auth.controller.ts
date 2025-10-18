@@ -50,10 +50,10 @@ export const login = async (
         .json({ error: "User name and password are required fields" });
     }
 
-    const { statusCode, message, user, token } =
+    const { statusCode, message, user, accessToken, refreshToken} =
       await AuthServices.loginUser(userName, password);
 
-    return res.status(statusCode).json({ user, message, token });
+    return res.status(statusCode).json({ user, message, accessToken, refreshToken });
   }
   catch (error) {
     console.error(error);
