@@ -2,7 +2,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import DB from "../configs/dbConfig.js";
 import * as types from "../types/types.js";
-import { JWT_SECRET } from "../configs/envConfig.js";
+import { JWT_SECRET, REFRESH_TOKEN_SECRET } from "../configs/envConfig.js";
+import { generateAccessToken, generateRefreshToken } from "../utils/token.js";
 
 export const createUser = async (
   userName: string, 
@@ -68,7 +69,7 @@ export const createUser = async (
 
 export const loginUser = async (
   userName: string,
-  password: string
+  password: string,
 ) => {
   try {
     const user = await DB.user.findUnique({
@@ -111,12 +112,12 @@ export const loginUser = async (
       },
     });
 
-    const accessToken = jwt.sign({ id: user.id, role: "USER" }, JWT_SECRET!, {
-      expiresIn: "1h",
-    });
+    const accessToken = generateAccessToken({id: user.id, role: "user"});
+    const refreshToken = generateRefreshToken({id: user.id, role: "user"});
 
-    const refreshToken = jwt.sign({ id: user.id}, JWT_SECRET!, {
-      expiresIn: "7d",
+    await DB.user.update({
+      where: { id: user.id },
+      data: { refreshToken: refreshToken},
     });
 
     return {
@@ -135,3 +136,26 @@ export const loginUser = async (
     };
   }
 };
+
+export const refreshToken = async (token: string) => {
+  const decoded: any = jwt.verify(token, REFRESH_TOKEN_SECRET!);
+
+  const user = await DB.user.findUnique({
+    where: {id: decoded.id}
+  });
+
+  if (!user || user.refreshToken !== token) throw new Error("Invalid refresh token");
+
+  const newAccessToken = generateAccessToken({id: user.id, role: 'user'});
+  const newRefreshToken = generateRefreshToken({id: user.id, role: 'user'});
+
+  await DB.user.update({
+    where: {id: user.id},
+    data: {refreshToken: newRefreshToken}
+  });
+
+  return {
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken
+  };
+}

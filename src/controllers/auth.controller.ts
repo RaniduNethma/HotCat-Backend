@@ -68,3 +68,30 @@ export const login = async (
       .json({ error: "Internal server error", message: error });
   }
 };
+
+export const refreshToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const token = req.body.refreshToken;
+    const newToken = await AuthServices.refreshToken(token);
+
+    return res
+      .status(200)
+      .json(newToken);
+  }
+  catch (error) {
+    console.error(error);
+    if (error instanceof Error) {
+      const errorMessage = error.message;
+      return res
+        .status(400)
+        .json({ error: "Error executing query", message: errorMessage });
+    }
+    return res
+      .status(500)
+      .json({ error: "Internal server error", message: error });
+  }
+}
