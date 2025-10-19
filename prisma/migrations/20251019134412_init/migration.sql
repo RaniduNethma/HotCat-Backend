@@ -8,6 +8,7 @@ CREATE TABLE `User` (
     `password` VARCHAR(191) NOT NULL,
     `dateOfBirth` DATETIME(3) NULL,
     `profileType` ENUM('BRONZE', 'SILVER', 'GOLD') NOT NULL DEFAULT 'BRONZE',
+    `refreshToken` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `User_userName_key`(`userName`),
