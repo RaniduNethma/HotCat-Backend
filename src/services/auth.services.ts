@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import DB from "../configs/dbConfig.js";
 import * as types from "../types/types.js";
 import { JWT_SECRET, REFRESH_TOKEN_SECRET } from "../configs/envConfig.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/token.js";
+//import { generateAccessToken, generateRefreshToken } from "../utils/token.js";
 
 export const createUser = async (
   userName: string, 
@@ -112,20 +112,20 @@ export const loginUser = async (
       },
     });
 
-    const accessToken = generateAccessToken({id: user.id, role: "user"});
+    /*const accessToken = generateAccessToken({id: user.id, role: "user"});
     const refreshToken = generateRefreshToken({id: user.id, role: "user"});
 
     await DB.user.update({
       where: { id: user.id },
       data: { refreshToken: refreshToken},
-    });
+    });*/
 
     return {
       statusCode: 200,
       message: "Login successfull",
       user: userData,
-      accessToken,
-      refreshToken
+      //accessToken,
+      //refreshToken
     };
   }
   catch (error) {
@@ -136,7 +136,7 @@ export const loginUser = async (
     };
   }
 };
-
+/*
 export const refreshToken = async (token: string) => {
   const decoded: any = jwt.verify(token, REFRESH_TOKEN_SECRET!);
 
@@ -159,3 +159,4 @@ export const refreshToken = async (token: string) => {
     refreshToken: newRefreshToken
   };
 }
+*/
