@@ -73,13 +73,7 @@ export const loginUser = async (
 ) => {
   try {
     const user = await DB.user.findUnique({
-      where: { userName: userName },
-      select: {
-        id: true,
-        userName: true,
-        email: true,
-        password: true
-      },
+      where: { userName: userName }
     });
 
     if (!user) {
@@ -96,21 +90,7 @@ export const loginUser = async (
         statusCode: 401,
         message: "Invalid email or password",
       };
-    }
-
-    const userData = await DB.user.findUnique({
-      where: {userName: userName},
-      select: {
-        id: true,
-        userName: true,
-        name: true,
-        phone: true,
-        email: true,
-        dateOfBirth: true,
-        profileType: true,
-        createdAt: true
-      },
-    });
+    };
 
     /*const accessToken = generateAccessToken({id: user.id, role: "user"});
     const refreshToken = generateRefreshToken({id: user.id, role: "user"});
@@ -120,10 +100,12 @@ export const loginUser = async (
       data: { refreshToken: refreshToken},
     });*/
 
+    const safeUser = excludePassword(user);
+
     return {
       statusCode: 200,
       message: "Login successfull",
-      user: userData,
+      user: safeUser,
       //accessToken,
       //refreshToken
     };
@@ -136,6 +118,13 @@ export const loginUser = async (
     };
   }
 };
+
+export const excludePassword = (user: any) => {
+  if(!user) return null;
+  const {password, ...safeUser} = user;
+  return safeUser;
+};
+
 /*
 export const refreshToken = async (token: string) => {
   const decoded: any = jwt.verify(token, REFRESH_TOKEN_SECRET!);
