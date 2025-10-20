@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from 'jsonwebtoken';
-import { ACCESS_TOKEN_SECRET, JWT_SECRET } from '../configs/envConfig.js'
+import { env } from '../configs/envConfig.js'
 
 interface JwtPayload{
     id: number;
@@ -17,7 +17,7 @@ export const auth = (roles: string[] = []) => {
                     .json({message: 'Not authorized, Token missing'});
             }
 
-            const decoded = jwt.verify(token, JWT_SECRET!) as JwtPayload;
+            const decoded = jwt.verify(token, env.JWT_SECRET!) as JwtPayload;
             req.user = decoded;
 
             if(roles.length && !roles.includes(decoded.role)){

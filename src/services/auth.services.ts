@@ -2,15 +2,15 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import DB from "../configs/dbConfig.js";
 import * as types from "../types/types.js";
-import { JWT_SECRET, REFRESH_TOKEN_SECRET } from "../configs/envConfig.js";
-//import { generateAccessToken, generateRefreshToken } from "../utils/token.js";
+import { env } from "../configs/envConfig.js";
+import { generateAccessToken, generateRefreshToken } from "../utils/token.js";
 
 export const createUser = async (
   userName: string, 
   name: string, 
   phone: string, 
   email: string, 
-  dateOfBirth: Date, 
+  dateOfBirth: Date,
   password: string
 ) => {
   const existingUser = await DB.user.findUnique({
@@ -38,24 +38,12 @@ export const createUser = async (
       },
     });
 
-    const savedUser = await DB.user.findUnique({
-      where: { userName: userName },
-      select: {
-        id: true,
-        userName: true,
-        name: true,
-        phone: true,
-        email: true,
-        dateOfBirth: true,
-        profileType: true,
-        createdAt: true
-      },
-    });
+    const safeUser = excludePassword(newUser);
 
     return {
       statusCode: 200,
       message: "Registration successful",
-      user: savedUser,
+      user: safeUser,
     };
   }
   catch (error) {
@@ -70,6 +58,7 @@ export const createUser = async (
 export const loginUser = async (
   userName: string,
   password: string,
+  refreshToken: string,
 ) => {
   try {
     const user = await DB.user.findUnique({
@@ -92,13 +81,13 @@ export const loginUser = async (
       };
     };
 
-    /*const accessToken = generateAccessToken({id: user.id, role: "user"});
+    const accessToken = generateAccessToken({id: user.id, role: "user"});
     const refreshToken = generateRefreshToken({id: user.id, role: "user"});
 
     await DB.user.update({
       where: { id: user.id },
       data: { refreshToken: refreshToken},
-    });*/
+    });
 
     const safeUser = excludePassword(user);
 
@@ -106,8 +95,8 @@ export const loginUser = async (
       statusCode: 200,
       message: "Login successfull",
       user: safeUser,
-      //accessToken,
-      //refreshToken
+      accessToken,
+      refreshToken
     };
   }
   catch (error) {
@@ -125,9 +114,9 @@ export const excludePassword = (user: any) => {
   return safeUser;
 };
 
-/*
-export const refreshToken = async (token: string) => {
-  const decoded: any = jwt.verify(token, REFRESH_TOKEN_SECRET!);
+
+export const tokenGenerater = async (token: string) => {
+  const decoded: any = jwt.verify(token, env.REFRESH_TOKEN_SECRET!);
 
   const user = await DB.user.findUnique({
     where: {id: decoded.id}
@@ -148,4 +137,3 @@ export const refreshToken = async (token: string) => {
     refreshToken: newRefreshToken
   };
 }
-*/

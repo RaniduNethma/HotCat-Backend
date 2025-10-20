@@ -42,7 +42,7 @@ export const login = async (
   next: NextFunction,
 ) => {
   try {
-    const { userName, password } = req.body;
+    const { userName, password, refreshToken} = req.body;
 
     if (!userName || !password) {
       return res
@@ -50,10 +50,10 @@ export const login = async (
         .json({ error: "User name and password are required fields" });
     }
 
-    const { statusCode, message, user/*, accessToken, refreshToken*/} =
-      await AuthServices.loginUser(userName, password);
+    const { statusCode, message, user, accessToken, refreshToken} =
+      await AuthServices.loginUser(userName, password, refreshToken);
 
-    return res.status(statusCode).json({ user, message/*, accessToken, refreshToken */});
+    return res.status(statusCode).json({ user, message, accessToken, refreshToken});
   }
   catch (error) {
     console.error(error);
@@ -69,14 +69,14 @@ export const login = async (
   }
 };
 
-/*export const refreshToken = async (
+export const refreshToken = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
     const token = req.body.refreshToken;
-    const newToken = await AuthServices.refreshToken(token);
+    const newToken = await AuthServices.tokenGenerater(token);
 
     return res
       .status(200)
@@ -94,4 +94,4 @@ export const login = async (
       .status(500)
       .json({ error: "Internal server error", message: error });
   }
-}*/
+}

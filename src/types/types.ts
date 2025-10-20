@@ -37,6 +37,7 @@ export type User = {
   password: string;
   dateOfBirth?: Date | null;
   profileType: ProfileType;
+  refreshToken?: string;
   createdAt: Date;
   order: Order[];
 };
