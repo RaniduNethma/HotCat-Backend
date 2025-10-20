@@ -8,108 +8,96 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           Int         @id @default(autoincrement())
-  userName     String      @unique
+model user {
+  id           Int          @id @default(autoincrement())
+  userName     String       @unique
   name         String
   phone        String
-  email        String?     @unique
+  email        String?      @unique
   password     String
   dateOfBirth  DateTime?
-  profileType  ProfileType @default(BRONZE)
-  refreshToken String?     @db.Text
-  createdAt    DateTime    @default(now())
-  order        Order[]
+  profileType  profile_type @default(BRONZE)
+  role         role         @default(USER)
+  refreshToken String?      @db.Text
+  createdAt    DateTime     @default(now())
+  order        order[]
 }
 
-model Staff {
-  id        Int      @id @default(autoincrement())
-  userName  String   @unique
-  name      String
-  phone     String
-  email     String?  @unique
-  password  String
-  role      Role     @default(WAITER)
-  createdAt DateTime @default(now())
-  order     Order[]
+model table {
+  id          Int          @id @default(autoincrement())
+  tableNumber Int          @unique
+  status      table_status @default(FREE)
+  order       order[]
 }
 
-model Table {
-  id          Int         @id @default(autoincrement())
-  tableNumber Int         @unique
-  status      TableStatus @default(FREE)
-  order       Order[]
-}
-
-model Product {
-  id             Int              @id @default(autoincrement())
-  name           String           @unique
+model product {
+  id             Int                @id @default(autoincrement())
+  name           String             @unique
   description    String?
-  category       Category         @relation(fields: [categoryId], references: [id])
+  category       category           @relation(fields: [categoryId], references: [id])
   categoryId     Int
-  stock          Int              @default(0)
-  createdAt      DateTime         @default(now())
-  priceListItems PriceListItems[]
-  orderItems     OrderItems[]
+  stock          Int                @default(0)
+  createdAt      DateTime           @default(now())
+  priceListItems price_list_items[]
+  orderItems     order_items[]
 }
 
-model Category {
+model category {
   id          Int       @id @default(autoincrement())
   name        String    @unique
   description String
   createdAt   DateTime  @default(now())
-  product     Product[]
+  product     product[]
 }
 
-model PriceList {
-  id             Int              @id @default(autoincrement())
-  name           String           @unique
+model price_list {
+  id             Int                @id @default(autoincrement())
+  name           String             @unique
   description    String?
-  createdAt      DateTime         @default(now())
-  priceListItems PriceListItems[]
+  createdAt      DateTime           @default(now())
+  priceListItems price_list_items[]
 }
 
-model PriceListItems {
-  id          Int       @id @default(autoincrement())
-  product     Product   @relation(fields: [productId], references: [id])
+model price_list_items {
+  id          Int        @id @default(autoincrement())
+  product     product    @relation(fields: [productId], references: [id])
   productId   Int
-  priceList   PriceList @relation(fields: [priceListId], references: [id])
+  priceList   price_list @relation(fields: [priceListId], references: [id])
   priceListId Int
-  price       Decimal   @db.Decimal(10, 2)
+  price       Decimal    @db.Decimal(10, 2)
 }
 
-model Order {
-  id            Int          @id @default(autoincrement())
-  User          User?        @relation(fields: [UserId], references: [id])
+model order {
+  id            Int           @id @default(autoincrement())
+  user          user?         @relation(fields: [UserId], references: [id])
   UserId        Int?
-  staff         Staff?       @relation(fields: [staffId], references: [id])
-  staffId       Int?
-  table         Table?       @relation(fields: [tableId], references: [id])
+  table         table?        @relation(fields: [tableId], references: [id])
   tableId       Int?
-  totalDiscount Decimal?     @db.Decimal(10, 2)
-  totalPrice    Decimal      @db.Decimal(10, 2)
-  status        OrderStatus  @default(PENDING)
-  createdAt     DateTime     @default(now())
-  orderItems    OrderItems[]
+  totalDiscount Decimal?      @db.Decimal(10, 2)
+  totalPrice    Decimal       @db.Decimal(10, 2)
+  status        order_status  @default(PENDING)
+  createdAt     DateTime      @default(now())
+  orderItems    order_items[]
 }
 
-model OrderItems {
+model order_items {
   id        Int     @id @default(autoincrement())
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order     order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId   Int
-  product   Product @relation(fields: [productId], references: [id])
+  product   product @relation(fields: [productId], references: [id])
   productId Int
   Quantity  Int
   subTotal  Decimal @db.Decimal(10, 2)
 }
 
-enum ProfileType {
+enum profile_type {
   BRONZE
   SILVER
   GOLD
 }
 
-enum Role {
+enum role {
+  USER
   WAITER
   CHEF
   STORE_KEEPER
@@ -118,12 +106,12 @@ enum Role {
   MANAGER
 }
 
-enum TableStatus {
+enum table_status {
   FREE
   BUSY
 }
 
-enum OrderStatus {
+enum order_status {
   PENDING
   COOKING
   READY
