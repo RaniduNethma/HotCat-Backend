@@ -42,7 +42,7 @@ export const login = async (
   next: NextFunction,
 ) => {
   try {
-    const { userName, password, refreshToken} = req.body;
+    const { userName, password } = req.body;
 
     if (!userName || !password) {
       return res
@@ -51,7 +51,7 @@ export const login = async (
     }
 
     const { statusCode, message, user, accessToken, refreshToken} =
-      await AuthServices.loginUser(userName, password, refreshToken);
+      await AuthServices.loginUser(userName, password);
 
     return res.status(statusCode).json({ user, message, accessToken, refreshToken});
   }

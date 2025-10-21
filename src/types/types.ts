@@ -1,5 +1,4 @@
 import { Decimal } from "@prisma/client/runtime/library";
-import DB from "../configs/dbConfig.js";
 
 export enum ProfileType {
   BRONZE = "BRONZE",
@@ -8,6 +7,7 @@ export enum ProfileType {
 }
 
 export enum Role {
+  USER = "USER",
   WAITER = "WAITER",
   CHEF = "CHEF",
   STORE_KEEPER = "STORE_KEEPER",
@@ -38,6 +38,7 @@ export type User = {
   dateOfBirth?: Date | null;
   profileType: ProfileType;
   refreshToken?: string;
+  role: Role;
   createdAt: Date;
   order: Order[];
 };

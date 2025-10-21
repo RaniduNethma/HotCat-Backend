@@ -14,7 +14,7 @@ export const createUser = async (
   password: string
 ) => {
   const existingUser = await DB.user.findUnique({
-    where: { userName: userName },
+    where: { userName },
   });
 
   if (existingUser != null) {
@@ -34,6 +34,7 @@ export const createUser = async (
         email: email ?? null,
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
         profileType: types.ProfileType.BRONZE,
+        role: types.Role.USER,
         password: hashedPassword,
       },
     });
@@ -57,12 +58,11 @@ export const createUser = async (
 
 export const loginUser = async (
   userName: string,
-  password: string,
-  refreshToken: string,
+  password: string
 ) => {
   try {
     const user = await DB.user.findUnique({
-      where: { userName: userName }
+      where: { userName }
     });
 
     if (!user) {
@@ -81,8 +81,8 @@ export const loginUser = async (
       };
     };
 
-    const accessToken = generateAccessToken({id: user.id, role: "user"});
-    const refreshToken = generateRefreshToken({id: user.id, role: "user"});
+    const accessToken = generateAccessToken({id: user.id, role: "USER"});
+    const refreshToken = generateRefreshToken({id: user.id, role: "USER"});
 
     await DB.user.update({
       where: { id: user.id },
@@ -124,8 +124,8 @@ export const tokenGenerater = async (token: string) => {
 
   if (!user || user.refreshToken !== token) throw new Error("Invalid refresh token");
 
-  const newAccessToken = generateAccessToken({id: user.id, role: 'user'});
-  const newRefreshToken = generateRefreshToken({id: user.id, role: 'user'});
+  const newAccessToken = generateAccessToken({id: user.id, role: user.role});
+  const newRefreshToken = generateRefreshToken({id: user.id, role: user.role});
 
   await DB.user.update({
     where: {id: user.id},
