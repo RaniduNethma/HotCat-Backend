@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import * as AuthServices from "../services/auth.services.js";
+import jwt from "jsonwebtoken";
+import { env } from "../configs/envConfig.js";
+import { log } from "console";
 
 export const signup = async (
   req: Request,
@@ -89,6 +92,42 @@ export const refreshToken = async (
       return res
         .status(400)
         .json({ error: "Error executing query", message: errorMessage });
+    }
+    return res
+      .status(500)
+      .json({ error: "Internal server error", message: error });
+  }
+}
+
+export const logoutController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if(!token){
+      return res
+        .status(401)
+        .json({message: "Access token required"});
+    }
+
+    const decoded: any = jwt.verify(token, env.ACCESS_TOKEN_SECRET!);
+
+    const result = await AuthServices.logout(decoded.userName);
+
+    return res
+      .status(result.statusCode)
+      .json({message: result.message});
+  }
+  catch (error) {
+    console.error(error);
+    if (error instanceof Error) {
+      const errorMessage = error.message;
+      return res
+        .status(400)
+        .json({ error: "Error executing query (Controller)", message: errorMessage });
     }
     return res
       .status(500)
