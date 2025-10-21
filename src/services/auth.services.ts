@@ -81,8 +81,8 @@ export const loginUser = async (
       };
     };
 
-    const accessToken = generateAccessToken({id: user.id, role: "USER"});
-    const refreshToken = generateRefreshToken({id: user.id, role: "USER"});
+    const accessToken = generateAccessToken({id: user.id, role: user.role});
+    const refreshToken = generateRefreshToken({id: user.id, role: user.role});
 
     await DB.user.update({
       where: { id: user.id },
