@@ -1,8 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import * as AuthServices from "../services/auth.services.js";
-import jwt from "jsonwebtoken";
-import { env } from "../configs/envConfig.js";
-import { log } from "console";
 
 export const signup = async (
   req: Request,
@@ -99,23 +96,20 @@ export const refreshToken = async (
   }
 }
 
-export const logoutController = async (
+export const logout = async (
   req: Request,
   res: Response
 ) => {
   try {
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(" ")[1];
+    const user = req.user as {id: number; role: string};
 
-    if(!token){
+    if(!req.user){
       return res
         .status(401)
-        .json({message: "Access token required"});
+        .json({message: 'Unauthorized'});
     }
 
-    const decoded: any = jwt.verify(token, env.ACCESS_TOKEN_SECRET!);
-
-    const result = await AuthServices.logout(decoded.userName);
+    const result = await AuthServices.logoutUser(user.id);
 
     return res
       .status(result.statusCode)

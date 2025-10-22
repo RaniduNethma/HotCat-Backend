@@ -17,7 +17,7 @@ export const auth = (roles: string[] = []) => {
                     .json({message: 'Not authorized, Token missing'});
             }
 
-            const decoded = jwt.verify(token, env.JWT_SECRET!) as JwtPayload;
+            const decoded = jwt.verify(token, env.ACCESS_TOKEN_SECRET!) as JwtPayload;
             req.user = decoded;
 
             if(roles.length && !roles.includes(decoded.role)){
