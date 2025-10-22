@@ -138,10 +138,10 @@ export const tokenGenerater = async (token: string) => {
   };
 }
 
-export const logout = async (userName: string) => {
+export const logoutUser = async (id: number) => {
   try {
     await DB.user.update({
-      where: { userName: userName },
+      where: { id: id },
       data: {refreshToken: null}
     });
 
