@@ -45,7 +45,7 @@ export const getUserHandler = async (
     }
 
     try {
-        const {id} = req.params.id;
+        const id: any = req.params.id;
 
         const {statusCode, data} = await userServices.getUserById(id);
         return res
