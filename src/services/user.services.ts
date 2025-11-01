@@ -24,10 +24,48 @@ export const getAllUsers = async (
         };
     }
     catch (error) {
-        console.error("Error executing logout", error);
+        console.error("Error executing getAllUsers", error);
         return {
         statusCode: 500,
         message: "Internal server error",
+        };
+    }
+}
+
+export const getUserById = async (id: number) => {
+    try {
+        if (!id) {
+            return {
+                statusCode: 404,
+                message: `User with id ${id} not found`
+            }
+        }
+
+        const user = await DB.user.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                userName: true,
+                name: true,
+                phone: true,
+                email: true,
+                dateOfBirth: true,
+                profileType: true,
+                role: true,
+                createdAt: true,
+            }
+        });
+
+        return {
+            statusCode: 200,
+            data: user
+        };
+    }
+    catch (error) {
+        console.error("Error executing getUserById", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
         };
     }
 }
