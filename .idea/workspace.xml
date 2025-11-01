@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1ce4f437-32f9-4885-ba3a-869f627ffd7f" name="Changes" comment="make endpoint in user.route" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="false" />
+    <option name="myAllFileTypesSelected" value="true" />
+    <option name="mySelectedFileTypes">
+      <set />
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="13-create-getuserbyid" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="34Yvwes3XToqgofgJxj1LerGk7H" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JavaScript Debug.localhost:5000.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Node.js.user.controller.ts.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/home/nethma/Desktop/MyDevProjects/HotCat/HotCat-Backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "/home/nethma/Applications/WebStorm-252.26830.93/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="localhost:5000" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:5000">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.localhost:5000" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-WS-252.26830.93" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1ce4f437-32f9-4885-ba3a-869f627ffd7f" name="Changes" comment="" />
+      <created>1761403559168</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761403559168</updated>
+      <workItem from="1761403560422" duration="2399000" />
+      <workItem from="1761417769095" duration="77000" />
+      <workItem from="1761418322067" duration="11000" />
+      <workItem from="1761419228390" duration="17000" />
+      <workItem from="1761419340438" duration="111000" />
+      <workItem from="1761419644637" duration="8000" />
+      <workItem from="1761661050127" duration="2294000" />
+      <workItem from="1761756195261" duration="3456000" />
+      <workItem from="1761920614786" duration="3788000" />
+      <workItem from="1762005538533" duration="139000" />
+    </task>
+    <task id="LOCAL-00001" summary="create getUserById in user.services">
+      <option name="closed" value="true" />
+      <created>1761757504565</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1761757504565</updated>
+    </task>
+    <task id="LOCAL-00002" summary="create getUserHandler in user.controller">
+      <option name="closed" value="true" />
+      <created>1761758442434</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1761758442434</updated>
+    </task>
+    <task id="LOCAL-00003" summary="unused import fix">
+      <option name="closed" value="true" />
+      <created>1761758533170</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1761758533170</updated>
+    </task>
+    <task id="LOCAL-00004" summary="unused import fix">
+      <option name="closed" value="true" />
+      <created>1761758584535</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1761758584535</updated>
+    </task>
+    <task id="LOCAL-00005" summary="id type mismatch error fix">
+      <option name="closed" value="true" />
+      <created>1761759225102</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1761759225102</updated>
+    </task>
+    <task id="LOCAL-00006" summary="make endpoint in user.route">
+      <option name="closed" value="true" />
+      <created>1761759421640</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1761759421640</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="create getUserById in user.services" />
+    <MESSAGE value="create getUserHandler in user.controller" />
+    <MESSAGE value="unused import fix" />
+    <MESSAGE value="id type mismatch error fix" />
+    <MESSAGE value="make endpoint in user.route" />
+    <option name="LAST_COMMIT_MESSAGE" value="make endpoint in user.route" />
+  </component>
+</project>
