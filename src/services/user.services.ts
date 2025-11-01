@@ -24,7 +24,7 @@ export const getAllUsers = async (
         };
     }
     catch (error) {
-        console.error("Error executing logout", error);
+        console.error("Error executing getAllUsers", error);
         return {
         statusCode: 500,
         message: "Internal server error",
