@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ce4f437-32f9-4885-ba3a-869f627ffd7f" name="Changes" comment="make endpoint in user.route" />
+    <list default="true" id="1ce4f437-32f9-4885-ba3a-869f627ffd7f" name="Changes" comment="make endpoint in user.route">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,6 +48,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "/home/nethma/Desktop/MyDevProjects/HotCat/HotCat-Backend",
     "node.js.detected.package.eslint": "true",
@@ -54,7 +57,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "/home/nethma/Applications/WebStorm-252.26830.93/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+    "ts.external.directory.path": "/home/nethma/Desktop/MyDevProjects/HotCat/HotCat-Backend/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -92,6 +95,8 @@
       <workItem from="1761756195261" duration="3456000" />
       <workItem from="1761920614786" duration="3788000" />
       <workItem from="1762005538533" duration="139000" />
+      <workItem from="1762006509375" duration="92000" />
+      <workItem from="1762006609446" duration="1298000" />
     </task>
     <task id="LOCAL-00001" summary="create getUserById in user.services">
       <option name="closed" value="true" />
