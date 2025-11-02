@@ -38,10 +38,6 @@ export const getUserHandler = async (
     req: Request,
     res: Response
 )=> {
-    console.log("req.user:", req.user);
-    console.log("req.params.id:", req.params.id);
-    console.log("req.params:", req.params);
-
     const id = req.query.id?.toString();
     const tokenId = req.user?.id?.toString();
     
@@ -54,7 +50,7 @@ export const getUserHandler = async (
     try {
         const id: any = req.params.id || req.query.id;
 
-        const {statusCode, data} = await userServices.getUserById(id);
+        const {statusCode, data} = await userServices.getUserById(Number(id));
         return res
             .status(statusCode)
             .json({data});
