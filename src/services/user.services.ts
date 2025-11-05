@@ -1,4 +1,5 @@
 import DB from '../configs/dbConfig.js';
+import * as types from "../types/types.js";
 
 export const getAllUsers = async (
     page: number
@@ -68,4 +69,17 @@ export const getUserById = async (id: number) => {
             message: "Internal server error",
         };
     }
+}
+
+export const updateUser = async (
+    id: Number,
+    userName: String,
+    name: String,
+    phone: String,
+    email: String,
+    dateOfBirth: Date,
+    profileType: types.ProfileType,
+    role: types.Role
+) => {
+    
 }
