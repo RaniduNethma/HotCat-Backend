@@ -81,5 +81,14 @@ export const updateUser = async (
     profileType: types.ProfileType,
     role: types.Role
 ) => {
-    
+    try {
+        
+    }
+    catch (error) {
+        console.error("Error executing getUserById", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
+        };
+    }
 }
