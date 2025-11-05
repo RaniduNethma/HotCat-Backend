@@ -72,17 +72,55 @@ export const getUserById = async (id: number) => {
 }
 
 export const updateUser = async (
-    id: Number,
-    userName: String,
-    name: String,
-    phone: String,
-    email: String,
-    dateOfBirth: Date,
-    profileType: types.ProfileType,
-    role: types.Role
+    id: number,
+    NewUserName: string,
+    newName: string,
+    newPhone: string,
+    newEmail: string,
+    newDateOfBirth: Date,
+    newProfileType: types.ProfileType,
+    newRole: types.Role
 ) => {
     try {
-        
+        if(!id){
+            return{
+                statusCode: 404,
+                message: `User with id ${id} not found`
+            };
+        }
+
+        await DB.user.update({
+            where: { id },
+            data: {
+                userName: NewUserName,
+                name: newName,
+                phone: newPhone,
+                email: newEmail,
+                dateOfBirth: newDateOfBirth,
+                profileType: newProfileType,
+                role: newRole
+            }
+        });
+
+        const user = await DB.user.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                userName: true,
+                name: true,
+                phone: true,
+                email: true,
+                dateOfBirth: true,
+                profileType: true,
+                role: true,
+                createdAt: true,
+            }
+        });
+
+        return {
+            statusCode: 200,
+            data: user
+        };
     }
     catch (error) {
         console.error("Error executing getUserById", error);
