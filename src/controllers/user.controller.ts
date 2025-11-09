@@ -85,9 +85,9 @@ export const updateUserHandler = async (
     try {
         const id: any = req.params.id || req.query.id;
 
-        const {NewUserName, newName, newPhone, newEmail, newDateOfBirth, newProfileType, newRole} = req.body;
+        const {newUserName, newName, newPhone, newEmail, newDateOfBirth, newProfileType, newRole} = req.body;
 
-        const {statusCode, message, data} = await userServices.updateUser(Number(id), NewUserName, newName, newPhone, newEmail, newDateOfBirth, newProfileType, newRole);
+        const {statusCode, message, data} = await userServices.updateUser(Number(id), newUserName, newName, newPhone, newEmail, newDateOfBirth, newProfileType, newRole);
 
         return res
             .status(statusCode)

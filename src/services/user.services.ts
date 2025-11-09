@@ -73,7 +73,7 @@ export const getUserById = async (id: number) => {
 
 export const updateUser = async (
     id: number,
-    NewUserName: string,
+    newUserName: string,
     newName: string,
     newPhone: string,
     newEmail: string,
@@ -92,7 +92,7 @@ export const updateUser = async (
         await DB.user.update({
             where: { id: id },
             data: {
-                userName: NewUserName,
+                userName: newUserName,
                 name: newName,
                 phone: newPhone,
                 email: newEmail,
