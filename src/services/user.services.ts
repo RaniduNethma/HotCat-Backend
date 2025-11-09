@@ -90,7 +90,7 @@ export const updateUser = async (
         }
 
         await DB.user.update({
-            where: { id },
+            where: { id: id },
             data: {
                 userName: NewUserName,
                 name: newName,
@@ -119,6 +119,7 @@ export const updateUser = async (
 
         return {
             statusCode: 200,
+            message: "User data updated successfully",
             data: user
         };
     }

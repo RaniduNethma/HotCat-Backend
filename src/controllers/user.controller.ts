@@ -87,11 +87,11 @@ export const updateUserHandler = async (
 
         const {NewUserName, newName, newPhone, newEmail, newDateOfBirth, newProfileType, newRole} = req.body;
 
-        const {statusCode, data} = await userServices.updateUser(Number(id), NewUserName, newName, newPhone, newEmail, newDateOfBirth, newProfileType, newRole);
+        const {statusCode, message, data} = await userServices.updateUser(Number(id), NewUserName, newName, newPhone, newEmail, newDateOfBirth, newProfileType, newRole);
 
         return res
             .status(statusCode)
-            .json({data});
+            .json({message, data});
     }
     catch (error) {
         console.error(error);
