@@ -131,3 +131,32 @@ export const updateUser = async (
         };
     }
 }
+
+export const deleteUser = async(
+    id: number
+) => {
+    if(!id){
+        return{
+            statusCode: 404,
+            message: `User with id ${id} not found`
+        };
+    }
+
+    try {
+        await DB.user.delete({
+            where: { id: id},
+        });
+
+        return{
+            statusCode: 200,
+            message: 'User deleted successfully'
+        }
+    }
+    catch (error) {
+        console.error("Error executing deleteUser", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
+        };
+    }
+}
