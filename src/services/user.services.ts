@@ -124,7 +124,7 @@ export const updateUser = async (
         };
     }
     catch (error) {
-        console.error("Error executing getUserById", error);
+        console.error("Error executing updateUser", error);
         return {
             statusCode: 500,
             message: "Internal server error",
