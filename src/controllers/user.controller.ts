@@ -106,3 +106,37 @@ export const updateUserHandler = async (
         .json({ error: "Internal server error", message: error });
     }
 }
+
+export const deleteUserHandler = async(
+    req: Request,
+    res: Response
+) => {
+    const id = req.query.id?.toString();
+    const tokenId = req.user?.id?.toString();
+
+    if(!id || tokenId !== id){
+        return res
+            .status(401)
+            .json({ error: 'Not authorized to access this profile'});
+    }
+
+    try {
+        const {statusCode, message} = await userServices.deleteUser(Number(id));
+
+        return res
+            .status(statusCode)
+            .json(message);
+    }
+    catch (error) {
+        console.error(error);
+        if (error instanceof Error) {
+            const errorMessage = error.message;
+            return res
+            .status(400)
+            .json({ error: "Error executing query", message: errorMessage });
+        }
+        return res
+        .status(500)
+        .json({ error: "Internal server error", message: error });
+    }
+}
