@@ -39,3 +39,34 @@ export const createTable = async(
     }
 }
 
+export const getAllTables = async(
+    page: number
+) => {
+    const limit: number = 10;
+    const skip: number = (page - 1) * limit;
+
+    try {
+        const allTables = await DB.table.findMany({
+            take: limit,
+            skip,
+            select: {
+                id: true,
+                tableNumber: true,
+                status: true
+            }
+        });
+
+        return{
+            statusCode: 200,
+            data: allTables
+        }
+    }
+    catch (error) {
+        console.error("Error executing getAllTables", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
+        };
+    }
+}
+

@@ -27,3 +27,30 @@ export const createTableHandler = async(
             .json({ error: "Internal server error", message: error });
     }
 }
+
+export const getAllTablesHandler = async(
+    req: Request,
+    res: Response
+) => {
+    const page = req.body;
+
+    try {
+        const {statusCode, data} = await tableServices.getAllTables(page);
+
+        return res
+            .status(statusCode)
+            .json({data});
+    }
+    catch (error) {
+        console.error(error);
+        if (error instanceof Error) {
+        const errorMessage = error.message;
+        return res
+            .status(400)
+            .json({ error: "Error executing query", message: errorMessage });
+        }
+        return res
+            .status(500)
+            .json({ error: "Internal server error", message: error });
+    }
+}
