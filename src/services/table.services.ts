@@ -70,3 +70,29 @@ export const getAllTables = async(
     }
 }
 
+export const getTableById = async(
+    id: number
+) => {
+    try {
+        const tableData = await DB.table.findUnique({
+            where: {id},
+            select: {
+                id: true,
+                tableNumber: true,
+                status: true
+            }
+        });
+
+        return {
+            statusCode: 200,
+            data: tableData
+        };
+    }
+    catch (error) {
+        console.error("Error executing getTableById", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
+        };
+    }
+}
