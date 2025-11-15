@@ -141,3 +141,32 @@ export const updateTable = async(
         };
     }
 }
+
+export const deleteTable = async(
+    id: number
+) => {
+    if(!id){
+        return{
+            statusCode: 404,
+            message: `Table with id ${id} not found`
+        };
+    }
+
+    try {
+        await DB.table.delete({
+            where: { id: id},
+        });
+
+        return{
+            statusCode: 200,
+            message: 'Table deleted successfully'
+        }
+    }
+    catch (error) {
+        console.error("Error executing deleteTable", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
+        };
+    }
+}
