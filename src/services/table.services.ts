@@ -96,3 +96,48 @@ export const getTableById = async(
         };
     }
 }
+
+export const updateTable = async(
+    id: number,
+    newTableNumber: number,
+    newStatus: types.TableStatus
+) => {
+    if(!id){
+        return{
+            statusCode: 404,
+            message: `Table with id ${id} not found`
+        };
+    }
+
+    try {
+        await DB.table.update({
+            where: {id: id},
+            data: {
+                tableNumber: newTableNumber,
+                status: newStatus
+            }
+        });
+
+        const updatedTable = await DB.table.findUnique({
+            where: {id: id},
+            select: {
+                id: true,
+                tableNumber: true,
+                status: true
+            }
+        });
+
+        return {
+            statusCode: 200,
+            message: 'Table data updated successfully',
+            data: updatedTable
+        }
+    }
+    catch (error) {
+        console.error("Error executing updateTable", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
+        };
+    }
+}
