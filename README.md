@@ -74,17 +74,20 @@ Here's an overview of the project structure:
 │   │
 │   ├── 📂 controllers/                      
 │   │   ├── 📄 auth.controller.ts            # Handles authentication requests & responses
-│   │   └── 📄 user.controller.ts            # Handles user-related requests & responses
+│   │   ├── 📄 table.controller.ts           # Handles table related requests & responses
+│   │   └── 📄 user.controller.ts            # Handles user related requests & responses
 │   │
 │   ├── 📂 middlewares/
 │   │   └── 📄 auth.middleware.ts            # Verify JWT tokens and protect private routes
 │   │
 │   ├── 📂 routes/
 │   │   ├── 📄 auth.route.ts                 # Defines authentication endpoints
+│   │   ├── 📄 table.route.ts                # Defines table related API endpoints
 │   │   └── 📄 user.route.ts                 # Defines user related API endpoints
 │   │
 │   ├── 📂 services/
 │   │   ├── 📄 auth.services.ts              # Business logic for authentication and token generation
+│   │   ├── 📄 table.services.ts             # Business logic for table data operations
 │   │   └── 📄 user.services.ts              # Business logic for user data operations
 │   │
 │   ├── 📂 types/
