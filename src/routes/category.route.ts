@@ -6,5 +6,6 @@ const categoryRouter = Router();
 
 categoryRouter.post('/create-category', auth(), categoryController.createCategoryHandler);
 categoryRouter.get('/get-all-categories', auth(), categoryController.getAllCategoriesHandler);
+categoryRouter.get('/get-category', auth(), categoryController.getCategoryByIdHandler);
 
 export default categoryRouter;

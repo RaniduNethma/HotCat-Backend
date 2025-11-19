@@ -70,3 +70,38 @@ export const getAllCategories = async(
         };
     }
 }
+
+export const getCategoryById = async(
+    id: number
+) => {
+    try {
+        const getCategory = await DB.category.findUnique({
+            where: {id},
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                createdAt: true
+            }
+        });
+
+        if(getCategory == null){
+            return {
+                statusCode: 404,
+                message: `Category with id ${id} not found`
+            }
+        }
+
+        return {
+            statusCode: 200,
+            data: getCategory
+        };
+    }
+    catch (error) {
+        console.error("Error executing getCategoryById", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
+        };
+    }
+}
