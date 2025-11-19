@@ -130,6 +130,13 @@ export const updateCategory = async(
             }
         });
 
+        if(updatedCategory == null){
+            return {
+                statusCode: 404,
+                message: `Category with id ${id} not found`
+            };
+        }
+
         return {
             statusCode: 200,
             message: 'Category data updated successfully',
