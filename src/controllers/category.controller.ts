@@ -81,3 +81,30 @@ export const getCategoryByIdHandler = async(
             .json({ error: "Internal server error", message: error });
     }
 }
+
+export const updateCategoryHandler = async(
+    req: Request,
+    res: Response
+) => {
+    const {id, newName, newDescription} = req.body;
+
+    try {
+        const {statusCode, message, data} = await categoryServices.updateCategory(Number(id), newName, newDescription);
+
+        return res
+            .status(statusCode)
+            .json({message, data});
+    }
+    catch (error) {
+        console.error(error);
+        if (error instanceof Error) {
+        const errorMessage = error.message;
+        return res
+            .status(400)
+            .json({ error: "Error executing query", message: errorMessage });
+        }
+        return res
+            .status(500)
+            .json({ error: "Internal server error", message: error });
+    }
+}
