@@ -105,3 +105,42 @@ export const getCategoryById = async(
         };
     }
 }
+
+export const updateCategory = async(
+    id: number,
+    newName: string,
+    newDescription: string
+) => {
+    try {
+        await DB.category.update({
+            where: {id},
+            data: {
+                name: newName,
+                description: newDescription
+            }
+        });
+
+        const updatedCategory = await DB.category.findUnique({
+            where: {id},
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                createdAt: true
+            }
+        });
+
+        return {
+            statusCode: 200,
+            message: 'Category data updated successfully',
+            data: updatedCategory
+        };
+    }
+    catch (error) {
+        console.error("Error executing updateCategory", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
+        };
+    }
+}
