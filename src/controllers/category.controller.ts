@@ -108,3 +108,30 @@ export const updateCategoryHandler = async(
             .json({ error: "Internal server error", message: error });
     }
 }
+
+export const deleteCategoryHandler = async(
+    req: Request,
+    res: Response
+) => {
+    const {id} = req.body;
+
+    try {
+        const {statusCode, message} = await categoryServices.deleteCategory(Number(id));
+
+        return res
+            .status(statusCode)
+            .json({message});
+    }
+    catch (error) {
+        console.error(error);
+        if (error instanceof Error) {
+        const errorMessage = error.message;
+        return res
+            .status(400)
+            .json({ error: "Error executing query", message: errorMessage });
+        }
+        return res
+            .status(500)
+            .json({ error: "Internal server error", message: error });
+    }
+}

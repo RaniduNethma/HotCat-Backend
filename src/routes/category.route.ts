@@ -8,5 +8,6 @@ categoryRouter.post('/create-category', auth(), categoryController.createCategor
 categoryRouter.get('/get-all-categories', auth(), categoryController.getAllCategoriesHandler);
 categoryRouter.get('/get-category', auth(), categoryController.getCategoryByIdHandler);
 categoryRouter.put('/update-category', auth(), categoryController.updateCategoryHandler);
+categoryRouter.delete('/delete-category', auth(), categoryController.deleteCategoryHandler);
 
 export default categoryRouter;

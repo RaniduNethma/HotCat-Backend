@@ -151,3 +151,36 @@ export const updateCategory = async(
         };
     }
 }
+
+export const deleteCategory = async(
+    id: number
+) => {
+    try {
+        const findCategory = await DB.category.findUnique({
+            where: {id}
+        });
+
+        if(!findCategory){
+            return {
+                statusCode: 404,
+                message: `Category with id ${id} not found`
+            };
+        }
+
+        await DB.user.delete({
+            where: {id: id}
+        });
+
+        return{
+            statusCode: 200,
+            message: 'Category deleted successfully'
+        };
+    }
+    catch (error) {
+        console.error("Error executing deleteCategory", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
+        };
+    }
+}
