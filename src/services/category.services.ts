@@ -38,3 +38,35 @@ export const createCategory = async(
         };
     }
 }
+
+export const getAllCategories = async(
+    page: number
+) => {
+    const limit: number = 10;
+    const skip: number = (page - 1) * limit;
+
+    try {
+        const allCategories = await DB.category.findMany({
+            take: limit,
+            skip,
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                createdAt: true
+            }
+        });
+
+        return {
+            statusCode: 200,
+            data: allCategories
+        };
+    }
+    catch (error) {
+        console.error("Error executing getAllCategories", error);
+        return {
+            statusCode: 500,
+            message: "Internal server error",
+        };
+    }
+}
