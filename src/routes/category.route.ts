@@ -5,5 +5,6 @@ import * as categoryController from '../controllers/category.controller.js';
 const categoryRouter = Router();
 
 categoryRouter.post('/create-category', auth(), categoryController.createCategoryHandler);
+categoryRouter.get('/get-all-categories', auth(), categoryController.getAllCategoriesHandler);
 
 export default categoryRouter;

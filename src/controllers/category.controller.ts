@@ -27,3 +27,30 @@ export const createCategoryHandler = async(
             .json({ error: "Internal server error", message: error });
     }
 }
+
+export const getAllCategoriesHandler = async(
+    req: Request,
+    res: Response
+) => {
+    const page = req.body;
+
+    try {
+        const {statusCode, message, data} = await categoryServices.getAllCategories(page);
+
+        return res
+            .status(statusCode)
+            .json({message, data});
+    }
+    catch (error) {
+        console.error(error);
+        if (error instanceof Error) {
+        const errorMessage = error.message;
+        return res
+            .status(400)
+            .json({ error: "Error executing query", message: errorMessage });
+        }
+        return res
+            .status(500)
+            .json({ error: "Internal server error", message: error });
+    }
+}
