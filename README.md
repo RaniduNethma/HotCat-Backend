@@ -1,3 +1,5 @@
+![HotCat Logo](./assets/HotCat-Logo.png)
+
 # HotCat - Backend
 
 Smart Orders, Happier Tables.
