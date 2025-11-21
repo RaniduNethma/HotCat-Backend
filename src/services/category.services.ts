@@ -167,7 +167,7 @@ export const deleteCategory = async(
             };
         }
 
-        await DB.user.delete({
+        await DB.category.delete({
             where: {id: id}
         });
 
