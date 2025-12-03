@@ -62,11 +62,34 @@ enum ProfileType {
   GOLD
 }
 
+// TABLE MANAGEMENT
+
 model Table {
   id          Int         @id @default(autoincrement())
   tableNumber Int         @unique
-  status      TableStatus @default(FREE)
-  order       Order[]
+  capacity    Int
+  tableType   TableType
+  tableStatus TableStatus @default(AVAILABLE)
+  qrCode      String      @unique
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  //Relations
+  order Order[]
+}
+
+enum TableType {
+  INDOOR
+  OUTDOOR
+  VIP
+}
+
+enum TableStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
+  CLEANING
 }
 
 model Product {
@@ -127,11 +150,6 @@ model OrderItems {
   productId Int
   Quantity  Int
   subTotal  Decimal @db.Decimal(10, 2)
-}
-
-enum TableStatus {
-  FREE
-  BUSY
 }
 
 enum OrderStatus {
