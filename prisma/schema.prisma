@@ -90,6 +90,7 @@ enum TableStatus {
   OCCUPIED
   RESERVED
   CLEANING
+  REPAIRING
 }
 
 model Product {
