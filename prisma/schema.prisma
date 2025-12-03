@@ -8,19 +8,58 @@ datasource db {
   //url      = env("DATABASE_URL")
 }
 
+//USER MANAGEMENT
+
 model User {
-  id           Int         @id @default(autoincrement())
-  userName     String      @unique
+  id           Int       @id @default(autoincrement())
+  userName     String    @unique
   name         String
   phone        String
-  email        String?     @unique
+  email        String?   @unique
   password     String
   dateOfBirth  DateTime?
-  profileType  ProfileType @default(BRONZE)
-  role         Role        @default(USER)
-  refreshToken String?     @db.Text
-  createdAt    DateTime    @default(now())
-  order        Order[]
+  userType     UserType  @default(CUSTOMER)
+  userRole     UserRole?
+  isActive     Boolean   @default(true)
+  refreshToken String?   @db.Text
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  //Relations
+  order    Order[]
+  profiles Profile?
+}
+
+model Profile {
+  id          Int         @id @default(autoincrement())
+  userId      Int         @unique
+  user        User        @relation(fields: [userId], references: [id])
+  profileType ProfileType @default(BRONZE)
+  address     String?
+  city        String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum UserType {
+  CUSTOMER
+  STAFF
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  OFFICER
+  CASHIER
+  WAITER
+  CHEF
+  STORE_KEEPER
+}
+
+enum ProfileType {
+  BRONZE
+  SILVER
+  GOLD
 }
 
 model Table {
@@ -88,22 +127,6 @@ model OrderItems {
   productId Int
   Quantity  Int
   subTotal  Decimal @db.Decimal(10, 2)
-}
-
-enum ProfileType {
-  BRONZE
-  SILVER
-  GOLD
-}
-
-enum Role {
-  USER
-  WAITER
-  CHEF
-  STORE_KEEPER
-  OFFICER
-  ADMIN
-  MANAGER
 }
 
 enum TableStatus {
