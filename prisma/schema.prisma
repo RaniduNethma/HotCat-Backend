@@ -93,24 +93,38 @@ enum TableStatus {
   REPAIRING
 }
 
-model Product {
-  id             Int              @id @default(autoincrement())
-  name           String           @unique
-  description    String?
-  category       Category         @relation(fields: [categoryId], references: [id])
-  categoryId     Int
-  stock          Int              @default(0)
-  createdAt      DateTime         @default(now())
-  priceListItems PriceListItems[]
-  orderItems     OrderItems[]
-}
+// PRODUCT MANAGEMENT
 
 model Category {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
   description String
-  createdAt   DateTime  @default(now())
-  product     Product[]
+  imageUrl    String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  product Product[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  imageUrl    String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  stock       Int      @default(0)
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  priceListItems PriceListItems[]
+  orderItems     OrderItems[]
 }
 
 model PriceList {
