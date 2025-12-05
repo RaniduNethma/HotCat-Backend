@@ -67,6 +67,13 @@ export interface AuthRequest extends Request {
   };
 }
 
+export interface TokenPayload {
+  id: string;
+  userName: string;
+  userRole?: UserRole;
+  profileType: ProfileType;
+}
+
 export interface Tokens {
   accessToken: string;
   refreshToken: string;
