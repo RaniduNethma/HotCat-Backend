@@ -1,60 +1,89 @@
 import { Decimal } from "@prisma/client/runtime/library";
 import { Request } from "express";
 
-export enum UserType {
-  CUSTOMER = "CUSTOMER",
-  STAFF = "STAFF"
+enum UserType {
+  CUSTOMER,
+  STAFF
 }
 
 enum UserRole {
-  ADMIN
-  MANAGER
-  OFFICER
-  CASHIER
-  WAITER
-  CHEF
+  ADMIN,
+  MANAGER,
+  OFFICER,
+  CASHIER,
+  WAITER,
+  CHEF,
   STORE_KEEPER
 }
 
 enum ProfileType {
-  BRONZE
-  SILVER
+  BRONZE,
+  SILVER,
   GOLD
+}
+
+enum TableType {
+  INDOOR,
+  OUTDOOR,
+  VIP
+}
+
+enum TableStatus {
+  AVAILABLE,
+  OCCUPIED,
+  RESERVED,
+  CLEANING,
+  REPAIRING
+}
+
+enum OrderStatus {
+  PENDING,
+  PREPARING,
+  READY,
+  SERVED
+}
+
+enum OrderType {
+  DINE_IN,
+  TAKEAWAY,
+  DELIVERY
+}
+
+enum PaymentStatus {
+  PENDING,
+  PAID,
+  PARTIALLY_PAID,
+  REFUNDED
 }
 
 export interface AuthRequest extends Request {
   user?: {
     id: string;
-    email: string;
-    role?: UserRole;
+    userName: string;
+    email?: string;
+    userType: UserType;
+    userRole?: UserRole;
     profileType: ProfileType;
   };
 }
 
-export enum ProfileType {
-  BRONZE = "BRONZE",
-  SILVER = "SILVER",
-  GOLD = "GOLD",
+export interface Tokens {
+  accessToken: string;
+  refreshToken: string;
 }
 
-export enum Role {
-  USER = "USER",
-  WAITER = "WAITER",
-  CHEF = "CHEF",
-  STORE_KEEPER = "STORE_KEEPER",
-  OFFICER = "OFFICER",
-  ADMIN = "ADMIN",
-  MANAGER = "MANAGER",
+export interface RegisterDTO {
+  userName: String;
+  name: String;
+  phone?: String;
+  email?: String;
+  password: String;
+  dateOfBirth?: Date;
+  userType: UserType;
+  userRole: UserRole;
 }
 
-export enum TableStatus {
-  FREE = "FREE",
-  BUSY = "BUSY",
-}
-
-export enum OrderStatus {
-  PENDING = "PENDING",
-  COOKING = "COOKING",
-  READY = "READY",
-  DELIVERED = "DELIVERED",
+export interface LoginDTO {
+  userName: string;
+  password: string;
 }
