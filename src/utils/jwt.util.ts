@@ -1,0 +1,59 @@
+import jwt from "jsonwebtoken";
+import { env } from "../configs/envConfig.js";
+import { TokenPayload, Tokens } from "../types/types.js";
+
+/*export const generateAccessToken = (payload: object): string => {
+    return jwt.sign(payload, env.ACCESS_TOKEN_SECRET!, {
+        expiresIn: env.ACCESS_TOKEN_EXPIRES,
+    });
+};
+
+export const generateRefreshToken = (payload: object): string => {
+    return jwt.sign(payload, env.REFRESH_TOKEN_SECRET!, {
+        expiresIn: env.REFRESH_TOKEN_EXPIRES,
+    });
+};
+
+export const verifyAccessToken = (token: string) => {
+    return jwt.verify(token, env.ACCESS_TOKEN_SECRET!);
+};
+
+export const verifyRefreshToken = (token: string) => {
+    return jwt.verify(token, env.REFRESH_TOKEN_SECRET!);
+};
+*/
+
+export class JWTUtil {
+    private static ACCESS_TOKEN_SECRET = env.ACCESS_TOKEN_SECRET!;
+    private static REFRESH_TOKEN_SECRET = env.REFRESH_TOKEN_SECRET!;
+    private static ACCESS_TOKEN_EXPIRY = env.ACCESS_TOKEN_EXPIRES;
+    private static REFRESH_TOKEN_EXPIRY = env.REFRESH_TOKEN_EXPIRES;
+
+    static generateTokens(payload: TokenPayload): Tokens {
+        const accessToken = jwt.sign(payload, this.ACCESS_TOKEN_SECRET, {
+            expiresIn: this.ACCESS_TOKEN_EXPIRY
+        });
+
+        const refreshToken = jwt.sign(payload, this.REFRESH_TOKEN_SECRET, {
+            expiresIn: this.REFRESH_TOKEN_EXPIRY
+        });
+
+        return { accessToken, refreshToken};
+    }
+
+    static verifyAccessToken(token: string): TokenPayload {
+        return jwt.verify(token, this.ACCESS_TOKEN_SECRET) as TokenPayload;
+    }
+
+    static verifyRefreshToken(token: string): TokenPayload {
+        return jwt.verify(token, this.REFRESH_TOKEN_SECRET) as TokenPayload;
+    }
+
+    static decodeToken(token: string): TokenPayload | null {
+        try {
+            return jwt.decode(token) as TokenPayload;
+        } catch {
+            return null;
+        }
+    }
+}
