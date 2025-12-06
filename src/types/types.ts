@@ -2,54 +2,54 @@ import { Decimal } from "@prisma/client/runtime/library";
 import { Request } from "express";
 
 enum UserRole {
-  ADMIN,
-  MANAGER,
-  OFFICER,
-  CASHIER,
-  WAITER,
-  CHEF,
-  STORE_KEEPER,
+  ADMIN = 'ADMIN',
+  MANAGER = 'MANAGER',
+  OFFICER = 'OFFICER',
+  CASHIER = 'CASHIER',
+  WAITER = 'WAITER',
+  CHEF = 'CHEF',
+  STORE_KEEPER = 'STORE_KEEPER',
   CUSTOMER = 'CUSTOMER'
 }
 
 enum ProfileType {
-  BRONZE,
-  SILVER,
-  GOLD
+  BRONZE = 'BRONZE',
+  SILVER = 'SILVER',
+  GOLD = 'GOLD'
 }
 
 enum TableType {
-  INDOOR,
-  OUTDOOR,
-  VIP
+  INDOOR = 'INDOOR',
+  OUTDOOR = 'OUTDOOR',
+  VIP = 'VIP'
 }
 
 enum TableStatus {
-  AVAILABLE,
-  OCCUPIED,
-  RESERVED,
-  CLEANING,
-  REPAIRING
+  AVAILABLE = 'AVAILABLE',
+  OCCUPIED = 'OCCUPIED',
+  RESERVED = 'RESERVED',
+  CLEANING = 'CLEANING',
+  REPAIRING = 'REPAIRING'
 }
 
 enum OrderStatus {
-  PENDING,
-  PREPARING,
-  READY,
-  SERVED
+  PENDING = 'PENDING',
+  PREPARING = 'PREPARING',
+  READY = 'READY',
+  SERVED = 'SERVED'
 }
 
 enum OrderType {
-  DINE_IN,
-  TAKEAWAY,
-  DELIVERY
+  DINE_IN = 'DINE_IN',
+  TAKEAWAY = 'TAKEAWAY',
+  DELIVERY = 'DELIVERY'
 }
 
 enum PaymentStatus {
-  PENDING,
-  PAID,
-  PARTIALLY_PAID,
-  REFUNDED
+  PENDING = 'PENDING',
+  PAID = 'PAID',
+  PARTIALLY_PAID = 'PARTIALLY_PAID',
+  REFUNDED = 'REFUNDED'
 }
 
 export interface AuthRequest extends Request {
@@ -65,7 +65,7 @@ export interface AuthRequest extends Request {
 export interface TokenPayload {
   id: string;
   userName: string;
-  userRole?: UserRole;
+  userRole: UserRole;
   profileType: ProfileType;
 }
 
