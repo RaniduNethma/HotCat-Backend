@@ -1,11 +1,6 @@
 import { Decimal } from "@prisma/client/runtime/library";
 import { Request } from "express";
 
-enum UserType {
-  CUSTOMER,
-  STAFF
-}
-
 enum UserRole {
   ADMIN,
   MANAGER,
@@ -13,7 +8,8 @@ enum UserRole {
   CASHIER,
   WAITER,
   CHEF,
-  STORE_KEEPER
+  STORE_KEEPER,
+  CUSTOMER
 }
 
 enum ProfileType {
@@ -61,7 +57,6 @@ export interface AuthRequest extends Request {
     id: string;
     userName: string;
     email?: string;
-    userType: UserType;
     userRole?: UserRole;
     profileType: ProfileType;
   };
@@ -86,7 +81,6 @@ export interface RegisterDTO {
   email?: String;
   password: String;
   dateOfBirth?: Date;
-  userType: UserType;
   userRole: UserRole;
 }
 
