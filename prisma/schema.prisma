@@ -18,7 +18,6 @@ model User {
   email        String?   @unique
   password     String
   dateOfBirth  DateTime?
-  userType     UserType  @default(CUSTOMER)
   userRole     UserRole?
   isActive     Boolean   @default(true)
   refreshToken String?   @db.Text
@@ -42,11 +41,6 @@ model Profile {
   updatedAt   DateTime    @updatedAt
 }
 
-enum UserType {
-  CUSTOMER
-  STAFF
-}
-
 enum UserRole {
   ADMIN
   MANAGER
@@ -55,6 +49,7 @@ enum UserRole {
   WAITER
   CHEF
   STORE_KEEPER
+  CUSTOMER
 }
 
 enum ProfileType {
