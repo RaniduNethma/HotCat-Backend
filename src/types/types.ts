@@ -9,7 +9,7 @@ enum UserRole {
   WAITER,
   CHEF,
   STORE_KEEPER,
-  CUSTOMER
+  CUSTOMER = 'CUSTOMER'
 }
 
 enum ProfileType {
@@ -57,7 +57,7 @@ export interface AuthRequest extends Request {
     id: string;
     userName: string;
     email?: string;
-    userRole?: UserRole;
+    userRole: UserRole;
     profileType: ProfileType;
   };
 }
