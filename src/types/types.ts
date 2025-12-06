@@ -1,7 +1,7 @@
 import { Decimal } from "@prisma/client/runtime/library";
 import { Request } from "express";
 
-enum UserRole {
+export enum UserRole {
   ADMIN = 'ADMIN',
   MANAGER = 'MANAGER',
   OFFICER = 'OFFICER',
