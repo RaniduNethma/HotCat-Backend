@@ -148,24 +148,10 @@ export class AuthService{
     }
   }
 
-  export const logoutUser = async (id: number) => {
-    try {
-      await DB.user.update({
-        where: { id: id },
-        data: {refreshToken: null}
-      });
-
-      return {
-        statusCode: 200,
-        message: 'Logout successful'
-      };
-    }
-    catch (error) {
-      console.error("Error executing logout", error);
-      return {
-        statusCode: 500,
-        message: "Internal server error",
-      };
-    }
+  async logout(id: number){
+    await DB.user.update({
+      where: { id: id },
+      data: {refreshToken: null}
+    });
   }
 }
