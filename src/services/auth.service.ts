@@ -1,8 +1,6 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import DB from "../configs/dbConfig.js";
 import {RegisterDTO, LoginDTO, TokenPayload} from "../types/types.js";
-import { env } from "../configs/envConfig.js";
 import { JWTUtil } from "../utils/jwt.util.js";
 
 export class AuthService{
@@ -79,7 +77,7 @@ export class AuthService{
     });
 
     if (!profile) {
-      throw new Error('No profile found');
+      throw new Error('Profile not found');
     }
 
     const payload: TokenPayload = {
@@ -125,7 +123,7 @@ export class AuthService{
       });
 
       if (!profile) {
-        throw new Error('No profile found');
+        throw new Error('Profile not found');
       }
 
       const payload: TokenPayload = {
@@ -153,5 +151,45 @@ export class AuthService{
       where: { id: id },
       data: {refreshToken: null}
     });
+  }
+
+  async getProfile(id: number){
+    const user = await DB.user.findUnique({
+      where: {id: id},
+      select: {
+        id: true,
+        userName: true,
+        name: true,
+        phone: true,
+        email: true,
+        dateOfBirth: true,
+        userRole: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      }
+    });
+
+    if(!user){
+      throw new Error('User not found');
+    }
+
+    const profile = await DB.profile.findUnique({
+      where: {userId: user.id},
+      select: {
+        profileType: true,
+        address: true,
+        city: true
+      }
+    });
+
+    if (!profile) {
+      throw new Error('Profile not found');
+    }
+
+    return{
+      user: user,
+      profile: profile
+    }
   }
 }
