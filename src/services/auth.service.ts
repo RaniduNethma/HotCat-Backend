@@ -108,27 +108,44 @@ export class AuthService{
     };
   };
 
-  export const tokenGenerater = async (token: string) => {
-    const decoded: any = jwt.verify(token, env.REFRESH_TOKEN_SECRET!);
+  async refreshToken (refreshToken: string){
+    try {
+      const decoded = JWTUtil.verifyRefreshToken(refreshToken);
 
-    const user = await DB.user.findUnique({
-      where: {id: decoded.id}
-    });
+      const user = await DB.user.findUnique({
+        where: {id: decoded.id}
+      });
 
-    if (!user || user.refreshToken !== token) throw new Error("Invalid refresh token");
+      if (!user || user.refreshToken !== refreshToken || !user.isActive){
+        throw new Error("Invalid refresh token");
+      }
 
-    const newAccessToken = generateAccessToken({id: user.id, role: user.role});
-    const newRefreshToken = generateRefreshToken({id: user.id, role: user.role});
+      const profile = await DB.profile.findUnique({
+        where: {userId: user.id},
+      });
 
-    await DB.user.update({
-      where: {id: user.id},
-      data: {refreshToken: newRefreshToken}
-    });
+      if (!profile) {
+        throw new Error('No profile found');
+      }
 
-    return {
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken
-    };
+      const payload: TokenPayload = {
+        id: user.id,
+        userName: user.userName,
+        userRole: user.userRole,
+        profileType: profile.profileType
+      }
+
+      const tokens = JWTUtil.generateTokens(payload);
+
+      await DB.user.update({
+        where: {id: user.id},
+        data: {refreshToken: tokens.refreshToken}
+      });
+
+      return tokens;
+    } catch (error) {
+      throw new Error('Invalid refresh token');
+    }
   }
 
   export const logoutUser = async (id: number) => {
