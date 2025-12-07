@@ -75,13 +75,16 @@ export interface Tokens {
 }
 
 export interface RegisterDTO {
-  userName: String;
-  name: String;
-  phone?: String;
-  email?: String;
-  password: String;
+  userName: string;
+  name: string;
+  phone: string;
+  email?: string;
+  password: string;
   dateOfBirth?: Date;
   userRole: UserRole;
+  profileType: ProfileType;
+  address?: string;
+  city?: string;
 }
 
 export interface LoginDTO {
