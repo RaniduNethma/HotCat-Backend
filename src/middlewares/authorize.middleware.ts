@@ -1,5 +1,6 @@
 import type { Response, NextFunction } from "express";
-import { AuthRequest, UserRole } from "../types/types.js";
+import { AuthRequest} from "../types/types.js";
+import {UserRole} from '@prisma/client';
 
 export const authorizeRoles = (...allowedRoles: UserRole[]) => {
     return (req: AuthRequest, res: Response, next: NextFunction) => {
