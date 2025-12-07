@@ -14,7 +14,7 @@ export class AuthService{
     if (existingUser != null) {
       return {
         statusCode: 409,
-        message: "Username already exists",
+        message: 'Username already exists',
       };
     }
 
@@ -27,11 +27,11 @@ export class AuthService{
         phone: data.phone,
         email: data.email ?? null,
         dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
-        userRole: data.userRole || 'CUSTOMER',
+        userRole: data.userRole,
         password: hashedPassword,
         profiles: {
           create: {
-            profileType: data.profileType || 'BRONZE',
+            profileType: data.profileType,
             address: data.address ?? null,
             city: data.city ?? null
           }
@@ -54,69 +54,59 @@ export class AuthService{
 
     return {
       statusCode: 200,
-      message: "Registration successful",
+      message: 'Registration successful',
       user: newUser,
     };
   };
 
-  export const loginUser = async (
-    userName: string,
-    password: string
-  ) => {
-    try {
-      const user = await DB.user.findUnique({
-        where: { userName }
-      });
+  async login(data: LoginDTO){
+    const user = await DB.user.findUnique({
+      where: { userName: data.userName },
+    });
 
-      if (!user) {
-        return {
-          statusCode: 401,
-          message: "Invalid email or password",
-        };
+    if (!user || !user.isActive) {
+      throw new Error('Invalid credentials');
+    }
+
+    const isMatch = await bcrypt.compare(data.password, user.password);
+
+    if (!isMatch) {
+      throw new Error('Invalid credentials');
+    };
+
+    const profile = await DB.profile.findUnique({
+      where: {userId: user.id},
+    });
+
+    if (!profile) {
+      throw new Error('No profile found');
+    }
+
+    const payload: TokenPayload = {
+      id: user.id,
+      userName: user.userName,
+      userRole: user.userRole,
+      profileType: profile.profileType
+    };
+
+    const tokens = JWTUtil.generateTokens(payload);
+
+    await DB.user.update({
+      where: { id: user.id },
+      data: { refreshToken: tokens.refreshToken},
+    });
+
+    return {
+      tokens,
+      user: {
+        id: user.id,
+        userName: user.userName,
+        name: user.name,
+        userRole: user.userRole,
+        profileType: profile.profileType
       }
-
-      const isMatch = await bcrypt.compare(password, user.password);
-
-      if (!isMatch) {
-        return {
-          statusCode: 401,
-          message: "Invalid email or password",
-        };
-      };
-
-      const accessToken = generateAccessToken({id: user.id, role: user.role});
-      const refreshToken = generateRefreshToken({id: user.id, role: user.role});
-
-      await DB.user.update({
-        where: { id: user.id },
-        data: { refreshToken: refreshToken},
-      });
-
-      const safeUser = excludePassword(user);
-
-      return {
-        statusCode: 200,
-        message: "Login successfull",
-        user: safeUser,
-        accessToken,
-        refreshToken
-      };
-    }
-    catch (error) {
-      console.error("Error executing login", error);
-      return {
-        statusCode: 500,
-        message: "Internal server error",
-      };
-    }
+    };
   };
-
-  export const excludePassword = (user: any) => {
-    if(!user) return null;
-    const {password, ...safeUser} = user;
-    return safeUser;
-  };
-
 
   export const tokenGenerater = async (token: string) => {
     const decoded: any = jwt.verify(token, env.REFRESH_TOKEN_SECRET!);
