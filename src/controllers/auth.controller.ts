@@ -44,7 +44,7 @@ export class AuthController{
         success: true,
         data: {
           user: result.user,
-          accessToken: result.tokens.accessToken;
+          accessToken: result.tokens.accessToken
         },
         message: 'Login successful'
       });
@@ -95,36 +95,22 @@ export class AuthController{
     }
   };
 
-  export const logout = async (
-    req: Request,
-    res: Response
-  ) => {
+  logout = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-      const user = req.user as {id: number; role: string};
-
       if(!req.user){
-        return res
-          .status(401)
-          .json({message: 'Unauthorized'});
+        await this.authService.logout(req.body);
       }
 
-      const result = await AuthServices.logoutUser(user.id);
+      res.clearCookie('accessToken');
+      res.clearCookie('refreshToken');
 
-      return res
-        .status(result.statusCode)
-        .json({message: result.message});
+      res.json({
+        success: true,
+        message: 'Logged out successfully'
+      });
     }
     catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        const errorMessage = error.message;
-        return res
-          .status(400)
-          .json({ error: "Error executing query (Controller)", message: errorMessage });
-      }
-      return res
-        .status(500)
-        .json({ error: "Internal server error", message: error });
+      next(error);
     }
-  }
+  };
 }
