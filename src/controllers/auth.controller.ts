@@ -113,4 +113,18 @@ export class AuthController{
       next(error);
     }
   };
+
+  getProfile = async(req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+      const user = await this.authService.getProfile(req.user!.id);
+
+      res.json({
+        success: true,
+        data: user
+      });
+    }
+    catch (error) {
+      next(error);
+    }
+  };
 }
