@@ -1,6 +1,7 @@
 import { Response, NextFunction } from "express";
 import { AuthRequest } from "../types/types.js";
 import { AuthService } from "../services/auth.service.js";
+import { env } from "../configs/envConfig.js";
 
 export class AuthController{
   private authService: AuthService;
@@ -9,11 +10,7 @@ export class AuthController{
     this.authService = new AuthService();
   }
 
-  register = async (
-    req: AuthRequest,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  register = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const user = await this.authService.register(req.body);
 
@@ -31,36 +28,32 @@ export class AuthController{
     }
   };
 
-  export const login = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  login = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-      const { userName, password } = req.body;
+      const result = await this.authService.login(req.body);
 
-      if (!userName || !password) {
-        return res
-          .status(400)
-          .json({ error: "User name and password are required fields" });
-      }
+      // Set Cookies
+      res.cookie('accessToken', result.tokens.accessToken, {
+        httpOnly: true,
+        secure: env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 Days
+      });
 
-      const { statusCode, message, user, accessToken, refreshToken} =
-        await AuthServices.loginUser(userName, password);
-
-      return res.status(statusCode).json({ user, message, accessToken, refreshToken});
+      res.json({
+        success: true,
+        data: {
+          user: result.user,
+          accessToken: result.tokens.accessToken;
+        },
+        message: 'Login successful'
+      });
     }
-    catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        const errorMessage = error.message;
-        return res
-          .status(400)
-          .json({ error: "Error executing query", message: errorMessage });
+    catch (error: any) {
+      if (error.message === 'Invalid credentials'){
+        return res.status(401).json({error: error.message});
       }
-      return res
-        .status(500)
-        .json({ error: "Internal server error", message: error });
+      next(error);
     }
   };
 

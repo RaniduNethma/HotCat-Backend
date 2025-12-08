@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 interface EnvConfig {
+    NODE_ENV: string;
     SERVER_PORT: number;
     DATABASE_URL: string;
     ACCESS_TOKEN_SECRET: string;
@@ -23,6 +24,7 @@ function getEnvVariable(key: any, required = true): any {
 }
 
 export const env: EnvConfig = {
+  NODE_ENV: getEnvVariable("NODE_ENV"),
   SERVER_PORT: Number(getEnvVariable("SERVER_PORT")),
   DATABASE_URL: getEnvVariable("DATABASE_URL"),
   ACCESS_TOKEN_SECRET: getEnvVariable("ACCESS_TOKEN_SECRET"),
