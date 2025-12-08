@@ -13,7 +13,7 @@ const registerSchema = z.object({
   name: z.string().min(3),
   phone: z.string(),
   email: z.string().optional(),
-  dateOfBirth: z.date().optional(),
+  dateOfBirth: z.coerce.date().optional(),
   userRole: z.enum([
     "ADMIN",
     "MANAGER",
