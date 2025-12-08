@@ -57,32 +57,43 @@ export class AuthController{
     }
   };
 
-  export const refreshToken = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  refreshToken = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-      const token = req.body.refreshToken;
-      const newToken = await AuthServices.tokenGenerater(token);
+      const refreshToken = req.cookies?.refreshToken || req.body.refreshToken;
 
-      return res
-        .status(200)
-        .json(newToken);
-    }
-    catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        const errorMessage = error.message;
-        return res
-          .status(400)
-          .json({ error: "Error executing query", message: errorMessage });
+      if(!refreshToken){
+        return res.status(401).json({error: 'Refresh token required'});
       }
-      return res
-        .status(500)
-        .json({ error: "Internal server error", message: error });
+      
+      const tokens = await this.authService.refreshToken(refreshToken);
+
+      // Update Cookies
+      res.cookie('accessToken', tokens.accessToken, {
+        httpOnly: true,
+        secure: env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 15 * 60 * 1000 // 15 Minutes
+      });
+
+      res.cookie('refreshToken', tokens.refreshToken, {
+        httpOnly: true,
+        secure: env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 Days
+      });
+
+      res.json({
+        success: true,
+        data: {accessToken: tokens.accessToken},
+        message: 'Token refreshed successfully'
+      });
     }
-  }
+    catch (error: any) {
+      res.clearCookie('accessToken');
+      res.clearCookie('refreshToken');
+      return res.status(401).json({error: 'Invalid refresh token'});
+    }
+  };
 
   export const logout = async (
     req: Request,
