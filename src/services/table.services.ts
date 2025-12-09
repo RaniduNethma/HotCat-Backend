@@ -44,16 +44,6 @@ export class TableService {
     };
   }
 
-  async getAvailableTables() {
-    return await DB.table.findMany({
-      where: {
-        isActive: true,
-        tableStatus: "AVAILABLE",
-      },
-      orderBy: { tableNumber: "asc" },
-    });
-  }
-
   async getAllTables(page: number) {
     const limit: number = 10;
     const skip: number = (page - 1) * limit;
@@ -72,7 +62,7 @@ export class TableService {
         createdAt: true,
         updatedAt: true,
       },
-      orderBy: { updatedAt: "desc" },
+      orderBy: { createdAt: "desc" },
     });
 
     return {
@@ -81,10 +71,19 @@ export class TableService {
     };
   }
 
-  getTableById = async (id: number) => {
-    try {
+  async getAvailableTables() {
+    return await DB.table.findMany({
+      where: {
+        isActive: true,
+        tableStatus: "AVAILABLE",
+      },
+      orderBy: { tableNumber: "asc" },
+    });
+  }
+
+  async getTableById(id: number) {
       const tableData = await DB.table.findUnique({
-        where: { id },
+        where: { id: id },
         select: {
           id: true,
           tableNumber: true,
@@ -96,14 +95,8 @@ export class TableService {
         statusCode: 200,
         data: tableData,
       };
-    } catch (error) {
-      console.error("Error executing getTableById", error);
-      return {
-        statusCode: 500,
-        message: "Internal server error",
-      };
     }
-  };
+  }
 
   updateTable = async (
     id: number,
