@@ -1,13 +1,33 @@
 import { Router } from "express";
-import { auth } from "../middlewares/auth.middleware.js";
-import * as categoryController from '../controllers/category.controller.js';
+import { authenticate } from "../middlewares/auth.middleware.js";
+import * as categoryController from "../controllers/category.controller.js";
 
 const categoryRouter = Router();
 
-categoryRouter.post('/create-category', auth(), categoryController.createCategoryHandler);
-categoryRouter.get('/get-all-categories', auth(), categoryController.getAllCategoriesHandler);
-categoryRouter.get('/get-category', auth(), categoryController.getCategoryByIdHandler);
-categoryRouter.put('/update-category', auth(), categoryController.updateCategoryHandler);
-categoryRouter.delete('/delete-category', auth(), categoryController.deleteCategoryHandler);
+categoryRouter.post(
+  "/create-category",
+  authenticate,
+  categoryController.createCategoryHandler
+);
+categoryRouter.get(
+  "/get-all-categories",
+  authenticate,
+  categoryController.getAllCategoriesHandler
+);
+categoryRouter.get(
+  "/get-category",
+  authenticate,
+  categoryController.getCategoryByIdHandler
+);
+categoryRouter.put(
+  "/update-category",
+  authenticate,
+  categoryController.updateCategoryHandler
+);
+categoryRouter.delete(
+  "/delete-category",
+  authenticate,
+  categoryController.deleteCategoryHandler
+);
 
 export default categoryRouter;

@@ -54,33 +54,32 @@ export class TableService {
     });
   }
 
-  getAllTables = async (page: number) => {
+  async getAllTables(page: number) {
     const limit: number = 10;
     const skip: number = (page - 1) * limit;
 
-    try {
-      const allTables = await DB.table.findMany({
-        take: limit,
-        skip,
-        select: {
-          id: true,
-          tableNumber: true,
-          tableStatus: true,
-        },
-      });
+    const allTables = await DB.table.findMany({
+      take: limit,
+      skip,
+      select: {
+        id: true,
+        tableNumber: true,
+        capacity: true,
+        tableType: true,
+        tableStatus: true,
+        qrCode: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: { updatedAt: "desc" },
+    });
 
-      return {
-        statusCode: 200,
-        data: allTables,
-      };
-    } catch (error) {
-      console.error("Error executing getAllTables", error);
-      return {
-        statusCode: 500,
-        message: "Internal server error",
-      };
-    }
-  };
+    return {
+      statusCode: 200,
+      data: allTables,
+    };
+  }
 
   getTableById = async (id: number) => {
     try {
