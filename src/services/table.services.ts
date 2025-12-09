@@ -87,7 +87,13 @@ export class TableService {
         select: {
           id: true,
           tableNumber: true,
+          capacity: true,
+          tableType: true,
           tableStatus: true,
+          qrCode: true,
+          isActive: true,
+          createdAt: true,
+          updatedAt: true,
         },
       });
 
