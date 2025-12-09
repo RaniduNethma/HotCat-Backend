@@ -44,6 +44,16 @@ export class TableService {
     };
   }
 
+  async getAvailableTables() {
+    return await DB.table.findMany({
+      where: {
+        isActive: true,
+        tableStatus: "AVAILABLE",
+      },
+      orderBy: { tableNumber: "asc" },
+    });
+  }
+
   getAllTables = async (page: number) => {
     const limit: number = 10;
     const skip: number = (page - 1) * limit;
