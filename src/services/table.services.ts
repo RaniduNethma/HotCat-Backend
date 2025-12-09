@@ -1,172 +1,168 @@
-import DB from '../configs/dbConfig.js'
-import * as types from '../types/types.js'
+import DB from "../configs/dbConfig.js";
+import { CreateTableDTO } from "../types/types.js";
+import { TableType, TableStatus } from "@prisma/client";
 
-export const createTable = async(
-    tableNumber: number,
-    status: types.TableStatus
-) => {
-    try {
-        const existingTable = await DB.table.findUnique({
-            where: {tableNumber}
-        });
+export class TableService {
+  async createTable(data: CreateTableDTO) {
+    const existingTable = await DB.table.findUnique({
+      where: { tableNumber: data.tableNumber },
+    });
 
-        if(existingTable != null){
-            return{
-                statusCode: 409,
-                message: 'Table number already exists'
-            }
-        }
-
-        const newTable = await DB.table.create({
-            data: {
-                tableNumber: tableNumber,
-                status: status
-            },
-        });
-
-        return {
-            statusCode: 200,
-            message: 'Create table successful',
-            data: newTable
-        }
+    if (existingTable != null) {
+      return {
+        statusCode: 409,
+        message: "Table number already exists",
+      };
     }
-    catch (error) {
-        console.error("Error executing createTable", error);
-        return {
-            statusCode: 500,
-            message: "Internal server error",
-        };
-    }
-}
 
-export const getAllTables = async(
-    page: number
-) => {
+    const newTable = await DB.table.create({
+      data: {
+        tableNumber: data.tableNumber,
+        capacity: data.capacity,
+        tableType: data.tableType,
+        tableStatus: data.tableStatus,
+        qrCode: data.qrCode,
+        isActive: data.isActive,
+      },
+      select: {
+        id: true,
+        tableNumber: true,
+        capacity: true,
+        tableType: true,
+        tableStatus: true,
+        qrCode: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return {
+      statusCode: 200,
+      message: "Create table successful",
+      data: newTable,
+    };
+  }
+
+  getAllTables = async (page: number) => {
     const limit: number = 10;
     const skip: number = (page - 1) * limit;
 
     try {
-        const allTables = await DB.table.findMany({
-            take: limit,
-            skip,
-            select: {
-                id: true,
-                tableNumber: true,
-                status: true
-            }
-        });
+      const allTables = await DB.table.findMany({
+        take: limit,
+        skip,
+        select: {
+          id: true,
+          tableNumber: true,
+          tableStatus: true,
+        },
+      });
 
-        return{
-            statusCode: 200,
-            data: allTables
-        }
+      return {
+        statusCode: 200,
+        data: allTables,
+      };
+    } catch (error) {
+      console.error("Error executing getAllTables", error);
+      return {
+        statusCode: 500,
+        message: "Internal server error",
+      };
     }
-    catch (error) {
-        console.error("Error executing getAllTables", error);
-        return {
-            statusCode: 500,
-            message: "Internal server error",
-        };
-    }
-}
+  };
 
-export const getTableById = async(
-    id: number
-) => {
+  getTableById = async (id: number) => {
     try {
-        const tableData = await DB.table.findUnique({
-            where: {id},
-            select: {
-                id: true,
-                tableNumber: true,
-                status: true
-            }
-        });
+      const tableData = await DB.table.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          tableNumber: true,
+          tableStatus: true,
+        },
+      });
 
-        return {
-            statusCode: 200,
-            data: tableData
-        };
+      return {
+        statusCode: 200,
+        data: tableData,
+      };
+    } catch (error) {
+      console.error("Error executing getTableById", error);
+      return {
+        statusCode: 500,
+        message: "Internal server error",
+      };
     }
-    catch (error) {
-        console.error("Error executing getTableById", error);
-        return {
-            statusCode: 500,
-            message: "Internal server error",
-        };
-    }
-}
+  };
 
-export const updateTable = async(
+  updateTable = async (
     id: number,
     newTableNumber: number,
-    newStatus: types.TableStatus
-) => {
-    if(!id){
-        return{
-            statusCode: 404,
-            message: `Table with id ${id} not found`
-        };
+    newStatus: TableStatus
+  ) => {
+    if (!id) {
+      return {
+        statusCode: 404,
+        message: `Table with id ${id} not found`,
+      };
     }
 
     try {
-        await DB.table.update({
-            where: {id: id},
-            data: {
-                tableNumber: newTableNumber,
-                status: newStatus
-            }
-        });
+      await DB.table.update({
+        where: { id: id },
+        data: {
+          tableNumber: newTableNumber,
+          tableStatus: newStatus,
+        },
+      });
 
-        const updatedTable = await DB.table.findUnique({
-            where: {id: id},
-            select: {
-                id: true,
-                tableNumber: true,
-                status: true
-            }
-        });
+      const updatedTable = await DB.table.findUnique({
+        where: { id: id },
+        select: {
+          id: true,
+          tableNumber: true,
+          tableStatus: true,
+        },
+      });
 
-        return {
-            statusCode: 200,
-            message: 'Table data updated successfully',
-            data: updatedTable
-        }
+      return {
+        statusCode: 200,
+        message: "Table data updated successfully",
+        data: updatedTable,
+      };
+    } catch (error) {
+      console.error("Error executing updateTable", error);
+      return {
+        statusCode: 500,
+        message: "Internal server error",
+      };
     }
-    catch (error) {
-        console.error("Error executing updateTable", error);
-        return {
-            statusCode: 500,
-            message: "Internal server error",
-        };
-    }
-}
+  };
 
-export const deleteTable = async(
-    id: number
-) => {
-    if(!id){
-        return{
-            statusCode: 404,
-            message: `Table with id ${id} not found`
-        };
+  deleteTable = async (id: number) => {
+    if (!id) {
+      return {
+        statusCode: 404,
+        message: `Table with id ${id} not found`,
+      };
     }
 
     try {
-        await DB.table.delete({
-            where: { id: id},
-        });
+      await DB.table.delete({
+        where: { id: id },
+      });
 
-        return{
-            statusCode: 200,
-            message: 'Table deleted successfully'
-        }
+      return {
+        statusCode: 200,
+        message: "Table deleted successfully",
+      };
+    } catch (error) {
+      console.error("Error executing deleteTable", error);
+      return {
+        statusCode: 500,
+        message: "Internal server error",
+      };
     }
-    catch (error) {
-        console.error("Error executing deleteTable", error);
-        return {
-            statusCode: 500,
-            message: "Internal server error",
-        };
-    }
+  };
 }

@@ -1,13 +1,14 @@
 import { Decimal } from "@prisma/client/runtime/library";
 import { Request } from "express";
 import {
-  UserRole, 
-  ProfileType, 
-  TableType, 
-  TableStatus, 
+  UserRole,
+  ProfileType,
+  TableType,
+  TableStatus,
   OrderStatus,
   OrderType,
-  PaymentStatus} from '@prisma/client';
+  PaymentStatus,
+} from "@prisma/client";
 
 export interface AuthRequest extends Request {
   user?: {
@@ -47,4 +48,13 @@ export interface RegisterDTO {
 export interface LoginDTO {
   userName: string;
   password: string;
+}
+
+export interface CreateTableDTO {
+  tableNumber: number;
+  capacity: number;
+  tableType: TableType;
+  tableStatus: TableStatus;
+  qrCode: string;
+  isActive: boolean;
 }
