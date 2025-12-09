@@ -1,5 +1,5 @@
 import DB from "../configs/dbConfig.js";
-import { CreateTableDTO } from "../types/types.js";
+import { CreateTableDTO, UpdateTableDTO } from "../types/types.js";
 import { TableType, TableStatus } from "@prisma/client";
 
 export class TableService {
@@ -82,95 +82,69 @@ export class TableService {
   }
 
   async getTableById(id: number) {
-      const tableData = await DB.table.findUnique({
-        where: { id: id },
-        select: {
-          id: true,
-          tableNumber: true,
-          capacity: true,
-          tableType: true,
-          tableStatus: true,
-          qrCode: true,
-          isActive: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      });
-
+    if (!id) {
       return {
-        statusCode: 200,
-        data: tableData,
+        statusCode: 404,
+        message: `Table with id ${id} not found`,
       };
     }
+
+    const tableData = await DB.table.findUnique({
+      where: { id: id },
+      select: {
+        id: true,
+        tableNumber: true,
+        capacity: true,
+        tableType: true,
+        tableStatus: true,
+        qrCode: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return {
+      statusCode: 200,
+      data: tableData,
+    };
   }
 
-  updateTable = async (
-    id: number,
-    newTableNumber: number,
-    newStatus: TableStatus
-  ) => {
-    if (!id) {
+  async updateTable(data: UpdateTableDTO) {
+    if (!data.id) {
       return {
         statusCode: 404,
-        message: `Table with id ${id} not found`,
+        message: `Table with id ${data.id} not found`,
       };
     }
 
-    try {
-      await DB.table.update({
-        where: { id: id },
-        data: {
-          tableNumber: newTableNumber,
-          tableStatus: newStatus,
-        },
-      });
+    const updatedTable = await DB.table.update({
+      where: { id: data.id },
+      data: {
+        tableNumber: data.tableNumber,
+        capacity: data.capacity,
+        tableType: data.tableType,
+        tableStatus: data.tableStatus,
+        qrCode: data.qrCode,
+        isActive: data.isActive,
+      },
+      select: {
+        id: true,
+        tableNumber: true,
+        capacity: true,
+        tableType: true,
+        tableStatus: true,
+        qrCode: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
 
-      const updatedTable = await DB.table.findUnique({
-        where: { id: id },
-        select: {
-          id: true,
-          tableNumber: true,
-          tableStatus: true,
-        },
-      });
-
-      return {
-        statusCode: 200,
-        message: "Table data updated successfully",
-        data: updatedTable,
-      };
-    } catch (error) {
-      console.error("Error executing updateTable", error);
-      return {
-        statusCode: 500,
-        message: "Internal server error",
-      };
-    }
-  };
-
-  deleteTable = async (id: number) => {
-    if (!id) {
-      return {
-        statusCode: 404,
-        message: `Table with id ${id} not found`,
-      };
-    }
-
-    try {
-      await DB.table.delete({
-        where: { id: id },
-      });
-
-      return {
-        statusCode: 200,
-        message: "Table deleted successfully",
-      };
-    } catch (error) {
-      console.error("Error executing deleteTable", error);
-      return {
-        statusCode: 500,
-        message: "Internal server error",
-      };
-    }
-  };
+    return {
+      statusCode: 200,
+      message: "Table data updated successfully",
+      data: updatedTable,
+    };
+  }
 }

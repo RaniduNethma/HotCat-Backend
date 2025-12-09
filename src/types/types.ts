@@ -58,3 +58,13 @@ export interface CreateTableDTO {
   qrCode: string;
   isActive: boolean;
 }
+
+export interface UpdateTableDTO {
+  id: number;
+  tableNumber: number;
+  capacity: number;
+  tableType: TableType;
+  tableStatus: TableStatus;
+  qrCode: string;
+  isActive: boolean;
+}
