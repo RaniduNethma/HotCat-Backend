@@ -36,7 +36,11 @@ export class TableController {
     }
   }
 
-  async getAvailableTables(res: Response, next: NextFunction) {
+  async getAvailableTables(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     const tables = await this.tableService.getAvailableTables();
 
     return res.status(200).json({
