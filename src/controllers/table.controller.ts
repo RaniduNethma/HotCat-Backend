@@ -29,33 +29,30 @@ export class TableController {
 
       return res.status(200).json({
         success: true,
-        data: tables
+        data: tables,
       });
     } catch (error) {
       next(error);
+    }
   }
 
-  getTableByIdHandler = async (req: Request, res: Response) => {
-    const id = req.body;
-
+  async getTableById(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const { statusCode, message, data } =
-        await tableServices.getTableById(id);
+      const id = req.params;
+      const table = await this.tableService.getTableById(Number(id));
 
-      return res.status(statusCode).json({ message, data });
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        const errorMessage = error.message;
-        return res
-          .status(400)
-          .json({ error: "Error executing query", message: errorMessage });
+      if (!table) {
+        return res.status(404).json({ error: "Table not found" });
       }
-      return res
-        .status(500)
-        .json({ error: "Internal server error", message: error });
+
+      return res.status(200).json({
+        success: true,
+        data: table,
+      });
+    } catch (error) {
+      next(error);
     }
-  };
+  }
 
   updateTableHandler = async (req: Request, res: Response) => {
     const { id, newTableNumber, newStatus } = req.body;
