@@ -1,6 +1,5 @@
 import DB from "../configs/dbConfig.js";
 import { CreateTableDTO, UpdateTableDTO } from "../types/types.js";
-import { TableType, TableStatus } from "@prisma/client";
 
 export class TableService {
   async createTable(data: CreateTableDTO) {
