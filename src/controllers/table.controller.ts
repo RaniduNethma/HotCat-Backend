@@ -23,26 +23,17 @@ export class TableController {
     }
   }
 
-  getAllTablesHandler = async (req: Request, res: Response) => {
-    const page = req.body;
-
+  async getAllTables(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const { statusCode, data } = await tableServices.getAllTables(page);
+      const tables = await this.tableService.getAllTables(req.body);
 
-      return res.status(statusCode).json({ data });
+      return res.status(200).json({
+        success: true,
+        data: tables
+      });
     } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        const errorMessage = error.message;
-        return res
-          .status(400)
-          .json({ error: "Error executing query", message: errorMessage });
-      }
-      return res
-        .status(500)
-        .json({ error: "Internal server error", message: error });
-    }
-  };
+      next(error);
+  }
 
   getTableByIdHandler = async (req: Request, res: Response) => {
     const id = req.body;
