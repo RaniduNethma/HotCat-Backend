@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticate } from "../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../middlewares/authorize.middleware.js";
 import { TableController } from "../controllers/table.controller.js";
-import { Role } from "../generated/prisma/index.js";
+import { UserRole } from "@prisma/client";
 import { z } from "zod";
 import { validate } from "../middlewares/validation.middleware.js";
 
@@ -44,7 +44,7 @@ tableRouter.post(
   "/create",
   authenticate,
   validate(createTableSchema),
-  authorizeRoles(Role.ADMIN, Role.MANAGER, Role.OFFICER),
+  authorizeRoles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OFFICER),
   tableController.createTable
 );
 
@@ -52,11 +52,11 @@ tableRouter.get(
   "/",
   authenticate,
   authorizeRoles(
-    Role.ADMIN,
-    Role.CHEF,
-    Role.MANAGER,
-    Role.OFFICER,
-    Role.WAITER
+    UserRole.ADMIN,
+    UserRole.CHEF,
+    UserRole.MANAGER,
+    UserRole.OFFICER,
+    UserRole.WAITER
   ),
   tableController.getAllTables
 );
@@ -65,11 +65,11 @@ tableRouter.get(
   "/available",
   authenticate,
   authorizeRoles(
-    Role.ADMIN,
-    Role.CHEF,
-    Role.MANAGER,
-    Role.OFFICER,
-    Role.WAITER
+    UserRole.ADMIN,
+    UserRole.CHEF,
+    UserRole.MANAGER,
+    UserRole.OFFICER,
+    UserRole.WAITER
   ),
   tableController.getAvailableTables
 );
@@ -78,11 +78,11 @@ tableRouter.get(
   "/:id",
   authenticate,
   authorizeRoles(
-    Role.ADMIN,
-    Role.CHEF,
-    Role.MANAGER,
-    Role.OFFICER,
-    Role.WAITER
+    UserRole.ADMIN,
+    UserRole.CHEF,
+    UserRole.MANAGER,
+    UserRole.OFFICER,
+    UserRole.WAITER
   ),
   tableController.getTableById
 );
@@ -91,7 +91,7 @@ tableRouter.post(
   "/update",
   authenticate,
   validate(updateTableSchema),
-  authorizeRoles(Role.ADMIN, Role.MANAGER, Role.OFFICER),
+  authorizeRoles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OFFICER),
   tableController.updateTable
 );
 
