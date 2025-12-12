@@ -1,16 +1,19 @@
-import { PrismaClient } from "@prisma/client";
+import { env } from "./envConfig.js";
+import { PrismaClient } from "../generated/prisma/client.js";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
-let DB: PrismaClient;
-
-if (process.env.NODE_ENV === "production") {
-  DB = new PrismaClient();
+const connectionString = env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error("DATABASE_URL environment variable is not set.");
 }
-else {
-  if (!(global as any).DB) {
-    (global as any).DB = new PrismaClient();
-  }
+const pool = new Pool({ connectionString });
 
-  DB = (global as any).DB;
-}
+const adapter = new PrismaPg(pool);
+
+const DB = new PrismaClient({ adapter });
 
 export default DB;
+
+// Launch Prisma Studio
+// npx prisma studio --config ./prisma.config.ts
