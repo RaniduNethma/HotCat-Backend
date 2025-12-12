@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticate } from "../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../middlewares/authorize.middleware.js";
 import { TableController } from "../controllers/table.controller.js";
-import { UserRole } from "@prisma/client";
+import { UserRole } from "../generated/prisma/client.js";
 import { z } from "zod";
 import { validate } from "../middlewares/validation.middleware.js";
 

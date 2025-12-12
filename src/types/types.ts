@@ -7,7 +7,7 @@ import {
   OrderStatus,
   OrderType,
   PaymentStatus,
-} from "@prisma/client";
+} from "../generated/prisma/client.js";
 
 export interface AuthRequest extends Request {
   user?: {
