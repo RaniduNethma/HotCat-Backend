@@ -9,7 +9,7 @@ export class TableController {
     this.tableService = new TableService();
   }
 
-  async createTable(req: AuthRequest, res: Response, next: NextFunction) {
+  createTable = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const table = await this.tableService.createTable(req.body);
 
@@ -21,7 +21,7 @@ export class TableController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   async getAllTables(req: AuthRequest, res: Response, next: NextFunction) {
     try {

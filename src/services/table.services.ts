@@ -7,7 +7,7 @@ export class TableService {
       where: { tableNumber: data.tableNumber },
     });
 
-    if (existingTable != null) {
+    if (existingTable) {
       return {
         statusCode: 409,
         message: "Table number already exists",
