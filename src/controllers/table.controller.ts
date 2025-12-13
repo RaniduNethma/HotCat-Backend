@@ -41,18 +41,18 @@ export class TableController {
     }
   };
 
-  async getAvailableTables(
+  getAvailableTables = async (
     req: AuthRequest,
     res: Response,
     next: NextFunction
-  ) {
+  ) => {
     const tables = await this.tableService.getAvailableTables();
 
     return res.status(200).json({
       success: true,
       data: tables,
     });
-  }
+  };
 
   async getTableById(req: AuthRequest, res: Response, next: NextFunction) {
     try {
