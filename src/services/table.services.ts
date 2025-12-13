@@ -49,7 +49,6 @@ export class TableService {
 
     const allTables = await DB.table.findMany({
       take: limit,
-      skip,
       select: {
         id: true,
         tableNumber: true,
@@ -62,6 +61,7 @@ export class TableService {
         updatedAt: true,
       },
       orderBy: { createdAt: "desc" },
+      skip: skip,
     });
 
     return {
