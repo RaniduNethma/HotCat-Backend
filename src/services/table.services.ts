@@ -70,14 +70,35 @@ export class TableService {
     };
   }
 
-  async getAvailableTables() {
-    return await DB.table.findMany({
+  async getAvailableTables(page: number) {
+    const limit: number = 10;
+    const skip: number = page > 1 ? (page - 1) * limit : 0;
+
+    const availableTables = await DB.table.findMany({
+      take: limit,
       where: {
         isActive: true,
         tableStatus: "AVAILABLE",
       },
+      select: {
+        id: true,
+        tableNumber: true,
+        capacity: true,
+        tableType: true,
+        tableStatus: true,
+        qrCode: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       orderBy: { tableNumber: "asc" },
+      skip,
     });
+
+    return {
+      statusCode: 200,
+      data: availableTables,
+    };
   }
 
   async getTableById(id: number) {

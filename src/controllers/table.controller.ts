@@ -47,7 +47,8 @@ export class TableController {
     res: Response,
     next: NextFunction
   ) => {
-    const tables = await this.tableService.getAvailableTables();
+    const page = req.query.page;
+    const tables = await this.tableService.getAvailableTables(Number(page));
 
     return res.status(200).json({
       success: true,
