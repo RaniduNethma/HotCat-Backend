@@ -45,7 +45,7 @@ export class TableService {
 
   async getAllTables(page: number) {
     const limit: number = 10;
-    const skip: number = (page - 1) * limit;
+    const skip: number = page > 1 ? (page - 1) * limit : 0;
 
     const allTables = await DB.table.findMany({
       take: limit,
@@ -61,7 +61,7 @@ export class TableService {
         updatedAt: true,
       },
       orderBy: { createdAt: "desc" },
-      skip: skip,
+      skip,
     });
 
     return {

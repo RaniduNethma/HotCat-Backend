@@ -29,8 +29,9 @@ export class TableController {
     next: NextFunction
   ) => {
     try {
-      const page: number = req.body;
+      const page = req.query.page;
       const tables = await this.tableService.getAllTables(Number(page));
+      console.log(req.query);
 
       return res.status(200).json({
         success: true,
@@ -54,7 +55,11 @@ export class TableController {
     });
   };
 
-  async getTableById(req: AuthRequest, res: Response, next: NextFunction) {
+  getTableById = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const table = await this.tableService.getTableById(req.body);
 
@@ -69,7 +74,7 @@ export class TableController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   async updateTable(req: AuthRequest, res: Response, next: NextFunction) {
     try {

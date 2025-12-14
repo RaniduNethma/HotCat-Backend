@@ -75,7 +75,7 @@ tableRouter.get(
 );
 
 tableRouter.get(
-  "/:id",
+  "/id",
   authenticate,
   authorizeRoles(
     UserRole.ADMIN,
