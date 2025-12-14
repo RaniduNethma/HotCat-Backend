@@ -8,7 +8,7 @@ Welcome to the backend of the HotCat project!
 
 ## What is HotCat?
 
-HotCat is a restaurant management web application designed to streamline dining experiences. Built with a Node.js & Express backend, React frontend, and MySQL database, it enables smart order handling, menu management, and efficient customer–restaurant interactions. The goal is to deliver a seamless, tech-powered dining experience.
+HotCat is a restaurant management web application designed to streamline dining experiences. Built with a Node.js & Express backend, React frontend, and postgreSQL database, it enables smart order handling, menu management, and efficient customer–restaurant interactions. The goal is to deliver a seamless, tech-powered dining experience.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ Before you can start using this project, make sure you have the following instal
 
 - Node.js
 - npm
-- MySQL
+- postgreSQL
 
 ## Getting Started
 
@@ -72,32 +72,35 @@ Here's an overview of the project structure:
 ├── 📂 src/
 │   ├── 📂 configs/
 │   │   ├── 📄 dbConfig.ts                   # Database connection setup using Prisma Client
-│   │   └── 📄 envConfig.ts                  # Loads and validates environment variables from `.env`
+│   │   ├── 📄 envConfig.ts                  # Loads and validates environment variables from `.env`
+│   │   └── 📄 redisConfig.ts                # Govern the behavior of the redis server
 │   │
 │   ├── 📂 controllers/                      
 │   │   ├── 📄 auth.controller.ts            # Handles authentication requests & responses
 │   │   ├── 📄 table.controller.ts           # Handles table related requests & responses
-│   │   └── 📄 user.controller.ts            # Handles user related requests & responses
+│   │   └── 📄 category.controller.ts        # Handles product category related requests & responses
 │   │
 │   ├── 📂 middlewares/
-│   │   └── 📄 auth.middleware.ts            # Verify JWT tokens and protect private routes
+│   │   ├── 📄 auth.middleware.ts            # Verify JWT tokens and Authentication
+│   │   ├── 📄 authorize.middleware.ts       # Authorization roles
+│   │   └── 📄 validation.middleware.ts      # Verifying data integrity
 │   │
 │   ├── 📂 routes/
 │   │   ├── 📄 auth.route.ts                 # Defines authentication endpoints
 │   │   ├── 📄 table.route.ts                # Defines table related API endpoints
-│   │   └── 📄 user.route.ts                 # Defines user related API endpoints
+│   │   └── 📄 category.route.ts             # Defines category related API endpoints
 │   │
 │   ├── 📂 services/
 │   │   ├── 📄 auth.services.ts              # Business logic for authentication and token generation
 │   │   ├── 📄 table.services.ts             # Business logic for table data operations
-│   │   └── 📄 user.services.ts              # Business logic for user data operations
+│   │   └── 📄 category.services.ts          # Business logic for product category data operations
 │   │
 │   ├── 📂 types/
 │   │   ├── 📄 express.d.ts                  # Extends Express Request types for custom properties
-│   │   └── 📄 types.ts                      # Defines reusable TypeScript interfaces and type aliases
+│   │   └── 📄 types.ts                      # Defines reusable TypeScript interfaces and type aliases   
 │   │
 │   ├── 📂 utils/
-│   │   └── 📄 token.ts                      # Creating and verifying JWT access/refresh tokens
+│   │   └── 📄 jwt.util.ts                   # Creating and verifying JWT access/refresh tokens
 │   │
 │   ├── 📄 app.ts                            # Initializes Express app, applies middleware, and sets up routes
 │   └── 📄 server.ts                         # Starts the server and listens on the configured port
@@ -108,6 +111,7 @@ Here's an overview of the project structure:
 ├── 📄 jest.config.ts                        # Configuration file for Jest testing framework
 ├── 📄 LICENSE                               # License information for the project (MIT)
 ├── 📄 package.json                          # Project metadata, scripts, and dependencies list
+├── 📄 prisma.config.ts                      # Configuration file for prisma ORM
 ├── 📄 README.md                             # Project overview, setup guide, and documentation
 └── 📄 tsconfig.json                         # TypeScript compiler configuration file
 ```
