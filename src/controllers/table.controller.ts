@@ -78,7 +78,7 @@ export class TableController {
     }
   };
 
-  async updateTable(req: AuthRequest, res: Response, next: NextFunction) {
+  updateTable = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const table = await this.tableService.updateTable(req.body);
 
@@ -93,5 +93,5 @@ export class TableController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 }

@@ -87,7 +87,7 @@ tableRouter.get(
   tableController.getTableById
 );
 
-tableRouter.post(
+tableRouter.put(
   "/update",
   authenticate,
   validate(updateTableSchema),
