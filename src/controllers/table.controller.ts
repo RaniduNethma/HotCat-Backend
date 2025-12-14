@@ -62,7 +62,8 @@ export class TableController {
     next: NextFunction
   ) => {
     try {
-      const table = await this.tableService.getTableById(req.body);
+      const id = req.query.tableId;
+      const table = await this.tableService.getTableById(Number(id));
 
       if (!table) {
         return res.status(404).json({ error: "Table not found" });
