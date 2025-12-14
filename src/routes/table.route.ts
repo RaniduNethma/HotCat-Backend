@@ -26,18 +26,14 @@ const createTableSchema = z.object({
 
 const updateTableSchema = z.object({
   id: z.number(),
-  tableNumber: z.number(),
-  capacity: z.number(),
-  tableType: z.enum(["INDOOR", "OUTDOOR", "VIP"]),
-  tableStatus: z.enum([
-    "AVAILABLE",
-    "OCCUPIED",
-    "RESERVED",
-    "CLEANING",
-    "REPAIRING",
-  ]),
-  qrCode: z.string(),
-  isActive: z.boolean(),
+  tableNumber: z.number().optional(),
+  capacity: z.number().optional(),
+  tableType: z.enum(["INDOOR", "OUTDOOR", "VIP"]).optional(),
+  tableStatus: z
+    .enum(["AVAILABLE", "OCCUPIED", "RESERVED", "CLEANING", "REPAIRING"])
+    .optional(),
+  qrCode: z.string().optional(),
+  isActive: z.boolean().optional(),
 });
 
 tableRouter.post(
