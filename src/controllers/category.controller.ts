@@ -27,25 +27,23 @@ export class CategoryController {
     }
   };
 
-  getAllCategoriesHandler = async (req: Request, res: Response) => {
-    const page = req.body;
-
+  getAllCategories = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
-      const { statusCode, message, data } =
-        await categoryServices.getAllCategories(page);
+      const page = req.query.page;
+      const categories = await this.categoryService.getAllCategories(
+        Number(page)
+      );
 
-      return res.status(statusCode).json({ message, data });
+      return res.status(200).json({
+        success: true,
+        data: categories,
+      });
     } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        const errorMessage = error.message;
-        return res
-          .status(400)
-          .json({ error: "Error executing query", message: errorMessage });
-      }
-      return res
-        .status(500)
-        .json({ error: "Internal server error", message: error });
+      next(error);
     }
   };
 
