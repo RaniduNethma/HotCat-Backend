@@ -1,5 +1,5 @@
 import DB from "../configs/dbConfig.js";
-import { CreateCategoryDTO } from "../types/types.js";
+import { CreateCategoryDTO, UpdateCategoryDTO } from "../types/types.js";
 
 export class CategoryService {
   async createCategory(data: CreateCategoryDTO) {
@@ -90,31 +90,34 @@ export class CategoryService {
     };
   }
 
-  async updateCategory(id: number, newName: string, newDescription: string) {
-    await DB.category.update({
-      where: { id },
-      data: {
-        name: newName,
-        description: newDescription,
-      },
-    });
+  async updateCategory(data: UpdateCategoryDTO) {
+    if (!data.id) {
+      return {
+        statusCode: 404,
+        message: `Category with id ${data.id} not found`,
+      };
+    }
 
-    const updatedCategory = await DB.category.findUnique({
-      where: { id },
+    const updatedCategory = await DB.category.update({
+      where: { id: data.id },
+      data: {
+        name: data.name,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        sortOrder: data.sortOrder,
+        isActive: data.isActive,
+      },
       select: {
         id: true,
         name: true,
         description: true,
+        imageUrl: true,
+        sortOrder: true,
+        isActive: true,
         createdAt: true,
+        updatedAt: true,
       },
     });
-
-    if (updatedCategory == null) {
-      return {
-        statusCode: 404,
-        message: `Category with id ${id} not found`,
-      };
-    }
 
     return {
       statusCode: 200,

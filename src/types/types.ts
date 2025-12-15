@@ -75,3 +75,12 @@ export interface CreateCategoryDTO {
   sortOrder: number;
   isActive: boolean;
 }
+
+export interface UpdateCategoryDTO {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+  sortOrder: number;
+  isActive: boolean;
+}
