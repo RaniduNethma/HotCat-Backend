@@ -67,3 +67,11 @@ export interface UpdateTableDTO {
   qrCode: string;
   isActive: boolean;
 }
+
+export interface CreateCategoryDTO {
+  name: string;
+  description: string;
+  imageUrl: string;
+  sortOrder: number;
+  isActive: boolean;
+}

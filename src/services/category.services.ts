@@ -1,186 +1,177 @@
-import DB from '../configs/dbConfig.js';
-import * as types from '../types/types.js';
+import DB from "../configs/dbConfig.js";
+import { CreateCategoryDTO } from "../types/types.js";
 
-export const createCategory = async(
-    name: string,
-    description: string
-) => {
+export class CategoryService {
+  async createCategory(data: CreateCategoryDTO) {
     const existingCategory = await DB.category.findUnique({
-        where: {name}
+      where: { name: data.name },
     });
 
-    if(existingCategory != null){
-        return {
-            statusCode: 409,
-            message: "Category name already exists",
-        };
+    if (existingCategory) {
+      return {
+        statusCode: 409,
+        message: "Category name already exists",
+      };
     }
 
-    try {
-        const newCategory = await DB.category.create({
-            data: {
-                name: name,
-                description: description
-            }
-        });
+    const newCategory = await DB.category.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        sortOrder: data.sortOrder,
+        isActive: data.isActive,
+      },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        imageUrl: true,
+        sortOrder: true,
+        isActive: true,
+      },
+    });
 
-        return {
-            statusCode: 200,
-            message: 'Create category successful',
-            data: newCategory
-        };
-    }
-    catch (error) {
-        console.error("Error executing createCategory", error);
-        return {
-            statusCode: 500,
-            message: "Internal server error",
-        };
-    }
-}
+    return {
+      statusCode: 200,
+      message: "Create category successful",
+      data: newCategory,
+    };
+  }
 
-export const getAllCategories = async(
-    page: number
-) => {
+  getAllCategories = async (page: number) => {
     const limit: number = 10;
     const skip: number = (page - 1) * limit;
 
     try {
-        const allCategories = await DB.category.findMany({
-            take: limit,
-            skip,
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                createdAt: true
-            }
-        });
+      const allCategories = await DB.category.findMany({
+        take: limit,
+        skip,
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          createdAt: true,
+        },
+      });
 
-        return {
-            statusCode: 200,
-            data: allCategories
-        };
+      return {
+        statusCode: 200,
+        data: allCategories,
+      };
+    } catch (error) {
+      console.error("Error executing getAllCategories", error);
+      return {
+        statusCode: 500,
+        message: "Internal server error",
+      };
     }
-    catch (error) {
-        console.error("Error executing getAllCategories", error);
-        return {
-            statusCode: 500,
-            message: "Internal server error",
-        };
-    }
-}
+  };
 
-export const getCategoryById = async(
-    id: number
-) => {
+  getCategoryById = async (id: number) => {
     try {
-        const getCategory = await DB.category.findUnique({
-            where: {id},
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                createdAt: true
-            }
-        });
+      const getCategory = await DB.category.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          createdAt: true,
+        },
+      });
 
-        if(getCategory == null){
-            return {
-                statusCode: 404,
-                message: `Category with id ${id} not found`
-            }
-        }
-
+      if (getCategory == null) {
         return {
-            statusCode: 200,
-            data: getCategory
+          statusCode: 404,
+          message: `Category with id ${id} not found`,
         };
-    }
-    catch (error) {
-        console.error("Error executing getCategoryById", error);
-        return {
-            statusCode: 500,
-            message: "Internal server error",
-        };
-    }
-}
+      }
 
-export const updateCategory = async(
+      return {
+        statusCode: 200,
+        data: getCategory,
+      };
+    } catch (error) {
+      console.error("Error executing getCategoryById", error);
+      return {
+        statusCode: 500,
+        message: "Internal server error",
+      };
+    }
+  };
+
+  updateCategory = async (
     id: number,
     newName: string,
     newDescription: string
-) => {
+  ) => {
     try {
-        await DB.category.update({
-            where: {id},
-            data: {
-                name: newName,
-                description: newDescription
-            }
-        });
+      await DB.category.update({
+        where: { id },
+        data: {
+          name: newName,
+          description: newDescription,
+        },
+      });
 
-        const updatedCategory = await DB.category.findUnique({
-            where: {id},
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                createdAt: true
-            }
-        });
+      const updatedCategory = await DB.category.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          createdAt: true,
+        },
+      });
 
-        if(updatedCategory == null){
-            return {
-                statusCode: 404,
-                message: `Category with id ${id} not found`
-            };
-        }
-
+      if (updatedCategory == null) {
         return {
-            statusCode: 200,
-            message: 'Category data updated successfully',
-            data: updatedCategory
+          statusCode: 404,
+          message: `Category with id ${id} not found`,
         };
-    }
-    catch (error) {
-        console.error("Error executing updateCategory", error);
-        return {
-            statusCode: 500,
-            message: "Internal server error",
-        };
-    }
-}
+      }
 
-export const deleteCategory = async(
-    id: number
-) => {
+      return {
+        statusCode: 200,
+        message: "Category data updated successfully",
+        data: updatedCategory,
+      };
+    } catch (error) {
+      console.error("Error executing updateCategory", error);
+      return {
+        statusCode: 500,
+        message: "Internal server error",
+      };
+    }
+  };
+
+  deleteCategory = async (id: number) => {
     try {
-        const findCategory = await DB.category.findUnique({
-            where: {id}
-        });
+      const findCategory = await DB.category.findUnique({
+        where: { id },
+      });
 
-        if(!findCategory){
-            return {
-                statusCode: 404,
-                message: `Category with id ${id} not found`
-            };
-        }
-
-        await DB.category.delete({
-            where: {id: id}
-        });
-
-        return{
-            statusCode: 200,
-            message: 'Category deleted successfully'
-        };
-    }
-    catch (error) {
-        console.error("Error executing deleteCategory", error);
+      if (!findCategory) {
         return {
-            statusCode: 500,
-            message: "Internal server error",
+          statusCode: 404,
+          message: `Category with id ${id} not found`,
         };
+      }
+
+      await DB.category.delete({
+        where: { id: id },
+      });
+
+      return {
+        statusCode: 200,
+        message: "Category deleted successfully",
+      };
+    } catch (error) {
+      console.error("Error executing deleteCategory", error);
+      return {
+        statusCode: 500,
+        message: "Internal server error",
+      };
     }
+  };
 }
