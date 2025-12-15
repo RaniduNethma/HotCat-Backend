@@ -47,25 +47,21 @@ export class CategoryController {
     }
   };
 
-  getCategoryByIdHandler = async (req: Request, res: Response) => {
-    const id = req.body;
-
+  getCategoryById = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
-      const { statusCode, message, data } =
-        await categoryServices.getCategoryById(Number(id));
+      const id = req.query.categoryId;
+      const category = await this.categoryService.getCategoryById(Number(id));
 
-      return res.status(statusCode).json({ message, data });
+      return res.status(200).json({
+        success: true,
+        data: category,
+      });
     } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        const errorMessage = error.message;
-        return res
-          .status(400)
-          .json({ error: "Error executing query", message: errorMessage });
-      }
-      return res
-        .status(500)
-        .json({ error: "Internal server error", message: error });
+      next(error);
     }
   };
 
