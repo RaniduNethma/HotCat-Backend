@@ -56,6 +56,10 @@ export class CategoryController {
       const id = req.query.categoryId;
       const category = await this.categoryService.getCategoryById(Number(id));
 
+      if (!category) {
+        return res.status(404).json({ error: "Category not found" });
+      }
+
       return res.status(200).json({
         success: true,
         data: category,
@@ -65,52 +69,24 @@ export class CategoryController {
     }
   };
 
-  updateCategoryHandler = async (req: Request, res: Response) => {
-    const { id, newName, newDescription } = req.body;
-
+  updateCategory = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
-      const { statusCode, message, data } =
-        await categoryServices.updateCategory(
-          Number(id),
-          newName,
-          newDescription
-        );
+      const category = await this.categoryService.updateCategory(req.body);
 
-      return res.status(statusCode).json({ message, data });
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        const errorMessage = error.message;
-        return res
-          .status(400)
-          .json({ error: "Error executing query", message: errorMessage });
+      if (!category) {
+        return res.status(404).json({ error: "Category not found" });
       }
-      return res
-        .status(500)
-        .json({ error: "Internal server error", message: error });
-    }
-  };
 
-  deleteCategoryHandler = async (req: Request, res: Response) => {
-    const { id } = req.body;
-
-    try {
-      const { statusCode, message } = await categoryServices.deleteCategory(
-        Number(id)
-      );
-
-      return res.status(statusCode).json({ message });
+      return res.status(200).json({
+        success: true,
+        data: category,
+      });
     } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        const errorMessage = error.message;
-        return res
-          .status(400)
-          .json({ error: "Error executing query", message: errorMessage });
-      }
-      return res
-        .status(500)
-        .json({ error: "Internal server error", message: error });
+      next(error);
     }
   };
 }
