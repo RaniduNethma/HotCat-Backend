@@ -48,7 +48,7 @@ const pageSchema = z.object({
 
 const tableIdSchema = z.object({
   query: z.object({
-    categoryId: z.string(),
+    tableId: z.string(),
   }),
 });
 
