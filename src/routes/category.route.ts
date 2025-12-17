@@ -1,33 +1,67 @@
 import { Router } from "express";
 import { authenticate } from "../middlewares/auth.middleware.js";
-import * as categoryController from "../controllers/category.controller.js";
+import { CategoryController } from "../controllers/category.controller.js";
+import { UserRole } from "../generated/prisma/client.js";
+import { validate } from "../middlewares/validation.middleware.js";
+import { authorizeRoles } from "../middlewares/authorize.middleware.js";
+import z from "zod";
 
 const categoryRouter = Router();
+const categoryController = new CategoryController();
+
+const createCategorySchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  imageUrl: z.string(),
+  sortOrder: z.number(),
+  isActive: z.boolean(),
+});
+
+const updateCategorySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+  imageUrl: z.string(),
+  sortOrder: z.number(),
+  isActive: z.boolean(),
+});
+
+const pageSchema = z.object({
+  page: z.number(),
+});
+
+const categoryIdSchema = z.object({
+  categoryId: z.number(),
+});
 
 categoryRouter.post(
-  "/create-category",
+  "/create",
   authenticate,
-  categoryController.createCategoryHandler
+  validate(createCategorySchema),
+  authorizeRoles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OFFICER),
+  categoryController.createCategory
 );
+
 categoryRouter.get(
-  "/get-all-categories",
+  "/",
   authenticate,
-  categoryController.getAllCategoriesHandler
+  validate(pageSchema),
+  categoryController.getAllCategories
 );
+
 categoryRouter.get(
-  "/get-category",
+  "/id",
   authenticate,
-  categoryController.getCategoryByIdHandler
+  validate(categoryIdSchema),
+  categoryController.getCategoryById
 );
+
 categoryRouter.put(
-  "/update-category",
+  "/update",
   authenticate,
-  categoryController.updateCategoryHandler
-);
-categoryRouter.delete(
-  "/delete-category",
-  authenticate,
-  categoryController.deleteCategoryHandler
+  validate(updateCategorySchema),
+  authorizeRoles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OFFICER),
+  categoryController.updateCategory
 );
 
 export default categoryRouter;
