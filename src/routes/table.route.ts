@@ -44,50 +44,22 @@ tableRouter.post(
   tableController.createTable
 );
 
-tableRouter.get(
-  "/",
-  authenticate,
-  authorizeRoles(
-    UserRole.ADMIN,
-    UserRole.CHEF,
-    UserRole.MANAGER,
-    UserRole.OFFICER,
-    UserRole.WAITER
-  ),
-  tableController.getAllTables
-);
+tableRouter.get("/", authenticate, tableController.getAllTables);
 
-tableRouter.get(
-  "/available",
-  authenticate,
-  authorizeRoles(
-    UserRole.ADMIN,
-    UserRole.CHEF,
-    UserRole.MANAGER,
-    UserRole.OFFICER,
-    UserRole.WAITER
-  ),
-  tableController.getAvailableTables
-);
+tableRouter.get("/available", authenticate, tableController.getAvailableTables);
 
-tableRouter.get(
-  "/id",
-  authenticate,
-  authorizeRoles(
-    UserRole.ADMIN,
-    UserRole.CHEF,
-    UserRole.MANAGER,
-    UserRole.OFFICER,
-    UserRole.WAITER
-  ),
-  tableController.getTableById
-);
+tableRouter.get("/id", authenticate, tableController.getTableById);
 
 tableRouter.put(
   "/update",
   authenticate,
   validate(updateTableSchema),
-  authorizeRoles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OFFICER),
+  authorizeRoles(
+    UserRole.ADMIN,
+    UserRole.MANAGER,
+    UserRole.OFFICER,
+    UserRole.WAITER
+  ),
   tableController.updateTable
 );
 
