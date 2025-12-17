@@ -32,13 +32,13 @@ const updateCategorySchema = z.object({
 
 const pageSchema = z.object({
   query: z.object({
-    page: z.number(),
+    page: z.string(),
   }),
 });
 
 const categoryIdSchema = z.object({
   query: z.object({
-    categoryId: z.number(),
+    categoryId: z.string(),
   }),
 });
 
