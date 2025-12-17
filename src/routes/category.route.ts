@@ -10,28 +10,36 @@ const categoryRouter = Router();
 const categoryController = new CategoryController();
 
 const createCategorySchema = z.object({
-  name: z.string(),
-  description: z.string(),
-  imageUrl: z.string(),
-  sortOrder: z.number(),
-  isActive: z.boolean(),
+  body: z.object({
+    name: z.string(),
+    description: z.string(),
+    imageUrl: z.string(),
+    sortOrder: z.number(),
+    isActive: z.boolean(),
+  }),
 });
 
 const updateCategorySchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  description: z.string(),
-  imageUrl: z.string(),
-  sortOrder: z.number(),
-  isActive: z.boolean(),
+  body: z.object({
+    id: z.number(),
+    name: z.string(),
+    description: z.string(),
+    imageUrl: z.string(),
+    sortOrder: z.number(),
+    isActive: z.boolean(),
+  }),
 });
 
 const pageSchema = z.object({
-  page: z.number(),
+  query: z.object({
+    page: z.number(),
+  }),
 });
 
 const categoryIdSchema = z.object({
-  categoryId: z.number(),
+  query: z.object({
+    categoryId: z.number(),
+  }),
 });
 
 categoryRouter.post(
