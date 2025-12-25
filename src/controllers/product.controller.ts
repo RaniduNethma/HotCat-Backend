@@ -26,4 +26,18 @@ export class ProductController {
       next(error);
     }
   };
+
+  getProducts = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+      const page = req.query.page;
+      const products = await this.productService.getProducts(Number(page));
+
+      return res.status(200).json({
+        success: true,
+        data: products,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
