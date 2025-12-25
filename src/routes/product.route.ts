@@ -6,7 +6,7 @@ import { validate } from "../middlewares/validation.middleware.js";
 import { ProductController } from "../controllers/product.controller.js";
 import z from "zod";
 
-const productRout = Router();
+const productRouter = Router();
 const productController = new ProductController();
 
 const createProductSchema = z.object({
@@ -27,10 +27,20 @@ const pageSchema = z.object({
   }),
 });
 
-productRout.post(
+productRouter.post(
   "/create",
   authenticate,
   validate(createProductSchema),
   authorizeRoles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OFFICER),
   productController.createProduct
 );
+
+productRouter.get("/", authenticate, productController.getProducts);
+
+productRouter.get(
+  "available",
+  authenticate,
+  productController.availableProducts
+);
+
+export default productRouter;
