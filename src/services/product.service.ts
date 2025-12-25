@@ -64,4 +64,23 @@ export class productService {
       data: allProducts,
     };
   }
+
+  async availableProducts(page: number) {
+    const limit: number = 10;
+    const skip: number = (page - 1) * limit;
+
+    const availableProducts = await DB.product.findMany({
+      take: limit,
+      skip,
+      where: { isActive: true },
+      include: {
+        category: {},
+      },
+    });
+
+    return {
+      statusCode: 200,
+      data: availableProducts,
+    };
+  }
 }
