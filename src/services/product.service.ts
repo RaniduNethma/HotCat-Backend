@@ -18,6 +18,13 @@ export class ProductService {
       where: { id: data.categoryId, isActive: true },
     });
 
+    if (!category) {
+      return {
+        statusCode: 400,
+        message: "Category is Inactive",
+      };
+    }
+
     const newProduct = await DB.product.create({
       data: {
         name: data.name,
