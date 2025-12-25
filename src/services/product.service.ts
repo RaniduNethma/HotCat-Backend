@@ -1,7 +1,7 @@
 import DB from "../configs/dbConfig.js";
 import { CreateProductDTO } from "../types/types.js";
 
-export class productService {
+export class ProductService {
   async createProduct(data: CreateProductDTO) {
     const existingProduct = await DB.product.findUnique({
       where: { name: data.name },
