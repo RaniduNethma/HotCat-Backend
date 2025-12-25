@@ -40,4 +40,24 @@ export class ProductController {
       next(error);
     }
   };
+
+  availableProducts = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const page = req.query.page;
+      const availableProducts = await this.productService.availableProducts(
+        Number(page)
+      );
+
+      return res.status(200).json({
+        success: true,
+        data: availableProducts,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
