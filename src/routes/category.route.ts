@@ -13,7 +13,7 @@ const createCategorySchema = z.object({
   body: z.object({
     name: z.string(),
     description: z.string(),
-    imageUrl: z.string(),
+    imageUrl: z.string().optional(),
     sortOrder: z.number(),
     isActive: z.boolean(),
   }),
