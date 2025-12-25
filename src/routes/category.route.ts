@@ -22,11 +22,11 @@ const createCategorySchema = z.object({
 const updateCategorySchema = z.object({
   body: z.object({
     id: z.number(),
-    name: z.string(),
-    description: z.string(),
-    imageUrl: z.string(),
-    sortOrder: z.number(),
-    isActive: z.boolean(),
+    name: z.string().optional(),
+    description: z.string().optional(),
+    imageUrl: z.string().optional(),
+    sortOrder: z.number().optional(),
+    isActive: z.boolean().optional(),
   }),
 });
 
