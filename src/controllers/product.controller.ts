@@ -60,4 +60,21 @@ export class ProductController {
       next(error);
     }
   };
+
+  updateProducts = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const updatedProduct = await this.productService.updateProducts(req.body);
+
+      return res.status(200).json({
+        success: true,
+        data: updatedProduct,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
