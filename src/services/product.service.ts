@@ -99,22 +99,24 @@ export class ProductService {
       };
     }
 
-    if (!data.categoryId) {
-      return {
-        statusCode: 404,
-        message: `category with id ${data.id} not found`,
-      };
-    }
+    if (data.categoryId != null) {
+      if (!data.categoryId) {
+        return {
+          statusCode: 404,
+          message: `category with id ${data.categoryId} not found`,
+        };
+      }
 
-    const category = await DB.category.findUnique({
-      where: { id: data.categoryId, isActive: true },
-    });
+      const category = await DB.category.findUnique({
+        where: { id: data.categoryId, isActive: true },
+      });
 
-    if (!category) {
-      return {
-        statusCode: 400,
-        message: "Category is Inactive",
-      };
+      if (!category) {
+        return {
+          statusCode: 400,
+          message: "Category is Inactive",
+        };
+      }
     }
 
     const updatedProduct = await DB.product.update({
