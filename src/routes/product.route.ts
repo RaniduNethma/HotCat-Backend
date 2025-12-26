@@ -21,6 +21,19 @@ const createProductSchema = z.object({
   }),
 });
 
+const updateProductSchema = z.object({
+  body: z.object({
+    id: z.number(),
+    name: z.string().optional(),
+    description: z.string().optional(),
+    imageUrl: z.string().optional(),
+    sortOrder: z.number().optional(),
+    isActive: z.boolean().optional(),
+    stock: z.number().optional(),
+    categoryId: z.number().optional(),
+  }),
+});
+
 const pageSchema = z.object({
   query: z.object({
     page: z.string(),
@@ -41,6 +54,14 @@ productRouter.get(
   "/available",
   authenticate,
   productController.availableProducts
+);
+
+productRouter.put(
+  "/update",
+  authenticate,
+  validate(updateProductSchema),
+  authorizeRoles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OFFICER),
+  productController.updateProducts
 );
 
 export default productRouter;
