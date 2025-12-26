@@ -38,7 +38,7 @@ productRouter.post(
 productRouter.get("/", authenticate, productController.getProducts);
 
 productRouter.get(
-  "available",
+  "/available",
   authenticate,
   productController.availableProducts
 );
