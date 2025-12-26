@@ -1,5 +1,5 @@
 import DB from "../configs/dbConfig.js";
-import { CreateProductDTO } from "../types/types.js";
+import { CreateProductDTO, UpdateProductDTO } from "../types/types.js";
 
 export class ProductService {
   async createProduct(data: CreateProductDTO) {
@@ -88,6 +88,55 @@ export class ProductService {
     return {
       statusCode: 200,
       data: availableProducts,
+    };
+  }
+
+  async updateProducts(data: UpdateProductDTO) {
+    if (!data.id) {
+      return {
+        statusCode: 404,
+        message: `Product with id ${data.id} not found`,
+      };
+    }
+
+    if (!data.categoryId) {
+      return {
+        statusCode: 404,
+        message: `category with id ${data.id} not found`,
+      };
+    }
+
+    const category = await DB.category.findUnique({
+      where: { id: data.categoryId, isActive: true },
+    });
+
+    if (!category) {
+      return {
+        statusCode: 400,
+        message: "Category is Inactive",
+      };
+    }
+
+    const updatedProduct = await DB.product.update({
+      where: { id: data.id },
+      data: {
+        name: data.name,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        sortOrder: data.sortOrder,
+        isActive: data.isActive,
+        stock: data.stock,
+        categoryId: data.categoryId,
+      },
+      include: {
+        category: {},
+      },
+    });
+
+    return {
+      statusCode: 200,
+      message: "Product data updated successfully",
+      data: updatedProduct,
     };
   }
 }

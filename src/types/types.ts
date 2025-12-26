@@ -94,3 +94,14 @@ export interface CreateProductDTO {
   stock: number;
   categoryId: number;
 }
+
+export interface UpdateProductDTO {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+  sortOrder: number;
+  isActive: boolean;
+  stock: number;
+  categoryId: number;
+}
