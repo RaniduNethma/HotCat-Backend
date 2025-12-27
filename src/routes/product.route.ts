@@ -40,6 +40,12 @@ const pageSchema = z.object({
   }),
 });
 
+const productIdSchema = z.object({
+  query: z.object({
+    id: z.string(),
+  }),
+});
+
 productRouter.post(
   "/create",
   authenticate,
@@ -48,15 +54,26 @@ productRouter.post(
   productController.createProduct
 );
 
-productRouter.get("/", authenticate, productController.getProducts);
+productRouter.get(
+  "/",
+  authenticate,
+  validate(pageSchema),
+  productController.getProducts
+);
 
 productRouter.get(
   "/available",
   authenticate,
+  validate(pageSchema),
   productController.availableProducts
 );
 
-productRouter.get("/id", authenticate, productController.productById);
+productRouter.get(
+  "/id",
+  authenticate,
+  validate(productIdSchema),
+  productController.productById
+);
 
 productRouter.put(
   "/update",
