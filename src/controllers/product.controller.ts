@@ -61,6 +61,20 @@ export class ProductController {
     }
   };
 
+  productById = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+      const id = req.body;
+      const productById = await this.productService.productById(Number(id));
+
+      return res.status(200).json({
+        success: true,
+        data: productById,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   updateProducts = async (
     req: AuthRequest,
     res: Response,
