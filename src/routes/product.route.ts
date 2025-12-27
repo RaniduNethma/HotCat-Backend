@@ -56,6 +56,8 @@ productRouter.get(
   productController.availableProducts
 );
 
+productRouter.get("/id", authenticate, productController.productById);
+
 productRouter.put(
   "/update",
   authenticate,
