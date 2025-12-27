@@ -91,6 +91,25 @@ export class ProductService {
     };
   }
 
+  async productById(id: number) {
+    const product = await DB.product.findUnique({
+      where: { id: id },
+      include: { category: {} },
+    });
+
+    if (!product) {
+      return {
+        statusCode: 404,
+        message: `Product with id ${id} not found`,
+      };
+    }
+
+    return {
+      statusCode: 200,
+      data: product,
+    };
+  }
+
   async updateProducts(data: UpdateProductDTO) {
     if (!data.id) {
       return {
