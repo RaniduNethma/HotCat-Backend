@@ -26,4 +26,24 @@ export class PriceListController {
       next(error);
     }
   };
+
+  allPriceLists = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const page = req.params.id;
+      const allPriceLists = await this.priceListService.allPriceLists(
+        Number(page)
+      );
+
+      return res.status(200).json({
+        success: true,
+        data: allPriceLists,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
