@@ -1,7 +1,7 @@
 import DB from "../configs/dbConfig.js";
 import { CreatePriceListDTO, UpdatePriceListDTO } from "../types/types.js";
 
-export class PriceList {
+export class PriceListService {
   async createPriceList(data: CreatePriceListDTO) {
     const existingPriceList = await DB.priceList.findUnique({
       where: { name: data.name },
