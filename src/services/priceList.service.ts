@@ -39,4 +39,20 @@ export class PriceListService {
       data: priceList,
     };
   }
+
+  async allPriceLists(page: number) {
+    const limit: number = 10;
+    const skip: number = (page - 1) * limit;
+
+    const allPriceLists = await DB.priceList.findMany({
+      take: limit,
+      skip,
+      include: { priceListItems: true },
+    });
+
+    return {
+      statusCode: 200,
+      data: allPriceLists,
+    };
+  }
 }
