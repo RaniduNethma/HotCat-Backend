@@ -8,6 +8,7 @@ import {
   OrderType,
   PaymentStatus,
 } from "../generated/prisma/client.js";
+import { Decimal } from "@prisma/client/runtime/client";
 
 export interface AuthRequest extends Request {
   user?: {
@@ -104,4 +105,30 @@ export interface UpdateProductDTO {
   isActive: boolean;
   stock: number;
   categoryId: number;
+}
+
+export interface PriceListItemsDTO {
+  productId: number;
+  price: Decimal;
+}
+
+export interface CreatePriceListDTO {
+  name: string;
+  description: string;
+  isActive: boolean;
+  isDefault: boolean;
+  startDate: Date;
+  endDate: Date;
+  items: PriceListItemsDTO[];
+}
+
+export interface UpdatePriceListDTO {
+  id: number;
+  name: string;
+  description: string;
+  isActive: boolean;
+  isDefault: boolean;
+  startDate: Date;
+  endDate: Date;
+  items: PriceListItemsDTO[];
 }
