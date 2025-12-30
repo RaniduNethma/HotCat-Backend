@@ -46,4 +46,23 @@ export class PriceListController {
       next(error);
     }
   };
+
+  availablePriceLists = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const page = req.params.id;
+      const availablePriceLists =
+        await this.priceListService.availablePriceLists(Number(page));
+
+      return res.status(200).json({
+        success: true,
+        data: availablePriceLists,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
