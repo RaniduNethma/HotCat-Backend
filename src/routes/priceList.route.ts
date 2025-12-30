@@ -48,3 +48,10 @@ priceListRouter.get(
   validate(pageSchema),
   priceListController.allPriceLists
 );
+
+priceListRouter.get(
+  "/available",
+  authenticate,
+  validate(pageSchema),
+  priceListController.allPriceLists
+);
