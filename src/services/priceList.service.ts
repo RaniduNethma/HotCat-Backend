@@ -55,4 +55,21 @@ export class PriceListService {
       data: allPriceLists,
     };
   }
+
+  async availablePriceLists(page: number) {
+    const limit: number = 10;
+    const skip: number = (page - 1) * limit;
+
+    const availablePriceLists = await DB.priceList.findMany({
+      take: limit,
+      skip,
+      where: { isActive: true },
+      include: { priceListItems: true },
+    });
+
+    return {
+      statusCode: 200,
+      data: availablePriceLists,
+    };
+  }
 }
