@@ -28,10 +28,23 @@ const CreatePriceListSchema = z.object({
   }),
 });
 
+const pageSchema = z.object({
+  query: z.object({
+    page: z.string(),
+  }),
+});
+
 priceListRouter.post(
   "/create",
   authenticate,
   validate(CreatePriceListSchema),
   authorizeRoles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OFFICER),
   priceListController.createPriceList
+);
+
+priceListRouter.get(
+  "/",
+  authenticate,
+  validate(pageSchema),
+  priceListController.allPriceLists
 );
