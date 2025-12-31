@@ -53,7 +53,7 @@ export class PriceListController {
     next: NextFunction
   ) => {
     try {
-      const page = req.params.id;
+      const page = req.params.page;
       const availablePriceLists =
         await this.priceListService.availablePriceLists(Number(page));
 
