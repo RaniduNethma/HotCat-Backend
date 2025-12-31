@@ -34,6 +34,12 @@ const pageSchema = z.object({
   }),
 });
 
+const priceListIdSchema = z.object({
+  query: z.object({
+    id: z.string(),
+  }),
+});
+
 priceListRouter.post(
   "/create",
   authenticate,
@@ -54,4 +60,11 @@ priceListRouter.get(
   authenticate,
   validate(pageSchema),
   priceListController.allPriceLists
+);
+
+priceListRouter.get(
+  "/id",
+  authenticate,
+  validate(priceListIdSchema),
+  priceListController.priceListById
 );
