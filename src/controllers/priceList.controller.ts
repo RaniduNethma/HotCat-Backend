@@ -33,7 +33,7 @@ export class PriceListController {
     next: NextFunction
   ) => {
     try {
-      const page = req.params.id;
+      const page = req.params.page;
       const allPriceLists = await this.priceListService.allPriceLists(
         Number(page)
       );
