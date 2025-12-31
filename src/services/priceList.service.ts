@@ -72,4 +72,23 @@ export class PriceListService {
       data: availablePriceLists,
     };
   }
+
+  async priceListById(id: number) {
+    const priceListById = await DB.priceList.findUnique({
+      where: { id: id },
+      include: { priceListItems: {} },
+    });
+
+    if (!priceListById) {
+      return {
+        statusCode: 404,
+        message: `PriceList with id ${id} not found`,
+      };
+    }
+
+    return {
+      statusCode: 200,
+      data: priceListById,
+    };
+  }
 }
