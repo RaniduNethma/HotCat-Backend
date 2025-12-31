@@ -65,4 +65,24 @@ export class PriceListController {
       next(error);
     }
   };
+
+  priceListById = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const id = req.params.id;
+      const priceListById = await this.priceListService.priceListById(
+        Number(id)
+      );
+
+      return res.status(200).json({
+        success: true,
+        data: priceListById,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
