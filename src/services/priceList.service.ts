@@ -14,11 +14,18 @@ export class PriceListService {
       };
     }
 
-    if (data.isDefault == true) {
+    if (data.isActive == true && data.isDefault == true) {
       await DB.priceList.updateMany({
         where: { isDefault: true },
         data: { isDefault: false },
       });
+    }
+
+    if (data.isActive == false && data.isDefault == true) {
+      return {
+        statusCode: 406,
+        message: "Default PriceList should always be active",
+      };
     }
 
     const priceList = await DB.priceList.create({
@@ -111,7 +118,20 @@ export class PriceListService {
       };
     }
 
-    if (data.isDefault == true) {
+    if (
+      (data.isActive == false && data.isDefault == true) ||
+      (existingPriceList.isActive == false && data.isDefault == true)
+    ) {
+      return {
+        statusCode: 406,
+        message: "Default PriceList should always be active",
+      };
+    }
+
+    if (
+      (data.isActive == true && data.isDefault == true) ||
+      (existingPriceList.isActive == true && data.isDefault == true)
+    ) {
       await DB.priceList.updateMany({
         where: { isDefault: true },
         data: { isDefault: false },
@@ -124,7 +144,6 @@ export class PriceListService {
         name: data.name,
         description: data.description,
         isActive: data.isActive,
-        isDefault: data.isDefault,
         startDate: data.startDate,
         endDate: data.endDate,
         priceListItems: {
