@@ -111,7 +111,11 @@ export class ProductService {
   }
 
   async updateProducts(data: UpdateProductDTO) {
-    if (!data.id) {
+    const existingProduct = await DB.product.findUnique({
+      where: { id: data.id },
+    });
+
+    if (!existingProduct) {
       return {
         statusCode: 404,
         message: `Product with id ${data.id} not found`,
