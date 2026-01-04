@@ -85,4 +85,23 @@ export class PriceListController {
       next(error);
     }
   };
+
+  updatePriceList = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const updatePriceList = await this.priceListService.updatePriceList(
+        req.body
+      );
+
+      return res.status(200).json({
+        success: true,
+        data: updatePriceList,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
