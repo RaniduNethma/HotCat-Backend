@@ -14,6 +14,13 @@ export class PriceListService {
       };
     }
 
+    if (data.isDefault == true) {
+      await DB.priceList.updateMany({
+        where: { isDefault: true },
+        data: { isDefault: false },
+      });
+    }
+
     const priceList = await DB.priceList.create({
       data: {
         name: data.name,
@@ -102,6 +109,13 @@ export class PriceListService {
         statusCode: 404,
         message: `PriceList with id ${data.id} not found`,
       };
+    }
+
+    if (data.isDefault == true) {
+      await DB.priceList.updateMany({
+        where: { isDefault: true },
+        data: { isDefault: false },
+      });
     }
 
     const updatedPriceList = await DB.priceList.update({
