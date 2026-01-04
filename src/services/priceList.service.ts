@@ -20,8 +20,8 @@ export class PriceListService {
         description: data.description,
         isActive: data.isActive,
         isDefault: data.isDefault,
-        startDate: data.startDate,
-        endDate: data.endDate,
+        startDate: data.startDate ? new Date(data.startDate) : null,
+        endDate: data.endDate ? new Date(data.endDate) : null,
 
         priceListItems: {
           create: data.items.map((items) => ({

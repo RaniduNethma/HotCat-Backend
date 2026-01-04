@@ -10,10 +10,8 @@ const priceListRouter = Router();
 const priceListController = new PriceListController();
 
 const PriceListItemsSchema = z.object({
-  body: z.object({
-    productId: z.number(),
-    price: z.number(),
-  }),
+  productId: z.number(),
+  price: z.number(),
 });
 
 const CreatePriceListSchema = z.object({
@@ -22,8 +20,8 @@ const CreatePriceListSchema = z.object({
     description: z.string(),
     isActive: z.boolean(),
     isDefault: z.boolean(),
-    startDate: z.date(),
-    endDate: z.date(),
+    startDate: z.coerce.date().optional(),
+    endDate: z.coerce.date().optional(),
     items: z.array(PriceListItemsSchema),
   }),
 });
