@@ -29,6 +29,7 @@ const registerSchema = z.object({
     profileType: z.enum(["BRONZE", "SILVER", "GOLD"]),
     address: z.string().min(3).optional(),
     city: z.string().optional(),
+    priceListId: z.number().optional(),
   }),
 });
 
