@@ -28,6 +28,19 @@ const CreatePriceListSchema = z.object({
   }),
 });
 
+const UpdatePriceListSchema = z.object({
+  body: z.object({
+    id: z.number(),
+    name: z.string().optional(),
+    description: z.string().optional(),
+    isActive: z.boolean().optional(),
+    isDefault: z.boolean().optional(),
+    startDate: z.date().optional(),
+    endDate: z.date().optional(),
+    items: z.array(PriceListItemsSchema).optional(),
+  }),
+});
+
 const pageSchema = z.object({
   query: z.object({
     page: z.string(),
@@ -67,4 +80,12 @@ priceListRouter.get(
   authenticate,
   validate(priceListIdSchema),
   priceListController.priceListById
+);
+
+priceListRouter.put(
+  "/update",
+  authenticate,
+  validate(UpdatePriceListSchema),
+  authorizeRoles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OFFICER),
+  priceListController.updatePriceList
 );
