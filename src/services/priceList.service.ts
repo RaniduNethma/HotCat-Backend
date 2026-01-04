@@ -91,4 +91,43 @@ export class PriceListService {
       data: priceListById,
     };
   }
+
+  async updatePriceList(data: UpdatePriceListDTO) {
+    const existingPriceList = await DB.priceList.findUnique({
+      where: { id: data.id },
+    });
+
+    if (!existingPriceList) {
+      return {
+        statusCode: 404,
+        message: `PriceList with id ${data.id} not found`,
+      };
+    }
+
+    const updatedPriceList = await DB.priceList.update({
+      where: { id: data.id },
+      data: {
+        name: data.name,
+        description: data.description,
+        isActive: data.isActive,
+        isDefault: data.isDefault,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        priceListItems: {
+          deleteMany: {},
+          create: data.items.map((items) => ({
+            productId: items.productId,
+            price: items.price,
+          })),
+        },
+      },
+      include: { priceListItems: true },
+    });
+
+    return {
+      statusCode: 200,
+      message: "PriceList data updated successfully",
+      data: updatedPriceList,
+    };
+  }
 }
