@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
 import DB from "../configs/dbConfig.js";
-import {RegisterDTO, LoginDTO, TokenPayload} from "../types/types.js";
+import { RegisterDTO, LoginDTO, TokenPayload } from "../types/types.js";
 import { JWTUtil } from "../utils/jwt.util.js";
 
-export class AuthService{
-  async register(data: RegisterDTO){
+export class AuthService {
+  async register(data: RegisterDTO) {
     const existingUser = await DB.user.findUnique({
       where: { userName: data.userName },
     });
@@ -12,11 +12,15 @@ export class AuthService{
     if (existingUser != null) {
       return {
         statusCode: 409,
-        message: 'Username already exists',
+        message: "Username already exists",
       };
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    const defaultPriceList = await DB.priceList.findFirst({
+      where: { isActive: true, isDefault: true },
+    });
 
     const newUser = await DB.user.create({
       data: {
@@ -27,13 +31,10 @@ export class AuthService{
         dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
         userRole: data.userRole,
         password: hashedPassword,
-        profiles: {
-          create: {
-            profileType: data.profileType,
-            address: data.address ?? null,
-            city: data.city ?? null
-          }
-        }
+        profileType: data.profileType,
+        address: data.address ?? null,
+        city: data.city ?? null,
+        priceListId: defaultPriceList?.id || null,
       },
       select: {
         id: true,
@@ -43,55 +44,50 @@ export class AuthService{
         email: true,
         dateOfBirth: true,
         userRole: true,
-        profiles: true,
+        profileType: true,
+        address: true,
+        city: true,
         isActive: true,
         createdAt: true,
-        updatedAt: true
-      }
+        updatedAt: true,
+        priceList: true,
+      },
     });
 
     return {
       statusCode: 200,
-      message: 'Registration successful',
+      message: "Registration successful",
       user: newUser,
     };
-  };
+  }
 
-  async login(data: LoginDTO){
+  async login(data: LoginDTO) {
     const user = await DB.user.findUnique({
       where: { userName: data.userName },
     });
 
     if (!user || !user.isActive) {
-      throw new Error('Invalid credentials');
+      throw new Error("Invalid credentials");
     }
 
     const isMatch = await bcrypt.compare(data.password, user.password);
 
     if (!isMatch) {
-      throw new Error('Invalid credentials');
-    };
-
-    const profile = await DB.profile.findUnique({
-      where: {userId: user.id},
-    });
-
-    if (!profile) {
-      throw new Error('Profile not found');
+      throw new Error("Invalid credentials");
     }
 
     const payload: TokenPayload = {
       id: user.id,
       userName: user.userName,
       userRole: user.userRole,
-      profileType: profile.profileType
+      profileType: user.profileType,
     };
 
     const tokens = JWTUtil.generateTokens(payload);
 
     await DB.user.update({
       where: { id: user.id },
-      data: { refreshToken: tokens.refreshToken},
+      data: { refreshToken: tokens.refreshToken },
     });
 
     return {
@@ -101,61 +97,53 @@ export class AuthService{
         userName: user.userName,
         name: user.name,
         userRole: user.userRole,
-        profileType: profile.profileType
-      }
+        profileType: user.profileType,
+      },
     };
-  };
+  }
 
-  async refreshToken (refreshToken: string){
+  async refreshToken(refreshToken: string) {
     try {
       const decoded = JWTUtil.verifyRefreshToken(refreshToken);
 
       const user = await DB.user.findUnique({
-        where: {id: decoded.id}
+        where: { id: decoded.id },
       });
 
-      if (!user || user.refreshToken !== refreshToken || !user.isActive){
+      if (!user || user.refreshToken !== refreshToken || !user.isActive) {
         throw new Error("Invalid refresh token");
-      }
-
-      const profile = await DB.profile.findUnique({
-        where: {userId: user.id},
-      });
-
-      if (!profile) {
-        throw new Error('Profile not found');
       }
 
       const payload: TokenPayload = {
         id: user.id,
         userName: user.userName,
         userRole: user.userRole,
-        profileType: profile.profileType
-      }
+        profileType: user.profileType,
+      };
 
       const tokens = JWTUtil.generateTokens(payload);
 
       await DB.user.update({
-        where: {id: user.id},
-        data: {refreshToken: tokens.refreshToken}
+        where: { id: user.id },
+        data: { refreshToken: tokens.refreshToken },
       });
 
       return tokens;
     } catch (error) {
-      throw new Error('Invalid refresh token');
+      throw new Error("Invalid refresh token");
     }
   }
 
-  async logout(id: number){
+  async logout(id: number) {
     await DB.user.update({
       where: { id: id },
-      data: {refreshToken: null}
+      data: { refreshToken: null },
     });
   }
 
-  async getProfile(id: number){
+  async getProfile(id: number) {
     const user = await DB.user.findUnique({
-      where: {id: id},
+      where: { id: id },
       select: {
         id: true,
         userName: true,
@@ -167,29 +155,19 @@ export class AuthService{
         isActive: true,
         createdAt: true,
         updatedAt: true,
-      }
-    });
-
-    if(!user){
-      throw new Error('User not found');
-    }
-
-    const profile = await DB.profile.findUnique({
-      where: {userId: user.id},
-      select: {
         profileType: true,
         address: true,
-        city: true
-      }
+        city: true,
+        priceList: true,
+      },
     });
 
-    if (!profile) {
-      throw new Error('Profile not found');
+    if (!user) {
+      throw new Error("User not found");
     }
 
-    return{
+    return {
       user: user,
-      profile: profile
-    }
+    };
   }
 }
