@@ -89,3 +89,5 @@ priceListRouter.put(
   authorizeRoles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OFFICER),
   priceListController.updatePriceList
 );
+
+export default priceListRouter;
