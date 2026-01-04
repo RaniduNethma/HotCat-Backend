@@ -25,26 +25,32 @@ model User {
   dateOfBirth  DateTime?
   userRole     UserRole  @default(CUSTOMER)
   isActive     Boolean   @default(true)
+  priceListId  Int?
+  priceList    PriceList? @relation(fields: [priceListId], references: [id])
+  profileType  ProfileType @default(BRONZE)
+  address      String?
+  city         String?
   refreshToken String?   @db.Text
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
   // Relations
-  profiles       Profile?
   orders         Order[]  @relation("UserOrders")
   assignedOrders Order[]  @relation("AssignedWaiter")
 }
 
-model Profile {
+/*model Profile {
   id          Int         @id @default(autoincrement())
   userId      Int         @unique
   user        User        @relation(fields: [userId], references: [id])
+  priceListId Int 
+  priceList   PriceList   @relation(fields: [priceListId], references: [id])
   profileType ProfileType @default(BRONZE)
   address     String?
   city        String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-}
+}*/
 
 enum UserRole {
   ADMIN
@@ -143,6 +149,7 @@ model PriceList {
 
   // Relations
   priceListItems PriceListItems[]
+  users User[]
 }
 
 model PriceListItems {
