@@ -4,6 +4,7 @@ import tableRouter from "./routes/table.route.js";
 import categoryRouter from "./routes/category.route.js";
 import productRouter from "./routes/product.route.js";
 import priceListRouter from "./routes/priceList.route.js";
+import orderRouter from "./routes/order.route.js";
 
 const app = express();
 
@@ -17,5 +18,6 @@ app.use("/api/tables", tableRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/products", productRouter);
 app.use("/api/pricelist", priceListRouter);
+app.use("/api/order", orderRouter);
 
 export default app;
