@@ -43,6 +43,7 @@ export interface RegisterDTO {
   profileType: ProfileType;
   address?: string;
   city?: string;
+  priceListId?: number | null;
 }
 
 export interface LoginDTO {
@@ -131,4 +132,27 @@ export interface UpdatePriceListDTO {
   startDate: Date;
   endDate: Date;
   items: PriceListItemsDTO[];
+}
+
+export interface OrderItemsDTO {
+  productId: number;
+  Quantity: number;
+  unitPrice: number;
+  subTotal: number;
+  orderStatus: OrderStatus;
+}
+
+export interface CreateOrderDTO {
+  userId: number;
+  tableId: number;
+  assignedToId: number;
+  orderStatus: OrderStatus;
+  orderType: OrderType;
+  subTotal: Decimal;
+  discount: Decimal;
+  totalAmount: Decimal;
+  paymentStatus: PaymentStatus;
+  paymentMethod: string;
+  completedAt: Date;
+  orderItems: OrderItemsDTO;
 }
