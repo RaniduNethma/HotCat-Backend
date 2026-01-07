@@ -72,7 +72,7 @@ export class PriceListController {
     next: NextFunction
   ) => {
     try {
-      const id = req.params.id;
+      const id = req.query.id;
       const priceListById = await this.priceListService.priceListById(
         Number(id)
       );
