@@ -56,7 +56,7 @@ export class PriceListService {
 
   async allPriceLists(page: number) {
     const limit: number = 10;
-    const skip: number = (page - 1) * limit;
+    const skip: number = page > 1 ? (page - 1) * limit : 0;
 
     const allPriceLists = await DB.priceList.findMany({
       take: limit,
