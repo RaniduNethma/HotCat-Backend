@@ -154,5 +154,5 @@ export interface CreateOrderDTO {
   paymentStatus: PaymentStatus;
   paymentMethod: string;
   completedAt: Date;
-  orderItems: OrderItemsDTO;
+  items: OrderItemsDTO[];
 }
