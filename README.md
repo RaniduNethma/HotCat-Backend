@@ -77,8 +77,11 @@ Here's an overview of the project structure:
 │   │
 │   ├── 📂 controllers/                      
 │   │   ├── 📄 auth.controller.ts            # Handles authentication requests & responses
-│   │   ├── 📄 table.controller.ts           # Handles table related requests & responses
-│   │   └── 📄 category.controller.ts        # Handles product category related requests & responses
+│   │   ├── 📄 category.controller.ts        # Handles product category related requests & responses
+│   │   ├── 📄 order.controller.ts           # Handles order related requests & responses
+│   │   ├── 📄 priceList.controller.ts       # Handles priceList related requests & responses
+│   │   ├── 📄 product.controller.ts         # Handles product related requests & responses
+│   │   └── 📄 table.controller.ts           # Handles table related requests & responses
 │   │
 │   ├── 📂 middlewares/
 │   │   ├── 📄 auth.middleware.ts            # Verify JWT tokens and Authentication
@@ -87,13 +90,19 @@ Here's an overview of the project structure:
 │   │
 │   ├── 📂 routes/
 │   │   ├── 📄 auth.route.ts                 # Defines authentication endpoints
-│   │   ├── 📄 table.route.ts                # Defines table related API endpoints
-│   │   └── 📄 category.route.ts             # Defines category related API endpoints
+│   │   ├── 📄 category.route.ts             # Defines category related API endpoints
+│   │   ├── 📄 order.route.ts                # Defines order related API endpoints
+│   │   ├── 📄 priceList.route.ts            # Defines priceList related API endpoints
+│   │   ├── 📄 product.route.ts              # Defines product related API endpoints
+│   │   └── 📄 table.route.ts                # Defines table related API endpoints
 │   │
 │   ├── 📂 services/
 │   │   ├── 📄 auth.services.ts              # Business logic for authentication and token generation
-│   │   ├── 📄 table.services.ts             # Business logic for table data operations
-│   │   └── 📄 category.services.ts          # Business logic for product category data operations
+│   │   ├── 📄 category.services.ts          # Business logic for product category data operations
+│   │   ├── 📄 order.services.ts             # Business logic for order data operations
+│   │   ├── 📄 priceList.service.ts          # Business logic for price lists data operations
+│   │   ├── 📄 product.service.ts            # Business logic for product data operations
+│   │   └── 📄 table.services.ts             # Business logic for table data operations
 │   │
 │   ├── 📂 types/
 │   │   ├── 📄 express.d.ts                  # Extends Express Request types for custom properties
