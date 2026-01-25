@@ -8,4 +8,11 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
             message: err.message
         });
     }
+
+    if(err.name === 'ValidationError'){
+        return res.status(400).json({
+            status: 'error',
+            message: err.message
+        });
+    }
 }
