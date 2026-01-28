@@ -12,15 +12,15 @@ export class CategoryController {
   createCategory = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const category = await this.categoryService.createCategory(req.body);
 
-      return res.status(201).json({
-        success: true,
-        data: category,
-        message: "Category created successfully",
+      return res.status(category.statusCode).json({
+        success: category.success,
+        message: category.message,
+        data: category.data,
       });
     } catch (error) {
       next(error);
@@ -30,16 +30,17 @@ export class CategoryController {
   getAllCategories = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const page = req.query.page;
       const categories = await this.categoryService.getAllCategories(
-        Number(page)
+        Number(page),
       );
 
-      return res.status(200).json({
-        success: true,
+      return res.status(categories.statusCode).json({
+        success: categories.success,
+        message: categories.message,
         data: categories,
       });
     } catch (error) {
@@ -50,19 +51,16 @@ export class CategoryController {
   getCategoryById = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const id = req.query.categoryId;
       const category = await this.categoryService.getCategoryById(Number(id));
 
-      if (!category) {
-        return res.status(404).json({ error: "Category not found" });
-      }
-
-      return res.status(200).json({
-        success: true,
-        data: category,
+      return res.status(category.statusCode).json({
+        success: category.success,
+        message: category.message,
+        data: category.data,
       });
     } catch (error) {
       next(error);
@@ -72,18 +70,15 @@ export class CategoryController {
   updateCategory = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const category = await this.categoryService.updateCategory(req.body);
 
-      if (!category) {
-        return res.status(404).json({ error: "Category not found" });
-      }
-
-      return res.status(200).json({
-        success: true,
-        data: category,
+      return res.status(category.statusCode).json({
+        success: category.success,
+        message: category.message,
+        data: category.data,
       });
     } catch (error) {
       next(error);
