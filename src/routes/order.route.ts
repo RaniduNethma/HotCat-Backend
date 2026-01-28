@@ -28,11 +28,37 @@ const createOrderSchema = z.object({
   }),
 });
 
+const pageSchema = z.object({
+  query: z.object({
+    page: z.string(),
+  }),
+});
+
+const orderIdSchema = z.object({
+  query: z.object({
+    orderId: z.string(),
+  }),
+});
+
 orderRouter.post(
   "/create",
   authenticate,
   validate(createOrderSchema),
-  orderController.createOrder
+  orderController.createOrder,
+);
+
+orderRouter.get(
+  "/",
+  authenticate,
+  validate(pageSchema),
+  orderController.getAllOrders,
+);
+
+orderRouter.get(
+  "/id",
+  authenticate,
+  validate(orderIdSchema),
+  orderController.getOrderById,
 );
 
 export default orderRouter;
