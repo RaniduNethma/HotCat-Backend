@@ -9,8 +9,10 @@ export class ProductService {
 
     if (existingProduct) {
       return {
+        success: false,
         statusCode: 409,
         message: "Product name already exists",
+        data: null,
       };
     }
 
@@ -20,8 +22,10 @@ export class ProductService {
 
     if (!category) {
       return {
+        success: false,
         statusCode: 400,
         message: "Category is Inactive",
+        data: null,
       };
     }
 
@@ -48,6 +52,7 @@ export class ProductService {
     });
 
     return {
+      success: true,
       statusCode: 200,
       message: "Create product successful",
       data: newProduct,
@@ -67,7 +72,9 @@ export class ProductService {
     });
 
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: allProducts,
     };
   }
@@ -86,7 +93,9 @@ export class ProductService {
     });
 
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: availableProducts,
     };
   }
@@ -99,13 +108,17 @@ export class ProductService {
 
     if (!product) {
       return {
+        success: false,
         statusCode: 404,
         message: `Product with id ${id} not found`,
+        data: null,
       };
     }
 
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: product,
     };
   }
@@ -117,16 +130,20 @@ export class ProductService {
 
     if (!existingProduct) {
       return {
+        success: false,
         statusCode: 404,
         message: `Product with id ${data.id} not found`,
+        data: null,
       };
     }
 
     if (data.categoryId != null) {
       if (!data.categoryId) {
         return {
+          success: false,
           statusCode: 404,
           message: `category with id ${data.categoryId} not found`,
+          data: null,
         };
       }
 
@@ -136,8 +153,10 @@ export class ProductService {
 
       if (!category) {
         return {
+          success: false,
           statusCode: 400,
           message: "Category is Inactive",
+          data: null,
         };
       }
     }
@@ -159,6 +178,7 @@ export class ProductService {
     });
 
     return {
+      success: true,
       statusCode: 200,
       message: "Product data updated successfully",
       data: updatedProduct,

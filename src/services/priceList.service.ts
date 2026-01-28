@@ -9,8 +9,10 @@ export class PriceListService {
 
     if (existingPriceList) {
       return {
+        success: false,
         statusCode: 409,
         message: `PriceList name already exists`,
+        data: null,
       };
     }
 
@@ -23,8 +25,10 @@ export class PriceListService {
 
     if (data.isActive == false && data.isDefault == true) {
       return {
+        success: false,
         statusCode: 406,
         message: "Default PriceList should always be active",
+        data: null,
       };
     }
 
@@ -48,6 +52,7 @@ export class PriceListService {
     });
 
     return {
+      success: true,
       statusCode: 200,
       message: "Create priceList successful",
       data: priceList,
@@ -65,7 +70,9 @@ export class PriceListService {
     });
 
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: allPriceLists,
     };
   }
@@ -82,7 +89,9 @@ export class PriceListService {
     });
 
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: availablePriceLists,
     };
   }
@@ -95,13 +104,17 @@ export class PriceListService {
 
     if (!priceListById) {
       return {
+        success: false,
         statusCode: 404,
         message: `PriceList with id ${id} not found`,
+        data: null,
       };
     }
 
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: priceListById,
     };
   }
@@ -113,8 +126,10 @@ export class PriceListService {
 
     if (!existingPriceList) {
       return {
+        success: false,
         statusCode: 404,
         message: `PriceList with id ${data.id} not found`,
+        data: null,
       };
     }
 
@@ -123,8 +138,10 @@ export class PriceListService {
       (existingPriceList.isActive == false && data.isDefault == true)
     ) {
       return {
+        success: false,
         statusCode: 406,
         message: "Default PriceList should always be active",
+        data: null,
       };
     }
 
@@ -158,6 +175,7 @@ export class PriceListService {
     });
 
     return {
+      success: true,
       statusCode: 200,
       message: "PriceList data updated successfully",
       data: updatedPriceList,

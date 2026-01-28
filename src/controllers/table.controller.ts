@@ -13,10 +13,10 @@ export class TableController {
     try {
       const table = await this.tableService.createTable(req.body);
 
-      return res.status(201).json({
-        success: true,
-        data: table,
-        message: "Table created successfully",
+      return res.status(table.statusCode).json({
+        success: table.success,
+        message: table.message,
+        data: table.data,
       });
     } catch (error) {
       next(error);
@@ -26,16 +26,17 @@ export class TableController {
   getAllTables = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const page = req.query.page;
       const tables = await this.tableService.getAllTables(Number(page));
       console.log(req.query);
 
-      return res.status(200).json({
-        success: true,
-        data: tables,
+      return res.status(tables.statusCode).json({
+        success: tables.success,
+        message: tables.message,
+        data: tables.data,
       });
     } catch (error) {
       next(error);
@@ -45,33 +46,31 @@ export class TableController {
   getAvailableTables = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     const page = req.query.page;
     const tables = await this.tableService.getAvailableTables(Number(page));
 
-    return res.status(200).json({
-      success: true,
-      data: tables,
+    return res.status(tables.statusCode).json({
+      success: tables.success,
+      message: tables.message,
+      data: tables.data,
     });
   };
 
   getTableById = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const id = req.query.tableId;
       const table = await this.tableService.getTableById(Number(id));
 
-      if (!table) {
-        return res.status(404).json({ error: "Table not found" });
-      }
-
-      return res.status(200).json({
-        success: true,
-        data: table,
+      return res.status(table.statusCode).json({
+        success: table.success,
+        message: table.message,
+        data: table.data,
       });
     } catch (error) {
       next(error);
@@ -82,13 +81,10 @@ export class TableController {
     try {
       const table = await this.tableService.updateTable(req.body);
 
-      if (!table) {
-        return res.status(404).json({ error: "Table not found" });
-      }
-
-      return res.status(200).json({
-        success: true,
-        data: table,
+      return res.status(table.statusCode).json({
+        success: table.success,
+        message: table.message,
+        data: table.data,
       });
     } catch (error) {
       next(error);

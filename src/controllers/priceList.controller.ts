@@ -12,15 +12,15 @@ export class PriceListController {
   createPriceList = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const priceList = await this.priceListService.createPriceList(req.body);
 
-      return res.status(200).json({
-        success: true,
-        message: "PriceList created successfully",
-        data: priceList,
+      return res.status(priceList.statusCode).json({
+        success: priceList.success,
+        message: priceList.message,
+        data: priceList.data,
       });
     } catch (error) {
       next(error);
@@ -30,17 +30,18 @@ export class PriceListController {
   allPriceLists = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const page = req.params.page;
       const allPriceLists = await this.priceListService.allPriceLists(
-        Number(page)
+        Number(page),
       );
 
-      return res.status(200).json({
-        success: true,
-        data: allPriceLists,
+      return res.status(allPriceLists.statusCode).json({
+        success: allPriceLists.success,
+        message: allPriceLists.message,
+        data: allPriceLists.data,
       });
     } catch (error) {
       next(error);
@@ -50,16 +51,17 @@ export class PriceListController {
   availablePriceLists = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const page = req.params.page;
       const availablePriceLists =
         await this.priceListService.availablePriceLists(Number(page));
 
-      return res.status(200).json({
-        success: true,
-        data: availablePriceLists,
+      return res.status(availablePriceLists.statusCode).json({
+        success: availablePriceLists.success,
+        message: availablePriceLists.message,
+        data: availablePriceLists.data,
       });
     } catch (error) {
       next(error);
@@ -69,17 +71,18 @@ export class PriceListController {
   priceListById = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const id = req.query.id;
       const priceListById = await this.priceListService.priceListById(
-        Number(id)
+        Number(id),
       );
 
-      return res.status(200).json({
-        success: true,
-        data: priceListById,
+      return res.status(priceListById.statusCode).json({
+        success: priceListById.success,
+        message: priceListById.message,
+        data: priceListById.data,
       });
     } catch (error) {
       next(error);
@@ -89,16 +92,17 @@ export class PriceListController {
   updatePriceList = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const updatePriceList = await this.priceListService.updatePriceList(
-        req.body
+        req.body,
       );
 
-      return res.status(200).json({
-        success: true,
-        data: updatePriceList,
+      return res.status(updatePriceList.statusCode).json({
+        success: updatePriceList.success,
+        message: updatePriceList.message,
+        data: updatePriceList.data,
       });
     } catch (error) {
       next(error);
