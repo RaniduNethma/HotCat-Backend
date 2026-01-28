@@ -9,8 +9,10 @@ export class TableService {
 
     if (existingTable) {
       return {
+        success: false,
         statusCode: 409,
         message: "Table number already exists",
+        data: null,
       };
     }
 
@@ -37,6 +39,7 @@ export class TableService {
     });
 
     return {
+      success: true,
       statusCode: 200,
       message: "Create table successful",
       data: newTable,
@@ -65,7 +68,9 @@ export class TableService {
     });
 
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: allTables,
     };
   }
@@ -96,19 +101,14 @@ export class TableService {
     });
 
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: availableTables,
     };
   }
 
   async getTableById(id: number) {
-    if (!id) {
-      return {
-        statusCode: 404,
-        message: `Table with id ${id} not found`,
-      };
-    }
-
     const tableData = await DB.table.findUnique({
       where: { id: id },
       select: {
@@ -124,17 +124,34 @@ export class TableService {
       },
     });
 
+    if (!tableData) {
+      return {
+        success: false,
+        statusCode: 404,
+        message: `Table with id ${id} not found`,
+        data: null,
+      };
+    }
+
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: tableData,
     };
   }
 
   async updateTable(data: UpdateTableDTO) {
-    if (!data.id) {
+    const table = await DB.table.findUnique({
+      where: { id: data.id },
+    });
+
+    if (!table) {
       return {
+        success: false,
         statusCode: 404,
         message: `Table with id ${data.id} not found`,
+        data: null,
       };
     }
 
@@ -162,6 +179,7 @@ export class TableService {
     });
 
     return {
+      success: true,
       statusCode: 200,
       message: "Table data updated successfully",
       data: updatedTable,

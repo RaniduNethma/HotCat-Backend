@@ -12,15 +12,15 @@ export class ProductController {
   createProduct = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const product = await this.productService.createProduct(req.body);
 
-      return res.status(201).json({
-        success: true,
-        message: "Product created successfully",
-        data: product,
+      return res.status(product.statusCode).json({
+        success: product.success,
+        message: product.message,
+        data: product.data,
       });
     } catch (error) {
       next(error);
@@ -32,9 +32,10 @@ export class ProductController {
       const page = req.query.page;
       const products = await this.productService.getProducts(Number(page));
 
-      return res.status(200).json({
-        success: true,
-        data: products,
+      return res.status(products.statusCode).json({
+        success: products.success,
+        message: products.message,
+        data: products.data,
       });
     } catch (error) {
       next(error);
@@ -44,17 +45,18 @@ export class ProductController {
   availableProducts = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const page = req.query.page;
       const availableProducts = await this.productService.availableProducts(
-        Number(page)
+        Number(page),
       );
 
-      return res.status(200).json({
-        success: true,
-        data: availableProducts,
+      return res.status(availableProducts.statusCode).json({
+        success: availableProducts.success,
+        message: availableProducts.message,
+        data: availableProducts.data,
       });
     } catch (error) {
       next(error);
@@ -66,9 +68,10 @@ export class ProductController {
       const id = req.query.id;
       const productById = await this.productService.productById(Number(id));
 
-      return res.status(200).json({
-        success: true,
-        data: productById,
+      return res.status(productById.statusCode).json({
+        success: productById.success,
+        message: productById.message,
+        data: productById.data,
       });
     } catch (error) {
       next(error);
@@ -78,14 +81,15 @@ export class ProductController {
   updateProducts = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const updatedProduct = await this.productService.updateProducts(req.body);
 
-      return res.status(200).json({
-        success: true,
-        data: updatedProduct,
+      return res.status(updatedProduct.statusCode).json({
+        success: updatedProduct.success,
+        message: updatedProduct.message,
+        data: updatedProduct.data,
       });
     } catch (error) {
       next(error);
