@@ -9,8 +9,10 @@ export class CategoryService {
 
     if (existingCategory) {
       return {
+        success: false,
         statusCode: 409,
         message: "Category name already exists",
+        data: null,
       };
     }
 
@@ -33,6 +35,7 @@ export class CategoryService {
     });
 
     return {
+      success: true,
       statusCode: 200,
       message: "Create category successful",
       data: newCategory,
@@ -57,7 +60,9 @@ export class CategoryService {
     });
 
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: allCategories,
     };
   }
@@ -79,13 +84,17 @@ export class CategoryService {
 
     if (getCategory == null) {
       return {
+        success: false,
         statusCode: 404,
         message: `Category with id ${id} not found`,
+        data: null,
       };
     }
 
     return {
+      success: true,
       statusCode: 200,
+      message: null,
       data: getCategory,
     };
   }
@@ -93,8 +102,10 @@ export class CategoryService {
   async updateCategory(data: UpdateCategoryDTO) {
     if (!data.id) {
       return {
+        success: false,
         statusCode: 404,
         message: `Category with id ${data.id} not found`,
+        data: null,
       };
     }
 
@@ -120,6 +131,7 @@ export class CategoryService {
     });
 
     return {
+      success: true,
       statusCode: 200,
       message: "Category data updated successfully",
       data: updatedCategory,
