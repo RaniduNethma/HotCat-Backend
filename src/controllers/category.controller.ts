@@ -41,7 +41,7 @@ export class CategoryController {
       return res.status(categories.statusCode).json({
         success: categories.success,
         message: categories.message,
-        data: categories,
+        data: categories.data,
       });
     } catch (error) {
       next(error);

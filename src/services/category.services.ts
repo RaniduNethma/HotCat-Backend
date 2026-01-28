@@ -57,6 +57,7 @@ export class CategoryService {
         sortOrder: true,
         isActive: true,
       },
+      orderBy: { createdAt: "desc" },
     });
 
     return {

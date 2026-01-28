@@ -15,15 +15,15 @@ const orderItemsSchema = z.object({
 
 const createOrderSchema = z.object({
   body: z.object({
-    userId: z.number(),
-    tableId: z.number(),
-    assignedToId: z.number(),
+    userId: z.number().optional(),
+    tableId: z.number().optional(),
+    assignedToId: z.number().optional(),
     orderStatus: z.enum(["PENDING", "PREPARING", "READY", "SERVED"]),
     orderType: z.enum(["DINE_IN", "TAKEAWAY", "DELIVERY"]),
-    discount: z.number(),
+    discount: z.number().optional(),
     paymentStatus: z.enum(["PENDING", "PAID", "PARTIALLY_PAID", "REFUNDED"]),
-    paymentMethod: z.string(),
-    completedAt: z.date(),
+    paymentMethod: z.string().optional(),
+    completedAt: z.date().optional(),
     orderItems: z.array(orderItemsSchema),
   }),
 });
