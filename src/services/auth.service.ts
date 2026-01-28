@@ -11,8 +11,10 @@ export class AuthService {
 
     if (existingUser != null) {
       return {
+        success: false,
         statusCode: 409,
         message: "Username already exists",
+        data: null,
       };
     }
 
@@ -55,9 +57,10 @@ export class AuthService {
     });
 
     return {
+      success: true,
       statusCode: 200,
       message: "Registration successful",
-      user: newUser,
+      data: newUser,
     };
   }
 
@@ -167,7 +170,8 @@ export class AuthService {
     }
 
     return {
-      user: user,
+      success: true,
+      data: user,
     };
   }
 }
