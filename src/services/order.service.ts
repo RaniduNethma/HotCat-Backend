@@ -85,7 +85,7 @@ export class OrderService {
       activePriceLists?.priceListItems?.map((item) => [
         item.productId,
         Number(item.price),
-      ]) || []
+      ]) || [],
     );
 
     const productsWithoutPrice = productIds.filter((id) => !priceMap.has(id));
@@ -151,6 +151,46 @@ export class OrderService {
       success: true,
       statusCode: 201,
       message: "Order created successfully",
+      data: order,
+    };
+  }
+
+  async getAllOrders(page: number) {
+    const limit: number = 10;
+    const skip: number = page > 1 ? (page - 1) * limit : 0;
+
+    const allOrders = await DB.order.findMany({
+      take: limit,
+      orderBy: { createdAt: "desc" },
+      skip,
+    });
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: null,
+      data: allOrders,
+    };
+  }
+
+  async getOrderById(id: number) {
+    const order = await DB.order.findUnique({
+      where: { id: id },
+    });
+
+    if (!order) {
+      return {
+        success: false,
+        statusCode: 404,
+        message: `Order with id ${id} not found`,
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: null,
       data: order,
     };
   }

@@ -31,7 +31,6 @@ export class TableController {
     try {
       const page = req.query.page;
       const tables = await this.tableService.getAllTables(Number(page));
-      console.log(req.query);
 
       return res.status(tables.statusCode).json({
         success: tables.success,
