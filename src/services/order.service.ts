@@ -17,7 +17,7 @@ export class OrderService {
       };
     }
 
-    if (!data.items || data.items.length === 0) {
+    if (data.items.length === 0) {
       return {
         success: false,
         statusCode: 400,
