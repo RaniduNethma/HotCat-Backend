@@ -1,4 +1,3 @@
-import { Decimal } from "@prisma/client/runtime/client";
 import DB from "../configs/dbConfig.js";
 import { CreateOrderDTO } from "../types/types.js";
 
@@ -17,7 +16,16 @@ export class OrderService {
       };
     }
 
-    if (data.items.length === 0) {
+    if (!data.orderItems || !Array.isArray(data.orderItems)) {
+      return {
+        success: false,
+        statusCode: 400,
+        message: "Items array is required",
+        data: null,
+      };
+    }
+
+    if (data.orderItems.length === 0) {
       return {
         success: false,
         statusCode: 400,
@@ -48,7 +56,7 @@ export class OrderService {
       };
     }
 
-    const productIds = data.items.map((item) => item.productId);
+    const productIds = data.orderItems.map((item) => item.productId);
 
     const [products, activePriceLists] = await Promise.all([
       DB.product.findMany({
@@ -99,7 +107,7 @@ export class OrderService {
     }
 
     let subTotal = 0;
-    const orderItemsData = data.items.map((item) => {
+    const orderItemsData = data.orderItems.map((item) => {
       const unitPrice = priceMap.get(item.productId)!;
       const itemSubTotal = unitPrice * item.Quantity;
 
@@ -109,7 +117,7 @@ export class OrderService {
         productId: item.productId,
         Quantity: item.Quantity,
         unitPrice: unitPrice,
-        subTotal: subTotal,
+        subTotal: itemSubTotal,
       };
     });
 
