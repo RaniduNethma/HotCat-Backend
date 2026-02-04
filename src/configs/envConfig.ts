@@ -1,19 +1,7 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
+import { EnvConfig } from "../types/types.js";
 
 dotenv.config();
-
-interface EnvConfig {
-    NODE_ENV: string;
-    SERVER_PORT: number;
-    DATABASE_URL: string;
-    ACCESS_TOKEN_SECRET: string;
-    REFRESH_TOKEN_SECRET: string;
-    ACCESS_TOKEN_EXPIRES: number;
-    REFRESH_TOKEN_EXPIRES: number;
-    REDIS_HOST: string
-    REDIS_PORT: number
-    REDIS_PASSWORD: string
-}
 
 function getEnvVariable(key: any, required = true): any {
   const value = process.env[key];
@@ -33,5 +21,6 @@ export const env: EnvConfig = {
   REFRESH_TOKEN_EXPIRES: getEnvVariable("REFRESH_TOKEN_EXPIRES"),
   REDIS_HOST: getEnvVariable("REDIS_HOST"),
   REDIS_PORT: getEnvVariable("REDIS_PORT"),
-  REDIS_PASSWORD: getEnvVariable("REDIS_PASSWORD")
+  REDIS_PASSWORD: getEnvVariable("REDIS_PASSWORD"),
+  CLIENT_URL: getEnvVariable("CLIENT_URL"),
 };
