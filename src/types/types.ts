@@ -10,6 +10,20 @@ import {
 } from "../generated/prisma/client.js";
 import { Decimal } from "@prisma/client/runtime/client";
 
+export interface EnvConfig {
+  NODE_ENV: string;
+  SERVER_PORT: number;
+  DATABASE_URL: string;
+  ACCESS_TOKEN_SECRET: string;
+  REFRESH_TOKEN_SECRET: string;
+  ACCESS_TOKEN_EXPIRES: number;
+  REFRESH_TOKEN_EXPIRES: number;
+  REDIS_HOST: string;
+  REDIS_PORT: number;
+  REDIS_PASSWORD: string;
+  CLIENT_URL: string;
+}
+
 export interface AuthRequest extends Request {
   user?: {
     id: number;
@@ -155,4 +169,10 @@ export interface CreateOrderDTO {
   paymentMethod: string;
   completedAt: Date;
   orderItems: OrderItemsDTO[];
+}
+
+export interface SocketUser {
+  userId: string;
+  role: string;
+  socketId: string;
 }
