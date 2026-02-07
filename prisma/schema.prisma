@@ -188,9 +188,12 @@ model OrderItems {
 
 enum OrderStatus {
   PENDING
+  CONFIRMED
   PREPARING
   READY
   SERVED
+  COMPLETED
+  CANCELLED
 }
 
 enum OrderType {
