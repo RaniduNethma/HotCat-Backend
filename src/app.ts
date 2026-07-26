@@ -1,23 +1,32 @@
-import express from "express";
-import authRouter from "./routes/auth.route.js";
-import tableRouter from "./routes/table.route.js";
-import categoryRouter from "./routes/category.route.js";
-import productRouter from "./routes/product.route.js";
-import priceListRouter from "./routes/priceList.route.js";
-import orderRouter from "./routes/order.route.js";
+import express from 'express';
+import cors from 'cors';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@as-integrations/express5';
+import { typeDefs } from './schemas/index.js';
+import { resolvers } from './resolvers/index.js';
+import { getContext } from './context.js';
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-//Routes
-app.use("/api/users", authRouter);
-app.use("/api/tables", tableRouter);
-app.use("/api/categories", categoryRouter);
-app.use("/api/products", productRouter);
-app.use("/api/pricelist", priceListRouter);
-app.use("/api/order", orderRouter);
+export async function startApp() {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
 
-export default app;
+  await server.start();
+
+  app.use(
+    '/graphql',
+    expressMiddleware(server, {
+      context: getContext,
+    }),
+  );
+
+  return app;
+}
