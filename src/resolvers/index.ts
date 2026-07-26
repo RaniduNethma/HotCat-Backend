@@ -1,3 +1,4 @@
+import { authResolvers } from './auth.resolver.js';
 import { categoryResolvers } from './category.resolver.js';
 
-export const resolvers = [categoryResolvers];
+export const resolvers = [authResolvers, categoryResolvers];

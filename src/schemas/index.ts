@@ -1,3 +1,4 @@
+import { authTypeDefs } from './auth.schema.js';
 import { categoryTypeDefs } from './category.schema.js';
 
-export const typeDefs = [categoryTypeDefs];
+export const typeDefs = [authTypeDefs, categoryTypeDefs];

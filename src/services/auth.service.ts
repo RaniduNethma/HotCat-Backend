@@ -1,7 +1,7 @@
-import bcrypt from "bcrypt";
-import DB from "../configs/dbConfig.js";
-import { RegisterDTO, LoginDTO, TokenPayload } from "../types/types.js";
-import { JWTUtil } from "../utils/jwt.util.js";
+import bcrypt from 'bcrypt';
+import DB from '../configs/dbConfig.js';
+import { RegisterDTO, LoginDTO, TokenPayload } from '../types/types.js';
+import { JWTUtil } from '../utils/jwt.util.js';
 
 export class AuthService {
   async register(data: RegisterDTO) {
@@ -10,12 +10,7 @@ export class AuthService {
     });
 
     if (existingUser != null) {
-      return {
-        success: false,
-        statusCode: 409,
-        message: "Username already exists",
-        data: null,
-      };
+      throw new Error('Username already exists');
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -38,28 +33,12 @@ export class AuthService {
         city: data.city ?? null,
         priceListId: defaultPriceList?.id || null,
       },
-      select: {
-        id: true,
-        userName: true,
-        name: true,
-        phone: true,
-        email: true,
-        dateOfBirth: true,
-        userRole: true,
-        profileType: true,
-        address: true,
-        city: true,
-        isActive: true,
-        createdAt: true,
-        updatedAt: true,
-        priceList: true,
-      },
     });
 
     return {
       success: true,
-      statusCode: 200,
-      message: "Registration successful",
+      statusCode: 201,
+      message: 'Registration successful',
       data: newUser,
     };
   }
@@ -70,13 +49,13 @@ export class AuthService {
     });
 
     if (!user || !user.isActive) {
-      throw new Error("Invalid credentials");
+      throw new Error('Invalid credentials');
     }
 
     const isMatch = await bcrypt.compare(data.password, user.password);
 
     if (!isMatch) {
-      throw new Error("Invalid credentials");
+      throw new Error('Invalid credentials');
     }
 
     const payload: TokenPayload = {
@@ -94,13 +73,12 @@ export class AuthService {
     });
 
     return {
-      tokens,
-      user: {
-        id: user.id,
-        userName: user.userName,
-        name: user.name,
-        userRole: user.userRole,
-        profileType: user.profileType,
+      success: true,
+      statusCode: 200,
+      message: 'Login successful',
+      data: {
+        user,
+        tokens,
       },
     };
   }
@@ -114,7 +92,7 @@ export class AuthService {
       });
 
       if (!user || user.refreshToken !== refreshToken || !user.isActive) {
-        throw new Error("Invalid refresh token");
+        throw new Error('Invalid refresh token');
       }
 
       const payload: TokenPayload = {
@@ -131,9 +109,17 @@ export class AuthService {
         data: { refreshToken: tokens.refreshToken },
       });
 
-      return tokens;
+      return {
+        success: true,
+        statusCode: 200,
+        message: 'Token refreshed successfully',
+        data: {
+          user,
+          tokens,
+        },
+      };
     } catch (error) {
-      throw new Error("Invalid refresh token");
+      throw new Error('Invalid refresh token');
     }
   }
 
@@ -142,35 +128,27 @@ export class AuthService {
       where: { id: id },
       data: { refreshToken: null },
     });
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: 'Logged out successfully',
+    };
   }
 
   async getProfile(id: number) {
     const user = await DB.user.findUnique({
       where: { id: id },
-      select: {
-        id: true,
-        userName: true,
-        name: true,
-        phone: true,
-        email: true,
-        dateOfBirth: true,
-        userRole: true,
-        isActive: true,
-        createdAt: true,
-        updatedAt: true,
-        profileType: true,
-        address: true,
-        city: true,
-        priceList: true,
-      },
     });
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     return {
       success: true,
+      statusCode: 200,
+      message: 'Profile fetched successfully',
       data: user,
     };
   }
