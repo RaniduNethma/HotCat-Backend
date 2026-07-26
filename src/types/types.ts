@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request } from 'express';
 import {
   UserRole,
   ProfileType,
@@ -7,8 +7,8 @@ import {
   OrderStatus,
   OrderType,
   PaymentStatus,
-} from "../generated/prisma/client.js";
-import { Decimal } from "@prisma/client/runtime/client";
+} from '../generated/prisma/client.js';
+import { Decimal } from '@prisma/client/runtime/client';
 
 export interface EnvConfig {
   NODE_ENV: string;

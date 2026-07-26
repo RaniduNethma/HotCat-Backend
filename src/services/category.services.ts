@@ -1,5 +1,5 @@
-import DB from "../configs/dbConfig.js";
-import { CreateCategoryDTO, UpdateCategoryDTO } from "../types/types.js";
+import DB from '../configs/dbConfig.js';
+import { CreateCategoryDTO, UpdateCategoryDTO } from '../types/types.js';
 
 export class CategoryService {
   async createCategory(data: CreateCategoryDTO) {
@@ -11,7 +11,7 @@ export class CategoryService {
       return {
         success: false,
         statusCode: 409,
-        message: "Category name already exists",
+        message: 'Category name already exists',
         data: null,
       };
     }
@@ -37,7 +37,7 @@ export class CategoryService {
     return {
       success: true,
       statusCode: 200,
-      message: "Create category successful",
+      message: 'Create category successful',
       data: newCategory,
     };
   }
@@ -57,7 +57,7 @@ export class CategoryService {
         sortOrder: true,
         isActive: true,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
 
     return {
@@ -134,8 +134,38 @@ export class CategoryService {
     return {
       success: true,
       statusCode: 200,
-      message: "Category data updated successfully",
+      message: 'Category data updated successfully',
       data: updatedCategory,
+    };
+  }
+
+  async deleteCategory(id: number) {
+    const existingCategory = await DB.category.findUnique({
+      where: { id: id },
+    });
+
+    if (!existingCategory) {
+      return {
+        success: false,
+        statusCode: 404,
+        message: `Category with id ${id} not found`,
+        data: null,
+      };
+    }
+
+    const deletedCategory = await DB.category.delete({
+      where: { id: id },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: 'Category deleted successfully',
+      data: deletedCategory,
     };
   }
 }
