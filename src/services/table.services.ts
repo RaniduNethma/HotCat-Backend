@@ -1,5 +1,5 @@
-import DB from "../configs/dbConfig.js";
-import { CreateTableDTO, UpdateTableDTO } from "../types/types.js";
+import DB from '../configs/dbConfig.js';
+import { CreateTableDTO, UpdateTableDTO } from '../types/types.js';
 
 export class TableService {
   async createTable(data: CreateTableDTO) {
@@ -11,7 +11,7 @@ export class TableService {
       return {
         success: false,
         statusCode: 409,
-        message: "Table number already exists",
+        message: 'Table number already exists',
         data: null,
       };
     }
@@ -41,7 +41,7 @@ export class TableService {
     return {
       success: true,
       statusCode: 200,
-      message: "Create table successful",
+      message: 'Create table successful',
       data: newTable,
     };
   }
@@ -63,7 +63,7 @@ export class TableService {
         createdAt: true,
         updatedAt: true,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       skip,
     });
 
@@ -83,7 +83,7 @@ export class TableService {
       take: limit,
       where: {
         isActive: true,
-        tableStatus: "AVAILABLE",
+        tableStatus: 'AVAILABLE',
       },
       select: {
         id: true,
@@ -96,7 +96,7 @@ export class TableService {
         createdAt: true,
         updatedAt: true,
       },
-      orderBy: { tableNumber: "asc" },
+      orderBy: { tableNumber: 'asc' },
       skip,
     });
 
@@ -181,15 +181,34 @@ export class TableService {
     return {
       success: true,
       statusCode: 200,
-      message: "Table data updated successfully",
+      message: 'Table data updated successfully',
       data: updatedTable,
     };
   }
-}
 
-//Testing 04
-//Testing 05
-//Testing 06
-//Testing 07
-//Testing 08
-//Testing 09
+  async deleteTable(id: number) {
+    const existingTable = await DB.table.findUnique({
+      where: { id: id },
+    });
+
+    if (!existingTable) {
+      return {
+        success: false,
+        statusCode: 404,
+        message: `Table with id ${id} not found`,
+        data: null,
+      };
+    }
+
+    const deletedTable = await DB.table.delete({
+      where: { id: id },
+    });
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: 'Table deleted successfully',
+      data: deletedTable,
+    };
+  }
+}
