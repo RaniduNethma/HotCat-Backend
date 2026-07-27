@@ -33,5 +33,10 @@ export const productResolvers = {
       checkRole(context.user, ['ADMIN', 'MANAGER', 'OFFICER']);
       return await productService.updateProducts(args.input);
     },
+
+    deleteProduct: async (_: any, args: { id: number }, context: AuthContext) => {
+      checkRole(context.user, ['ADMIN', 'MANAGER', 'OFFICER']);
+      return await productService.deleteProduct(args.id);
+    },
   },
 };

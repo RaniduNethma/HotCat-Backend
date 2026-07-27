@@ -57,5 +57,6 @@ export const productTypeDefs = `#graphql
     type Mutation {
         createProduct(input: CreateProductInput!): ProductResponse!
         updateProduct(input: UpdateProductInput!): ProductResponse!
+        deleteProduct(id: Int!): ProductResponse!
     }
 `;
