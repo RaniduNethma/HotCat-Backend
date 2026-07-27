@@ -1,5 +1,5 @@
-import DB from "../configs/dbConfig.js";
-import { CreateProductDTO, UpdateProductDTO } from "../types/types.js";
+import DB from '../configs/dbConfig.js';
+import { CreateProductDTO, UpdateProductDTO } from '../types/types.js';
 
 export class ProductService {
   async createProduct(data: CreateProductDTO) {
@@ -11,7 +11,7 @@ export class ProductService {
       return {
         success: false,
         statusCode: 409,
-        message: "Product name already exists",
+        message: 'Product name already exists',
         data: null,
       };
     }
@@ -24,7 +24,7 @@ export class ProductService {
       return {
         success: false,
         statusCode: 400,
-        message: "Category is Inactive",
+        message: 'Category is Inactive',
         data: null,
       };
     }
@@ -54,7 +54,7 @@ export class ProductService {
     return {
       success: true,
       statusCode: 200,
-      message: "Create product successful",
+      message: 'Create product successful',
       data: newProduct,
     };
   }
@@ -155,7 +155,7 @@ export class ProductService {
         return {
           success: false,
           statusCode: 400,
-          message: "Category is Inactive",
+          message: 'Category is Inactive',
           data: null,
         };
       }
@@ -180,8 +180,37 @@ export class ProductService {
     return {
       success: true,
       statusCode: 200,
-      message: "Product data updated successfully",
+      message: 'Product data updated successfully',
       data: updatedProduct,
+    };
+  }
+
+  async deleteProduct(id: number) {
+    const existingProduct = await DB.product.findUnique({
+      where: { id: id },
+    });
+
+    if (!existingProduct) {
+      return {
+        success: false,
+        statusCode: 404,
+        message: `Product with id ${id} not found`,
+        data: null,
+      };
+    }
+
+    const deletedProduct = await DB.product.delete({
+      where: { id: id },
+      include: {
+        category: {},
+      },
+    });
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: 'Product deleted successfully',
+      data: deletedProduct,
     };
   }
 }
