@@ -181,4 +181,39 @@ export class PriceListService {
       data: updatedPriceList,
     };
   }
+
+  async deletePriceList(id: number) {
+    const existingPriceList = await DB.priceList.findUnique({
+      where: { id: id },
+    });
+
+    if (!existingPriceList) {
+      return {
+        success: false,
+        statusCode: 404,
+        message: `PriceList with id ${id} not found`,
+        data: null,
+      };
+    }
+
+    if (existingPriceList.isDefault) {
+      return {
+        success: false,
+        statusCode: 403,
+        message: "Cannot delete the Default PriceList!",
+        data: null,
+      };
+    }
+
+    const deletedPriceList = await DB.priceList.delete({
+      where: { id: id },
+    });
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: "PriceList deleted successfully",
+      data: deletedPriceList,
+    };
+  }
 }
