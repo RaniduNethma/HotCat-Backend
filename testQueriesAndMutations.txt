@@ -1,0 +1,239 @@
+mutation Register {
+  register(input: {
+    userName: "admin_test"
+    name: "Test Admin"
+    phone: "0771234567"
+    email: "admin@test.com"
+    userRole: "ADMIN"
+    password: "password123"
+    profileType: "GOLD"
+  }) {
+    success
+    message
+    data { id userName userRole }
+  }
+}
+
+mutation Login {
+  login(input: {
+    userName: "admin_test"
+    password: "password123"
+  }) {
+    success
+    message
+    data {
+      tokens { accessToken refreshToken }
+    }
+  }
+}
+
+Copy access token and save Authorization: Bearer <token>
+
+query GetProfile {
+  getProfile {
+    success
+    message
+    data { id name userRole profileType }
+  }
+}
+
+mutation Logout {
+  logout {
+    success
+    message
+  }
+}
+
+mutation CreateCategory {
+  createCategory(input: {
+    name: "Burgers"
+    description: "All kinds of delicious burgers"
+    imageUrl: "https://example.com/burgers.jpg"
+    isActive: true
+  }) {
+    success
+    message
+    data { id name description }
+  }
+}
+
+query GetAllCategories {
+  getAllCategories(page: 1) {
+    success
+    data { id name isActive }
+  }
+}
+
+query GetCategoryById {
+  getCategoryById(id: 1) {
+    success
+    data { id name description }
+  }
+}
+
+mutation UpdateCategory {
+  updateCategory(input: {
+    id: 1
+    name: "Premium Burgers"
+    isActive: true
+  }) {
+    success
+    message
+    data { id name }
+  }
+}
+
+mutation DeleteCategory {
+  deleteCategory(id: 1) {
+    success
+    message
+  }
+}
+
+mutation CreateProduct {
+  createProduct(input: {
+    name: "Spicy Chicken Burger"
+    description: "Crispy chicken with spicy mayo"
+    imageUrl: "https://example.com/burger.jpg"
+    sortOrder: 1
+    isActive: true
+    stock: 50
+    categoryId: 1
+  }) {
+    success
+    message
+    data { id name stock category { name } }
+  }
+}
+
+query GetAllProducts {
+  getProducts(page: 1) {
+    success
+    data { id name stock isActive }
+  }
+}
+
+query GetProductById {
+  productById(id: 1) {
+    success
+    data { id name description }
+  }
+}
+
+mutation UpdateProduct {
+  updateProduct(input: {
+    id: 1
+    stock: 100
+    isActive: true
+  }) {
+    success
+    message
+    data { id name stock }
+  }
+}
+
+mutation DeleteProduct {
+  deleteProduct(id: 1) {
+    success
+    message
+  }
+}
+
+mutation CreateTable {
+  createTable(input: {
+    tableNumber: 1
+    capacity: 4
+    tableType: "INDOOR"
+    tableStatus: "AVAILABLE"
+    qrCode: "QR_TABLE_01"
+    isActive: true
+  }) {
+    success
+    message
+    data { id tableNumber capacity tableType }
+  }
+}
+
+query GetAllTables {
+  getAllTables(page: 1) {
+    success
+    data { id tableNumber tableStatus }
+  }
+}
+
+query GetAvailableTables {
+  getAvailableTables(page: 1) {
+    success
+    data { id tableNumber tableStatus }
+  }
+}
+
+mutation UpdateTable {
+  updateTable(input: {
+    id: 1
+    tableStatus: "OCCUPIED"
+  }) {
+    success
+    message
+    data { id tableNumber tableStatus }
+  }
+}
+
+mutation DeleteTable {
+  deleteTable(id: 1) {
+    success
+    message
+  }
+}
+
+mutation CreatePriceList {
+  createPriceList(input: {
+    name: "Weekend Offer"
+    description: "Special discounted prices for weekends"
+    isActive: true
+    isDefault: true
+    items: [
+      { productId: 1, price: 1200.00 }
+    ]
+  }) {
+    success
+    message
+    data { id name isDefault priceListItems { productId price } }
+  }
+}
+
+query GetAllPriceLists {
+  allPriceLists(page: 1) {
+    success
+    data { id name isDefault priceListItems { productId price } }
+  }
+}
+
+query GetPriceListById {
+  priceListById(id: 1) {
+    success
+    data { id name priceListItems { productId price } }
+  }
+}
+
+mutation UpdatePriceList {
+  updatePriceList(input: {
+    id: 1
+    name: "Weekend Super Offer"
+    items: [
+      { productId: 1, price: 1100.00 }
+    ]
+  }) {
+    success
+    message
+    data { id name priceListItems { productId price } }
+  }
+}
+
+mutation DeletePriceList {
+  deletePriceList(id: 1) {
+    success
+    message
+  }
+}
+
