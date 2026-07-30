@@ -1,5 +1,5 @@
-import DB from "../configs/dbConfig.js";
-import { CreatePriceListDTO, UpdatePriceListDTO } from "../types/types.js";
+import DB from '../configs/dbConfig.js';
+import { CreatePriceListDTO, UpdatePriceListDTO } from '../types/types.js';
 
 export class PriceListService {
   async createPriceList(data: CreatePriceListDTO) {
@@ -27,7 +27,7 @@ export class PriceListService {
       return {
         success: false,
         statusCode: 406,
-        message: "Default PriceList should always be active",
+        message: 'Default PriceList should always be active',
         data: null,
       };
     }
@@ -54,7 +54,7 @@ export class PriceListService {
     return {
       success: true,
       statusCode: 200,
-      message: "Create priceList successful",
+      message: 'Create priceList successful',
       data: priceList,
     };
   }
@@ -140,7 +140,7 @@ export class PriceListService {
       return {
         success: false,
         statusCode: 406,
-        message: "Default PriceList should always be active",
+        message: 'Default PriceList should always be active',
         data: null,
       };
     }
@@ -177,7 +177,7 @@ export class PriceListService {
     return {
       success: true,
       statusCode: 200,
-      message: "PriceList data updated successfully",
+      message: 'PriceList data updated successfully',
       data: updatedPriceList,
     };
   }
@@ -200,7 +200,7 @@ export class PriceListService {
       return {
         success: false,
         statusCode: 403,
-        message: "Cannot delete the Default PriceList!",
+        message: 'Cannot delete the Default PriceList!',
         data: null,
       };
     }
@@ -212,7 +212,7 @@ export class PriceListService {
     return {
       success: true,
       statusCode: 200,
-      message: "PriceList deleted successfully",
+      message: 'PriceList deleted successfully',
       data: deletedPriceList,
     };
   }
