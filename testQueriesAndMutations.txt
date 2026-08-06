@@ -237,3 +237,80 @@ mutation DeletePriceList {
   }
 }
 
+mutation CreateOrder {
+  createOrder(input: {
+    userId: 1
+    tableId: 1
+    orderStatus: "PENDING"
+    orderType: "DINE_IN"
+    discount: 100.00
+    paymentStatus: "PENDING"
+    orderItems: [
+      { productId: 1, Quantity: 2, orderStatus: "PENDING" }
+    ]
+  }) {
+    success
+    statusCode
+    message
+    data {
+      id
+      orderType
+      subTotal
+      discount
+      totalAmount
+      orderItems {
+        productId
+        Quantity
+        unitPrice
+        subTotal
+      }
+    }
+  }
+}
+
+query GetAllOrders {
+  getAllOrders(page: 1) {
+    success
+    data {
+      id
+      orderStatus
+      orderType
+      totalAmount
+      paymentStatus
+      createdAt
+      orderItems {
+        productId
+        Quantity
+      }
+    }
+  }
+}
+
+query GetOrderById {
+  getOrderById(id: 1) {
+    success
+    data {
+      id
+      orderType
+      orderStatus
+      tableId
+      totalAmount
+      orderItems {
+        productId
+        Quantity
+        orderStatus
+      }
+    }
+  }
+}
+
+mutation DeleteOrder {
+  deleteOrder(id: 1) {
+    success
+    message
+    data {
+      id
+      totalAmount
+    }
+  }
+}
