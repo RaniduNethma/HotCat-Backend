@@ -1,5 +1,5 @@
-import DB from "../configs/dbConfig.js";
-import { CreateOrderDTO } from "../types/types.js";
+import DB from '../configs/dbConfig.js';
+import { CreateOrderDTO } from '../types/types.js';
 
 export class OrderService {
   async createOrder(data: CreateOrderDTO) {
@@ -20,7 +20,7 @@ export class OrderService {
       return {
         success: false,
         statusCode: 400,
-        message: "Items array is required",
+        message: 'Items array is required',
         data: null,
       };
     }
@@ -29,16 +29,16 @@ export class OrderService {
       return {
         success: false,
         statusCode: 400,
-        message: "Order must contain at least one item",
+        message: 'Order must contain at least one item',
         data: null,
       };
     }
 
-    if (data.orderType === "DINE_IN" && !data.tableId) {
+    if (data.orderType === 'DINE_IN' && !data.tableId) {
       return {
         success: false,
         statusCode: 400,
-        message: "DINE_IN orders must have a table assigned",
+        message: 'DINE_IN orders must have a table assigned',
         data: null,
       };
     }
@@ -84,16 +84,13 @@ export class OrderService {
       return {
         success: false,
         statusCode: 404,
-        message: `Products not found or inactive: ${missingIds.join(", ")}`,
+        message: `Products not found or inactive: ${missingIds.join(', ')}`,
         data: null,
       };
     }
 
     const priceMap = new Map(
-      activePriceLists?.priceListItems?.map((item) => [
-        item.productId,
-        Number(item.price),
-      ]) || [],
+      activePriceLists?.priceListItems?.map((item) => [item.productId, Number(item.price)]) || [],
     );
 
     const productsWithoutPrice = productIds.filter((id) => !priceMap.has(id));
@@ -101,7 +98,7 @@ export class OrderService {
       return {
         success: false,
         statusCode: 404,
-        message: `Products without price in active price list: ${productsWithoutPrice.join(", ")}`,
+        message: `Products without price in active price list: ${productsWithoutPrice.join(', ')}`,
         data: null,
       };
     }
@@ -128,7 +125,7 @@ export class OrderService {
       return {
         success: false,
         statusCode: 400,
-        message: "Discount cannot exceed subtotal",
+        message: 'Discount cannot exceed subtotal',
         data: null,
       };
     }
@@ -158,7 +155,7 @@ export class OrderService {
     return {
       success: true,
       statusCode: 201,
-      message: "Order created successfully",
+      message: 'Order created successfully',
       data: order,
     };
   }
@@ -169,8 +166,9 @@ export class OrderService {
 
     const allOrders = await DB.order.findMany({
       take: limit,
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       skip,
+      include: { orderItems: true },
     });
 
     return {
@@ -184,6 +182,7 @@ export class OrderService {
   async getOrderById(id: number) {
     const order = await DB.order.findUnique({
       where: { id: id },
+      include: { orderItems: true },
     });
 
     if (!order) {
@@ -200,6 +199,33 @@ export class OrderService {
       statusCode: 200,
       message: null,
       data: order,
+    };
+  }
+
+  async deleteOrder(id: number) {
+    const existingOrder = await DB.order.findUnique({
+      where: { id: id },
+    });
+
+    if (!existingOrder) {
+      return {
+        success: false,
+        statusCode: 404,
+        message: `Order with id ${id} not found`,
+        data: null,
+      };
+    }
+
+    const deletedOrder = await DB.order.delete({
+      where: { id: id },
+      include: { orderItems: true },
+    });
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: 'Order deleted successfully',
+      data: deletedOrder,
     };
   }
 }
