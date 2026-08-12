@@ -39,4 +39,12 @@ export const productResolvers = {
       return await productService.deleteProduct(args.id);
     },
   },
+
+  Product: {
+    category: async (parent: any, _: any, context: any) => {
+      if (!parent.categoryId) return null;
+
+      return await context.loaders.categoryLoader.load(parent.categoryId);
+    },
+  },
 };

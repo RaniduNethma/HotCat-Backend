@@ -109,14 +109,33 @@ mutation CreateProduct {
 query GetAllProducts {
   getProducts(page: 1) {
     success
-    data { id name stock isActive }
+    data { 
+      id 
+      name 
+      stock 
+      isActive
+      category {
+        id,
+        name,
+        description
+      }
+    }
   }
 }
 
 query GetProductById {
   productById(id: 1) {
     success
-    data { id name description }
+    data { 
+      id 
+      name 
+      description
+      category {
+        id,
+        name,
+        description
+      }
+    }
   }
 }
 
