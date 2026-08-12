@@ -5,9 +5,10 @@ const port = env.SERVER_PORT;
 
 async function startServer() {
   try {
-    const app = await startApp();
-    app.listen(port, () => {
+    const { httpServer } = await startApp();
+    httpServer.listen(port, () => {
       console.log(`Server is running on http://localhost:${port}/graphql`);
+      console.log(`Websockets ready at ws://localhost:${port}/graphql`);
     });
   } catch (error) {
     console.error('Error when starting server', error);
