@@ -39,16 +39,6 @@ export class ProductService {
         stock: data.stock,
         categoryId: data.categoryId,
       },
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        imageUrl: true,
-        sortOrder: true,
-        isActive: true,
-        stock: true,
-        categoryId: true,
-      },
     });
 
     return {
@@ -66,9 +56,6 @@ export class ProductService {
     const allProducts = await DB.product.findMany({
       take: limit,
       skip,
-      include: {
-        category: {},
-      },
     });
 
     return {
@@ -87,9 +74,6 @@ export class ProductService {
       take: limit,
       skip,
       where: { isActive: true },
-      include: {
-        category: {},
-      },
     });
 
     return {
@@ -103,7 +87,6 @@ export class ProductService {
   async productById(id: number) {
     const product = await DB.product.findUnique({
       where: { id: id },
-      include: { category: {} },
     });
 
     if (!product) {
@@ -172,9 +155,6 @@ export class ProductService {
         stock: data.stock,
         categoryId: data.categoryId,
       },
-      include: {
-        category: {},
-      },
     });
 
     return {
@@ -201,9 +181,6 @@ export class ProductService {
 
     const deletedProduct = await DB.product.delete({
       where: { id: id },
-      include: {
-        category: {},
-      },
     });
 
     return {
