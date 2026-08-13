@@ -333,3 +333,14 @@ mutation DeleteOrder {
     }
   }
 }
+
+subscription OnOrderCreated {
+  orderCreated {
+    success
+    message
+    data {
+      id
+      totalAmount
+    }
+  }
+}
