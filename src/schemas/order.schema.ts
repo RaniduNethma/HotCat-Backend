@@ -68,4 +68,8 @@ export const orderTypeDefs = `#graphql
     createOrder(input: CreateOrderInput!): OrderResponse!
     deleteOrder(id: Int!): OrderResponse!
   }
+
+  type Subscription {
+    orderCreated: OrderResponse!
+  }
 `;
