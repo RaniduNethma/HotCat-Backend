@@ -1,5 +1,5 @@
 import DB from '../configs/dbConfig.js';
-import { CreateOrderDTO } from '../types/types.js';
+import { CreateOrderDTO, UpdateOrderDTO } from '../types/types.js';
 
 export class OrderService {
   async createOrder(data: CreateOrderDTO) {
@@ -199,6 +199,43 @@ export class OrderService {
       statusCode: 200,
       message: null,
       data: order,
+    };
+  }
+
+  async updateOrder(data: UpdateOrderDTO) {
+    const existingOrder = await DB.order.findUnique({
+      where: { id: data.id },
+    });
+
+    if (!existingOrder) {
+      return {
+        success: false,
+        statusCode: 404,
+        message: `Order with id ${data.id} not found`,
+        data: null,
+      };
+    }
+
+    const updateOrder = await DB.order.update({
+      where: { id: data.id },
+      data: {
+        ...(data.tableId && { tableId: data.tableId }),
+        ...(data.assignedToId && { assignedToId: data.assignedToId }),
+        ...(data.orderStatus && { orderStatus: data.orderStatus }),
+        ...(data.orderType && { orderType: data.orderType }),
+        ...(data.paymentStatus && { paymentStatus: data.paymentStatus }),
+        ...(data.paymentMethod && { paymentMethod: data.paymentMethod }),
+      },
+      include: {
+        orderItems: true,
+      },
+    });
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: 'Order updated successfully',
+      data: updateOrder,
     };
   }
 
