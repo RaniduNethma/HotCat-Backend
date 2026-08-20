@@ -171,6 +171,16 @@ export interface CreateOrderDTO {
   orderItems: OrderItemsDTO[];
 }
 
+export interface UpdateOrderDTO {
+  id: number;
+  tableId: number;
+  assignedToId: number;
+  orderStatus?: OrderStatus;
+  orderType: OrderType;
+  paymentStatus?: PaymentStatus;
+  paymentMethod: string;
+}
+
 export interface SocketUser {
   userId: string;
   role: string;
