@@ -1,4 +1,27 @@
 export const orderTypeDefs = `#graphql
+  enum OrderStatus {
+    PENDING
+    CONFIRMED
+    PREPARING
+    READY
+    SERVED
+    COMPLETED
+    CANCELLED
+  }
+
+  enum PaymentStatus {
+    PENDING
+    PAID
+    PARTIALLY_PAID
+    REFUNDED
+  }
+
+  enum OrderType {
+    DINE_IN
+    TAKEAWAY
+    DELIVERY
+  }
+
   type OrderItem {
     id: Int!
     productId: Int!
@@ -50,13 +73,23 @@ export const orderTypeDefs = `#graphql
     userId: Int
     tableId: Int
     assignedToId: Int
-    orderStatus: String!
-    orderType: String!
+    orderStatus: OrderStatus!
+    orderType: OrderType!
     discount: Float
-    paymentStatus: String!
+    paymentStatus: PaymentStatus!
     paymentMethod: String
     completedAt: String
     orderItems: [OrderItemInput!]!
+  }
+
+  input UpdateOrderInput {
+    id: Int!
+    tableId: Int
+    assignedToId: Int
+    orderStatus: OrderStatus
+    orderType: OrderType
+    paymentStatus: PaymentStatus
+    paymentMethod: String
   }
 
   type Query {
@@ -66,10 +99,12 @@ export const orderTypeDefs = `#graphql
 
   type Mutation {
     createOrder(input: CreateOrderInput!): OrderResponse!
+    updateOrder(input: UpdateOrderInput!): OrderResponse!
     deleteOrder(id: Int!): OrderResponse!
   }
 
   type Subscription {
     orderCreated: OrderResponse!
+    orderUpdated: OrderResponse!
   }
 `;

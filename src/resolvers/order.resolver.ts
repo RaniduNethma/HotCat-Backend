@@ -1,6 +1,6 @@
 import { AuthContext } from '../context.js';
 import { OrderService } from '../services/order.service.js';
-import { CreateOrderDTO } from '../types/types.js';
+import { CreateOrderDTO, UpdateOrderDTO } from '../types/types.js';
 import { checkRole } from '../utils/auth.util.js';
 import { pubsub } from '../utils/pubsub.utils.js';
 
@@ -31,6 +31,17 @@ export const orderResolvers = {
       return order;
     },
 
+    updateOrder: async (_: any, args: { input: UpdateOrderDTO }, context: AuthContext) => {
+      checkRole(context.user, ['WAITER', 'CASHIER', 'OFFICER', 'MANAGER', 'ADMIN']);
+      const updateOrder = await orderService.updateOrder(args.input);
+
+      if (updateOrder.success) {
+        pubsub.publish('ORDER_UPDATED', { orderUpdated: updateOrder });
+      }
+
+      return updateOrder;
+    },
+
     deleteOrder: async (_: any, args: { id: number }, context: AuthContext) => {
       checkRole(context.user, ['OFFICER', 'MANAGER', 'ADMIN']);
       return await orderService.deleteOrder(args.id);
@@ -40,6 +51,10 @@ export const orderResolvers = {
   Subscription: {
     orderCreated: {
       subscribe: () => pubsub.asyncIterableIterator(['ORDER_CREATED']),
+    },
+
+    orderUpdated: {
+      subscribe: () => pubsub.asyncIterableIterator(['ORDER_UPDATED']),
     },
   },
 };
